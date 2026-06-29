@@ -16,6 +16,22 @@ Target coverage:
 - Add e2e coverage for core user workflows once authentication, teams, epics, tickets, comments, and persisted board operations are implemented.
 - Keep browser tests runnable through Podman using the `e2e` compose profile.
 
+## Running Headless Tests
+
+Run the Playwright smoke test from the repository root:
+
+```shell
+podman-compose -f infra/podman/podman-compose.yml --profile test up --build --abort-on-container-exit e2e
+```
+
+This command starts the required application services and runs the `e2e` container. Playwright launches Chromium headlessly inside the Podman container.
+
+Clean up the test stack:
+
+```shell
+podman-compose -f infra/podman/podman-compose.yml --profile test down
+```
+
 ## Authentication
 
 - `auth-signup-verification-login`: user signs up, receives verification flow, verifies email, then logs in.
