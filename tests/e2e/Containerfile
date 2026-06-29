@@ -3,8 +3,9 @@ FROM mcr.microsoft.com/playwright:latest
 WORKDIR /app
 
 COPY package.json ./
-RUN npm install --omit=dev
+RUN npm install
 
-COPY smoke-test.js ./
+COPY smoke-test.ts ./
+COPY tsconfig.json ./
 
 CMD ["npm", "test"]

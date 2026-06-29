@@ -1,16 +1,32 @@
+import { DndContext } from "@dnd-kit/core";
+import axios from "axios";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { DndContext } from "@dnd-kit/core";
 import { create } from "zustand";
-import axios from "axios";
 import "./styles.css";
+
+type Column = {
+  id: string;
+  title: string;
+  tickets: string[];
+};
+
+type HealthResponse = {
+  status: string;
+};
+
+type BoardState = {
+  columns: Column[];
+  apiStatus: string;
+  checkApi: () => Promise<void>;
+};
 
 const api = axios.create({
   baseURL: "/api",
 });
 
-const useBoardStore = create((set) => ({
+const useBoardStore = create<BoardState>((set) => ({
   columns: [
     { id: "todo", title: "To Do", tickets: ["Draft architecture"] },
     { id: "in-progress", title: "In Progress", tickets: ["Wire Podman runtime"] },
@@ -18,7 +34,7 @@ const useBoardStore = create((set) => ({
   ],
   apiStatus: "Not checked",
   checkApi: async () => {
-    const response = await api.get("/health");
+    const response = await api.get<HealthResponse>("/health");
     set({ apiStatus: response.data.status });
   },
 }));
@@ -65,7 +81,13 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+const root = document.getElementById("root");
+
+if (!root) {
+  throw new Error("Root element was not found");
+}
+
+ReactDOM.createRoot(root).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,

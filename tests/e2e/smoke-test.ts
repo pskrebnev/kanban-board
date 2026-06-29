@@ -2,9 +2,9 @@ import { chromium } from "playwright";
 
 const appUrl = process.env.APP_URL || "http://localhost:3000";
 
-async function waitForHttp(url, label) {
+async function waitForHttp(url: string, label: string): Promise<void> {
   const deadline = Date.now() + 60_000;
-  let lastError;
+  let lastError: Error | undefined;
 
   while (Date.now() < deadline) {
     try {
@@ -15,7 +15,7 @@ async function waitForHttp(url, label) {
 
       lastError = new Error(`${label} returned ${response.status}`);
     } catch (error) {
-      lastError = error;
+      lastError = error instanceof Error ? error : new Error(String(error));
     }
 
     await new Promise((resolve) => setTimeout(resolve, 1_000));
