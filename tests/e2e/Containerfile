@@ -1,0 +1,10 @@
+FROM mcr.microsoft.com/playwright:latest
+
+WORKDIR /app
+
+COPY package.json ./
+RUN npm install --omit=dev
+
+COPY smoke-test.js ./
+
+CMD ["npm", "test"]

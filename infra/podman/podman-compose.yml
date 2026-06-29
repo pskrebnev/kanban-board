@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: ../../frontend
+      dockerfile: Containerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ../../backend
+      dockerfile: Containerfile
+    environment:
+      NODE_ENV: production
+      PORT: "8080"
+      DATABASE_URL: postgresql://user:password@db:5432/ticketing
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ticketing
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  e2e:
+    profiles:
+      - test
+    build:
+      context: ../../tests/e2e
+      dockerfile: Containerfile
+    environment:
+      APP_URL: http://frontend
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  postgres-data:
