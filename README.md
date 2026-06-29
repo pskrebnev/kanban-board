@@ -33,6 +33,24 @@ tests/e2e/           Browser smoke tests using Playwright in Podman
 
 The stack is intended to run with rootless Podman.
 
+## Environment Configuration
+
+Runtime ports, database credentials, and test URLs are read from a local `.env` file at the repository root.
+
+Create it from the committed template before running the project:
+
+```shell
+copy .env.example .env
+```
+
+On macOS or Linux:
+
+```shell
+cp .env.example .env
+```
+
+Update `.env` for your local machine. Do not commit `.env`; it is ignored by Git.
+
 ## Run In UI Mode
 
 Start frontend, backend, and PostgreSQL from the repository root:
@@ -43,9 +61,9 @@ podman-compose -f infra/podman/podman-compose.yml up --build
 
 Then open the application in a browser:
 
-- Frontend: http://localhost:3000
-- Backend health: http://localhost:8080/api/health
-- Backend database readiness: http://localhost:8080/api/ready
+- Frontend: `http://localhost:${FRONTEND_HOST_PORT}`
+- Backend health: `http://localhost:${BACKEND_HOST_PORT}/api/health`
+- Backend database readiness: `http://localhost:${BACKEND_HOST_PORT}/api/ready`
 
 Stop the stack:
 
@@ -81,5 +99,5 @@ See [docs/testing-approach.md](docs/testing-approach.md) for the grouped e2e sce
 
 - `frontend` serves the built React app with Nginx and proxies `/api` to `backend`.
 - `backend` exposes `/api/health`, `/api/ready`, and an initial API resource index.
-- `db` runs PostgreSQL 15 with database `ticketing`, user `user`, and password `password`.
+- `db` runs PostgreSQL 15 using database settings from `.env`.
 - `e2e` runs Playwright with Chromium for browser automation.

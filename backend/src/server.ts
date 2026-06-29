@@ -14,9 +14,22 @@ type ReadyResponse =
       message: string;
     };
 
-const port = Number(process.env.PORT || 8080);
-const databaseUrl =
-  process.env.DATABASE_URL || "postgresql://user:password@localhost:5432/ticketing";
+function requireEnv(name: string): string {
+  const value = process.env[name];
+
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+
+  return value;
+}
+
+const port = Number(requireEnv("PORT"));
+const databaseUrl = requireEnv("DATABASE_URL");
+
+if (!Number.isInteger(port) || port <= 0) {
+  throw new Error("PORT must be a positive integer");
+}
 
 const app = express();
 const pool = new Pool({ connectionString: databaseUrl });
