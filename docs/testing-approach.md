@@ -18,6 +18,8 @@ Target coverage:
 
 ## Running Headless Tests
 
+Create a local `.env` file from `.env.example` before running tests. The test target URL is read from `E2E_APP_URL`.
+
 Run the Playwright smoke test from the repository root:
 
 ```shell

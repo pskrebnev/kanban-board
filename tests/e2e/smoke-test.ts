@@ -1,6 +1,16 @@
 import { chromium } from "playwright";
 
-const appUrl = process.env.APP_URL || "http://localhost:3000";
+function requireEnv(name: string): string {
+  const value = process.env[name];
+
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+
+  return value;
+}
+
+const appUrl = requireEnv("APP_URL");
 
 async function waitForHttp(url: string, label: string): Promise<void> {
   const deadline = Date.now() + 60_000;

@@ -46,6 +46,7 @@ The solution separates UI, API, data persistence, and test execution into indepe
 - PostgreSQL stores users, teams, epics, tickets, comments, and future audit data.
 - Podman provides the local container runtime for the application stack and test execution.
 - Playwright provides browser automation by launching Chromium inside the e2e Podman container.
+- Runtime ports, database credentials, and test URLs are supplied through a local `.env` file based on `.env.example`.
 
 Local service flow:
 
@@ -123,10 +124,19 @@ The stack is designed for rootless Podman.
 
 Primary local services:
 
-- `frontend`: React SPA served on host port `3000`.
-- `backend`: REST API served on host port `8080`.
+- `frontend`: React SPA served on the configured frontend host port.
+- `backend`: REST API served on the configured backend host port.
 - `db`: PostgreSQL 15 database.
 - `e2e`: optional Playwright test runner profile that launches a Chromium browser inside the Podman container.
+
+Runtime configuration:
+
+- `FRONTEND_HOST_PORT` and `FRONTEND_CONTAINER_PORT` configure the frontend port mapping and Nginx listener.
+- `BACKEND_HOST_PORT` and `BACKEND_CONTAINER_PORT` configure the API port mapping and backend process port.
+- `POSTGRES_HOST_PORT` and `POSTGRES_CONTAINER_PORT` configure database port mapping.
+- `POSTGRES_DB`, `POSTGRES_USER`, and `POSTGRES_PASSWORD` configure PostgreSQL.
+- `DATABASE_URL` configures the backend database connection.
+- `E2E_APP_URL` configures the Playwright test target inside the Podman network.
 
 Start the application stack:
 
@@ -151,6 +161,7 @@ Current documented changes:
 - Backend entrypoint moved from `src/server.js` to `src/server.ts`, compiled to `dist/server.js`.
 - E2E smoke test moved from `smoke-test.js` to `smoke-test.ts`.
 - Browser testing now runs inside the Playwright e2e container instead of a separate Selenium Chrome service.
+- Runtime ports, database credentials, and test URLs moved from committed service definitions to local `.env` configuration.
 
 Future planned changes:
 
