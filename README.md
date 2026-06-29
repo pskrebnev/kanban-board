@@ -33,15 +33,15 @@ tests/e2e/           Browser smoke tests using Playwright in Podman
 
 The stack is intended to run with rootless Podman.
 
-## Run The Stack
+## Run In UI Mode
 
-Start frontend, backend, and PostgreSQL:
+Start frontend, backend, and PostgreSQL from the repository root:
 
 ```shell
 podman-compose -f infra/podman/podman-compose.yml up --build
 ```
 
-Then open:
+Then open the application in a browser:
 
 - Frontend: http://localhost:3000
 - Backend health: http://localhost:8080/api/health
@@ -59,12 +59,20 @@ Remove the PostgreSQL development volume:
 podman-compose -f infra/podman/podman-compose.yml down -v
 ```
 
-## Run Browser Tests
+## Run Headless Playwright Tests
 
-The e2e profile builds a Playwright test-runner container and launches Chromium inside Podman:
+Run the headless Playwright smoke test from the repository root:
 
 ```shell
 podman-compose -f infra/podman/podman-compose.yml --profile test up --build --abort-on-container-exit e2e
+```
+
+This starts the required application services and runs the `e2e` container. Playwright launches Chromium headlessly inside the Podman container.
+
+Clean up the test stack:
+
+```shell
+podman-compose -f infra/podman/podman-compose.yml --profile test down
 ```
 
 See [docs/testing-approach.md](docs/testing-approach.md) for the grouped e2e scenario plan.
