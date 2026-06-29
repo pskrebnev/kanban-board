@@ -1,6 +1,8 @@
 # Kanban Ticketing System
 
-Kanban Ticketing is a starter 3-tier application with a React SPA, REST API, PostgreSQL database, and Podman-based local runtime.
+Kanban Ticketing is a starter TypeScript-first 3-tier application with a React SPA, REST API, PostgreSQL database, and Podman-based local runtime.
+
+Current phase: Phase 1, foundation and runtime scaffold. The project currently has the TypeScript app skeleton, Podman runtime, PostgreSQL service, and Playwright smoke-test container in place.
 
 ## Architecture
 
@@ -17,9 +19,9 @@ See [docs/architecture.md](docs/architecture.md) for the high-level architecture
 ## Project Structure
 
 ```text
-backend/             REST API service
+backend/             TypeScript REST API service
 docs/                Architecture documentation
-frontend/            React Vite SPA
+frontend/            TypeScript React Vite SPA
 infra/podman/        Podman compose runtime
 tests/e2e/           Browser smoke tests using Playwright in Podman
 ```
@@ -64,6 +66,8 @@ The e2e profile builds a Playwright test-runner container and launches Chromium 
 ```shell
 podman-compose -f infra/podman/podman-compose.yml --profile test up --build --abort-on-container-exit e2e
 ```
+
+See [docs/testing-approach.md](docs/testing-approach.md) for the grouped e2e scenario plan.
 
 ## Local Service Details
 

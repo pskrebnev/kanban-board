@@ -4,9 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node smoke-test.js"
+    "test": "tsx smoke-test.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "playwright": "latest"
+    "playwright": "latest",
+    "tsx": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "typescript": "latest"
   }
 }
