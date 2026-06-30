@@ -77,7 +77,8 @@ The project is delivered in phases. The status below reflects what is actually b
 
 ### Not Yet Implemented
 
-- **Kanban board** — real drag-and-drop persistence, filtering, and search (planned: Phase 7).
+- **Kanban board** — real drag-and-drop persistence, filtering, and search
+  (planned: [Phase 7](docs/phase-7.md)).
 - **Persistence-backed data** — the current board uses in-memory placeholder data only.
 
 See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap, the
@@ -85,8 +86,9 @@ See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap
 [Phase 2 plan](docs/phase-2.md) (authentication, complete), the
 [Phase 3 plan](docs/phase-3.md) (teams, complete), the
 [Phase 4 plan](docs/phase-4.md) (epics, complete), the
-[Phase 5 plan](docs/phase-5.md) (tickets, complete), and the
-[Phase 6 plan](docs/phase-6.md) (comments, complete).
+[Phase 5 plan](docs/phase-5.md) (tickets, complete), the
+[Phase 6 plan](docs/phase-6.md) (comments, complete), and the
+[Phase 7 plan](docs/phase-7.md) (Kanban board, filtering & search, planned).
 
 ---
 
@@ -486,5 +488,6 @@ compile automatically.
 - [Phase 4 plan](docs/phase-4.md) — epics management plan with a JIRA-style backlog.
 - [Phase 5 plan](docs/phase-5.md) — tickets management plan with a JIRA-style backlog.
 - [Phase 6 plan](docs/phase-6.md) — comments management plan with a JIRA-style backlog.
+- [Phase 7 plan](docs/phase-7.md) — Kanban board, filtering & search plan with a JIRA-style backlog.
 - [Architecture](docs/architecture.md) — high-level architecture and delivery phases.
 - [Testing approach](docs/testing-approach.md) — grouped end-to-end scenario catalogue.

@@ -171,23 +171,36 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 
 ## Kanban Board [planned — Phase 7]
 
+See [phase-7.md](phase-7.md) for the detailed plan, JIRA-style backlog, and Definition of Done.
+
 - `board-five-workflow-columns`: board shows exactly five columns in required order.
 - `board-team-selector`: selecting a team shows only that team's tickets.
+- `board-no-team-selected-state`: with no team selected, the board shows an explicit prompt rather than an empty or broken layout.
+- `board-team-empty-state`: a team with no tickets shows the five columns with an explicit "no tickets" indication rather than blank space.
+- `board-loading-state`: the board shows a loading indicator while a team's tickets are being fetched.
 - `board-card-content`: ticket cards show at least title and type, optionally epic.
+- `board-column-counts`: each column shows a live count of the cards currently in it, and a total ticket count is visible.
 - `board-open-ticket-from-card`: user opens ticket details from a board card.
-- `board-create-ticket-entry`: board provides clear create-ticket action.
+- `board-create-ticket-entry`: board provides a clear create-ticket action that pre-selects the board's current team.
 - `board-drag-persists-state`: dragging a card to another column updates the backend and survives refresh.
-- `board-drag-failure-rolls-back`: failed drag update returns the card to its previous column and shows an error.
-- `board-direct-state-move`: card can move directly between any two states.
-- `board-order-by-modified-desc`: cards in a column are ordered by most recently modified first.
+- `board-drag-failure-rolls-back`: failed drag update returns the card to its previous column and shows a visible, dismissible error naming the failed action.
+- `board-direct-state-move`: card can move directly between any two states (e.g. `new` straight to `done`) with no enforced sequence.
+- `board-order-by-modified-desc`: cards in a column are ordered by most recently modified first, matching the existing ticket list API order.
+- `board-click-vs-drag`: clicking a card without dragging it opens ticket details rather than starting/ending a drag.
+- `board-usable-at-100-tickets`: with at least 100 tickets on one team, the board remains responsive for scrolling, filtering, and dragging.
 
 ## Filtering And Search [planned — Phase 7]
 
+See [phase-7.md](phase-7.md) for the detailed plan, JIRA-style backlog, and Definition of Done.
+
 - `filters-by-type`: board filters tickets by `bug`, `feature`, or `fix`.
-- `filters-by-epic`: board filters tickets by selected epic.
-- `filters-title-search`: case-insensitive substring search filters ticket titles.
+- `filters-by-epic`: board filters tickets by selected epic, with epic options scoped to the currently selected team.
+- `filters-title-search`: case-insensitive substring search filters ticket titles (e.g. searching "pay" matches a title containing "Payment").
 - `filters-and-logic`: type, epic, and search filters combine using AND logic.
+- `filters-no-match-state`: a filter combination matching no ticket shows the board's empty/no-results state instead of an error.
+- `filters-update-on-team-change`: switching the team while filters are active re-scopes the epic filter to the new team's epics.
 - `filters-clear`: user can clear filters and restore the full board.
+- `filters-client-side-no-extra-requests`: applying or changing a filter does not issue a new `GET /api/tickets` request — filtering happens over the already-fetched team ticket list.
 
 ## Seed / Test Data [implemented]
 
