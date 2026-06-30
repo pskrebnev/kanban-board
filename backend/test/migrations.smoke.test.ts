@@ -18,6 +18,7 @@ const runOrSkip = databaseUrl ? describe : describe.skip;
 const expectedTables = [
   "users",
   "email_verification_tokens",
+  "password_reset_tokens",
   "teams",
   "epics",
   "tickets",

@@ -33,6 +33,8 @@ Completed:
 - Added a Vitest/Supertest backend test suite, including a migration smoke test.
 - Added local authentication: email/password sign-up, Argon2id hashing, SMTP email
   verification (24h single-use tokens, resend), and login/logout with a JWT session cookie.
+- Added password recovery: emailed 1h single-use reset links (`password_reset_tokens`,
+  migration `0004`), with reset also confirming the email; frontend forgot/reset screens.
 - Added `requireAuth` middleware protecting business endpoints, with a public allow-list for
   auth and health/readiness endpoints.
 - Added Mailpit to the local stack for capturing verification emails, and frontend auth

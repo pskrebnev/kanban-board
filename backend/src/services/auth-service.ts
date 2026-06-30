@@ -6,10 +6,17 @@ import type { SafeUser } from "../auth/types.js";
 import type { Mailer } from "../email/mailer.js";
 import { ConflictError, ForbiddenError, UnauthorizedError, ValidationError } from "../errors.js";
 import {
+  consumePasswordResetToken,
+  createPasswordResetToken,
+  findPasswordResetTokenByHash,
+  invalidateUserPasswordResetTokens,
+} from "../repositories/password-reset-token-repository.js";
+import {
   createUser,
   findUserByEmail,
   findUserById,
   markUserVerified,
+  updateUserPassword,
   type UserRow,
 } from "../repositories/user-repository.js";
 import {
@@ -20,6 +27,7 @@ import {
 } from "../repositories/verification-token-repository.js";
 
 const VERIFICATION_TTL_MS = 24 * 60 * 60 * 1000;
+const PASSWORD_RESET_TTL_MS = 60 * 60 * 1000;
 
 export type AuthServiceDeps = {
   pool: pg.Pool;
@@ -32,6 +40,8 @@ export type AuthService = {
   verify(token: string): Promise<void>;
   resend(email: string): Promise<void>;
   login(email: string, password: string): Promise<SafeUser>;
+  requestPasswordReset(email: string): Promise<void>;
+  resetPassword(token: string, newPassword: string): Promise<void>;
   getUserById(id: string): Promise<SafeUser | null>;
 };
 
@@ -130,6 +140,48 @@ export function createAuthService(deps: AuthServiceDeps): AuthService {
       }
 
       return toSafeUser(user);
+    },
+
+    async requestPasswordReset(email) {
+      const user = await findUserByEmail(pool, normalizeEmail(email));
+
+      // Always respond the same way to avoid leaking which emails are registered.
+      if (!user) {
+        return;
+      }
+
+      await invalidateUserPasswordResetTokens(pool, user.id);
+
+      const token = generateVerificationToken();
+      const expiresAt = new Date(Date.now() + PASSWORD_RESET_TTL_MS);
+      await createPasswordResetToken(pool, user.id, hashToken(token), expiresAt);
+
+      const resetUrl = `${appBaseUrl}/reset-password?token=${encodeURIComponent(token)}`;
+      await mailer.sendPasswordResetEmail(user.email, resetUrl);
+    },
+
+    async resetPassword(token, newPassword) {
+      if (newPassword.length < 8) {
+        throw new ValidationError("Password must be at least 8 characters long");
+      }
+
+      const tokenRow = await findPasswordResetTokenByHash(pool, hashToken(token));
+
+      if (!tokenRow) {
+        throw new ValidationError("Invalid or expired password reset link");
+      }
+
+      if (tokenRow.consumed_at !== null) {
+        throw new ValidationError("This password reset link has already been used");
+      }
+
+      if (tokenRow.expires_at.getTime() < Date.now()) {
+        throw new ValidationError("This password reset link has expired");
+      }
+
+      const passwordHash = await hashPassword(newPassword);
+      await updateUserPassword(pool, tokenRow.user_id, passwordHash);
+      await consumePasswordResetToken(pool, tokenRow.id);
     },
 
     async getUserById(id) {

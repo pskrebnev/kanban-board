@@ -35,9 +35,12 @@ epics, tickets, or comments behavior is introduced in this phase.
 
 - Backend auth dependencies: `argon2`, `jsonwebtoken`, `cookie-parser`, `nodemailer`, `zod`.
 - Password hashing with Argon2id; JWT issued in an httpOnly, SameSite cookie.
-- Endpoints: `signup`, `verify`, `resend`, `login`, `logout`, `me`.
+- Endpoints: `signup`, `verify`, `resend`, `forgot-password`, `reset-password`, `login`,
+  `logout`, `me`.
 - Single-use, 24h email-verification tokens (stored hashed); SMTP delivery via Nodemailer;
   Mailpit capture in local/test environments.
+- Password recovery: single-use, 1h password-reset tokens (stored hashed); reset emails via the
+  same SMTP/Mailpit path; a successful reset also marks the email verified.
 - `requireAuth` middleware and a public allow-list (signup, login, verify, resend, health,
   readiness, static assets).
 - Frontend auth screens (sign-up, login, email-verification result, resend), an auth store,
@@ -48,8 +51,7 @@ epics, tickets, or comments behavior is introduced in this phase.
 ### Out of scope (later phases)
 
 - Teams, epics, tickets, comments endpoints and UI (Phases 3–7).
-- Password reset, SSO/OAuth, roles/membership (out of mandatory scope per spec §12; reset is a
-  stretch feature §14).
+- SSO/OAuth, roles/membership (out of mandatory scope per spec §12).
 
 ## Technical Approach
 
@@ -78,6 +80,17 @@ epics, tickets, or comments behavior is introduced in this phase.
 - Email delivery via Nodemailer using the Phase 1 SMTP config; production must support
   `relay1.dataart.com`; local/test uses Mailpit (already wired under the `test` profile).
 
+### Password recovery
+
+- `POST /api/auth/forgot-password`: for a known email, invalidate prior unused reset tokens,
+  issue a new high-entropy token (store only its hash with a 1h `expires_at`), and email a
+  reset link. Always responds generically so it never reveals whether the email is registered.
+- `POST /api/auth/reset-password`: validate the new password (≥8), look up the token by hash;
+  reject if missing, consumed, or expired; update the password hash, consume the token, and
+  mark the email verified (the emailed link proves inbox control).
+- Reset tokens live in a dedicated `password_reset_tokens` table (migration `0004`), mirroring
+  the verification-token design (hashed, single-use, indexed by `user_id`).
+
 ### Login, logout, session
 
 - `POST /api/auth/login`: look up by email; verify password with Argon2; reject unverified
@@ -89,7 +102,9 @@ epics, tickets, or comments behavior is introduced in this phase.
 ### Frontend
 
 - Screens/routes: Sign-up, Login, Email-verification result (reads `token` from the URL and
-  calls verify), and a Resend action available from the login/verification screens.
+  calls verify), a Resend action available from the login/verification screens, plus
+  Forgot-password (request a reset link) and Reset-password (reads `token` from the URL and
+  sets a new password).
 - An auth store (Zustand) that calls `/api/auth/me` on load and after login/logout.
 - A `ProtectedRoute` wrapper redirecting unauthenticated users to login; a header user menu
   with **Log out** (per wireframe 2).
@@ -169,6 +184,20 @@ Story points are rough relative estimates. IDs are local references (e.g. `P2-1`
 | P2-21 | Unit tests | Password hashing/verify; token hashing + expiry; JWT sign/verify. | Edge cases covered; deterministic and fast. | 2 |
 | P2-22 | Playwright auth flow | Sign-up shows verification state; login rejects bad credentials; email captured via Mailpit. | E2E passes in the `test` compose profile. | 3 |
 
+### EPIC P2-E7 — Password Recovery
+
+> As a user who forgot my password, I can request a reset link and set a new password so that I
+> can regain access to my account.
+
+| ID | Task | Description | Acceptance Criteria | Est |
+|---|---|---|---|---|
+| P2-26 | Reset token table | Migration `0004` adds `password_reset_tokens` (hashed, single-use, indexed by user). | Table + index created; smoke test asserts presence and emptiness. | 1 |
+| P2-27 | Forgot-password endpoint | `POST /api/auth/forgot-password` invalidates prior reset tokens, issues a 1h token, emails the link. | Known email → link emailed; response is generic and never reveals account existence. | 2 |
+| P2-28 | Reset-password endpoint | `POST /api/auth/reset-password` validates password + token, updates the hash, consumes the token, marks email verified. | Valid → password changed + email verified; missing/used/expired/weak → rejected. | 3 |
+| P2-29 | Reset email | Nodemailer sends a password-reset email; Mailpit captures it locally. | Reset email appears in Mailpit; prod uses the SMTP relay. | 1 |
+| P2-30 | Frontend recovery screens | Forgot-password and Reset-password pages with states; "Forgot your password?" link on login. | Request shows generic success; reset sets new password and links to login; states handled. | 3 |
+| P2-31 | Recovery tests | Integration tests for reset happy path, single-use, and no-enumeration. | Cases assert status codes and side effects against a real Postgres. | 2 |
+
 ### EPIC P2-E6 — Documentation
 
 > As a reader, I need docs that reflect authentication and its configuration.
@@ -190,8 +219,11 @@ Story points are rough relative estimates. IDs are local references (e.g. `P2-1`
 - [x] Unverified users cannot log in or access protected endpoints/screens.
 - [x] Session is carried in an httpOnly cookie; no tokens appear in URLs (except the single-use
       verification token).
-- [x] All business endpoints are protected; sign-up, login, verify, resend, health, and
-      readiness remain public.
+- [x] A user can request a password reset, receive a 1h single-use reset link (captured in
+      Mailpit locally), set a new password, and log in with it; the old password stops working.
+- [x] Password-reset requests respond generically and never reveal whether an email exists.
+- [x] All business endpoints are protected; sign-up, login, verify, resend, forgot-password,
+      reset-password, health, and readiness remain public.
 - [x] Backend integration/unit tests pass; a Playwright auth flow test is included.
 - [x] No secrets are committed; `.env.example` documents required variables.
 - [x] README, architecture, and HLS docs reflect authentication.
@@ -214,6 +246,14 @@ domain, so nothing is ever delivered externally and there is no spam risk.
    (the app shows "Email verified").
 5. Log in with the same credentials → you land on the protected board.
 6. Open the top-right account menu → **Log out** → you return to the login page.
+
+### Password recovery
+
+1. On the **Log in** page, click **Forgot your password?** and submit your email.
+2. Open the "Reset your Kanban Ticketing password" email in Mailpit and click the link (valid
+   1 hour, single-use).
+3. Enter a new password (≥ 8 characters) and submit.
+4. Log in with the new password; the old one no longer works.
 
 ### Negative paths to verify
 

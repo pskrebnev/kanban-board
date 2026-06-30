@@ -40,8 +40,10 @@ The project is delivered in phases. The status below reflects what is actually b
 - **Authentication** — email/password sign-up, SMTP email verification (24h single-use
   tokens, resend), login/logout with a JWT session cookie, and `requireAuth` protection of
   business endpoints. Passwords are hashed with Argon2id.
-- **Auth screens** — sign-up, login, email-verification result, and resend, with a protected
-  board and a header log-out menu.
+- **Password recovery** — request a reset link by email and set a new password via a 1-hour,
+  single-use token; a successful reset also confirms the email.
+- **Auth screens** — sign-up, login, email-verification result, resend, forgot-password, and
+  reset-password, with a protected board and a header log-out menu.
 - Backend health and readiness endpoints (`/api/health`, `/api/ready`) and a static API
   resource index (`/api`).
 - A scaffold Kanban board UI (static placeholder columns, not yet backed by the API).
@@ -225,7 +227,10 @@ Roll back the most recent migration with `npm run migrate:down`.
 ### Authentication & Email
 
 Authentication uses local email/password accounts. After sign-up, the backend sends a
-verification email through SMTP; an account cannot log in until it is verified.
+verification email through SMTP; an account cannot log in until it is verified. Forgotten
+passwords are recovered the same way: the backend emails a reset link (valid for 1 hour,
+single-use) that lets the user set a new password. Resetting also confirms the email address,
+since clicking the emailed link proves control of the inbox.
 
 - **Local development:** the stack includes [Mailpit](https://github.com/axllent/mailpit), a
   mail catcher. Sign-up emails are captured there instead of being delivered. Open the Mailpit
@@ -239,8 +244,8 @@ verification email through SMTP; an account cannot log in until it is verified.
   set `COOKIE_SECURE=true` when serving over HTTPS, and provide a strong `JWT_SECRET`.
 
 Sessions are carried in an httpOnly cookie. The following endpoints are public: sign-up,
-login, verify, resend, `/api/health`, and `/api/ready`. All other business endpoints require
-authentication.
+login, verify, resend, forgot-password, reset-password, `/api/health`, and `/api/ready`. All
+other business endpoints require authentication.
 
 ### Try The Sign-Up & Login Flow Locally
 
@@ -266,6 +271,14 @@ Things to try for the negative paths:
 - **Resend:** request a new link from the login or verification page; the previous link stops
   working and the newest one in Mailpit verifies the account.
 - **Single-use / expiry:** a verification link works only once and expires after 24 hours.
+
+To test **password recovery**:
+
+1. On the **Log in** page, click **Forgot your password?** and submit your email.
+2. Open Mailpit (`http://localhost:${MAILPIT_UI_PORT}`), open the "Reset your Kanban Ticketing
+   password" message, and click its link (valid for 1 hour, single-use).
+3. Enter a new password (≥ 8 characters) and submit; you see a success message.
+4. Log in with the **new** password — the old one no longer works.
 
 You can also exercise the same flow over HTTP without a browser. See
 [Running The Browser Tests](#running-the-browser-tests) for the automated Playwright auth-flow
@@ -300,8 +313,9 @@ tests/e2e/           Browser smoke tests using Playwright in Podman
 ### Local Service Details
 
 - `frontend` serves the built React app with Nginx and proxies `/api` to `backend`.
-- `backend` exposes auth endpoints (`/api/auth/signup`, `/verify`, `/resend`, `/login`,
-  `/logout`, `/me`), health/readiness (`/api/health`, `/api/ready`), and an API resource index.
+- `backend` exposes auth endpoints (`/api/auth/signup`, `/verify`, `/resend`,
+  `/forgot-password`, `/reset-password`, `/login`, `/logout`, `/me`), health/readiness
+  (`/api/health`, `/api/ready`), and an API resource index.
 - `db` runs PostgreSQL 15 using database settings from `.env`.
 - `mailpit` captures outgoing verification emails locally (UI on `MAILPIT_UI_PORT`).
 - `e2e` runs Playwright with Chromium for browser automation (smoke + auth-flow tests).

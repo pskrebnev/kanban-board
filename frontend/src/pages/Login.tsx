@@ -69,6 +69,9 @@ export function Login(): ReactElement {
         {showResend && <ResendVerification initialEmail={email} />}
 
         <p className="auth-alt">
+          <Link to="/forgot-password">Forgot your password?</Link>
+        </p>
+        <p className="auth-alt">
           New here? <Link to="/signup">Create an account</Link>
         </p>
       </section>

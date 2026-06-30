@@ -30,19 +30,31 @@ async function expectStatus(promise: Promise<unknown>, status: number): Promise<
 runOrSkip("auth flow (integration)", () => {
   const pool: pg.Pool = createPool(databaseUrl as string);
   const sentLinks: string[] = [];
+  const resetLinks: string[] = [];
   const mailer: Mailer = {
     async sendVerificationEmail(_to, verifyUrl) {
       sentLinks.push(verifyUrl);
+    },
+    async sendPasswordResetEmail(_to, resetUrl) {
+      resetLinks.push(resetUrl);
     },
   };
   const auth = createAuthService({ pool, mailer, appBaseUrl: "http://localhost:3000" });
 
   beforeEach(async () => {
     sentLinks.length = 0;
-    await pool.query("truncate table email_verification_tokens, users restart identity cascade");
+    resetLinks.length = 0;
+    await pool.query(
+      "truncate table password_reset_tokens, email_verification_tokens, users restart identity cascade",
+    );
   });
 
   afterAll(async () => {
+    // Leave the database empty so the migration smoke test's "no application
+    // data" assertion holds regardless of test file ordering.
+    await pool.query(
+      "truncate table password_reset_tokens, email_verification_tokens, users restart identity cascade",
+    );
     await pool.end();
   });
 
@@ -96,6 +108,37 @@ runOrSkip("auth flow (integration)", () => {
     expect(secondToken).not.toBe(firstToken);
     await expectStatus(auth.verify(firstToken), 400);
     await auth.verify(secondToken);
+  });
+
+  it("resets a password and lets the user log in with the new one", async () => {
+    await auth.signup("reset@example.com", "originalpass");
+    await auth.verify(tokenFromUrl(sentLinks[0] ?? ""));
+
+    await auth.requestPasswordReset("reset@example.com");
+    const resetToken = tokenFromUrl(resetLinks[0] ?? "");
+    await auth.resetPassword(resetToken, "brandnewpass");
+
+    // Old password no longer works; new one does.
+    await expectStatus(auth.login("reset@example.com", "originalpass"), 401);
+    const user = await auth.login("reset@example.com", "brandnewpass");
+    expect(user.email).toBe("reset@example.com");
+  });
+
+  it("treats a password reset link as single-use", async () => {
+    await auth.signup("resetonce@example.com", "originalpass");
+    await auth.verify(tokenFromUrl(sentLinks[0] ?? ""));
+
+    await auth.requestPasswordReset("resetonce@example.com");
+    const resetToken = tokenFromUrl(resetLinks[0] ?? "");
+
+    await auth.resetPassword(resetToken, "brandnewpass");
+    await expectStatus(auth.resetPassword(resetToken, "anotherpass"), 400);
+  });
+
+  it("does not reveal whether an email exists on reset request", async () => {
+    // No throw and no email sent for an unknown address.
+    await auth.requestPasswordReset("ghost@example.com");
+    expect(resetLinks.length).toBe(0);
   });
 
   it("rejects an expired token", async () => {
