@@ -64,6 +64,146 @@ button {
   max-width: 980px;
 }
 
+.board-five {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  max-width: 1280px;
+}
+
+.centered {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.topbar {
+  align-items: center;
+  background: white;
+  border-bottom: 1px solid #dce2f0;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+
+.brand {
+  font-weight: 800;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-button {
+  background: #eef2ff;
+  color: #2456ff;
+}
+
+.user-dropdown {
+  background: white;
+  border: 1px solid #dce2f0;
+  border-radius: 0.75rem;
+  box-shadow: 0 16px 40px rgb(23 32 51 / 12%);
+  padding: 0.5rem;
+  position: absolute;
+  right: 0;
+  top: 3rem;
+}
+
+.user-dropdown button {
+  background: transparent;
+  color: #172033;
+  width: 100%;
+}
+
+.auth-shell {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1.5rem;
+}
+
+.auth-card {
+  background: white;
+  border: 1px solid #dce2f0;
+  border-radius: 1.25rem;
+  box-shadow: 0 16px 40px rgb(23 32 51 / 8%);
+  max-width: 420px;
+  padding: 2.5rem;
+  width: 100%;
+}
+
+.auth-card h1 {
+  font-size: 1.75rem;
+  margin: 0 0 1.5rem;
+}
+
+.auth-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-card label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 700;
+  gap: 0.4rem;
+}
+
+.auth-card input {
+  border: 1px solid #c7d0e6;
+  border-radius: 0.6rem;
+  font: inherit;
+  padding: 0.7rem 0.85rem;
+}
+
+.auth-card button {
+  width: 100%;
+}
+
+.auth-alt {
+  margin-top: 1.5rem;
+}
+
+.muted {
+  color: #5a6680;
+  font-size: 0.85rem;
+}
+
+.success {
+  color: #0a7d44;
+  font-weight: 700;
+}
+
+.error {
+  color: #c0271c;
+  font-weight: 700;
+}
+
+.resend {
+  border-top: 1px solid #eceff7;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+}
+
+.field-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.field-row input {
+  border: 1px solid #c7d0e6;
+  border-radius: 0.6rem;
+  flex: 1;
+  font: inherit;
+  padding: 0.6rem 0.75rem;
+}
+
+.field-row button {
+  white-space: nowrap;
+}
+
 .column {
   background: white;
   border: 1px solid #dce2f0;

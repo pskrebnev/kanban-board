@@ -37,15 +37,19 @@ The project is delivered in phases. The status below reflects what is actually b
   epics, tickets, comments, verification tokens), applied automatically on backend startup.
 - Backend foundation: typed config loader, shared PostgreSQL pool, central error handler,
   and a layered route structure.
+- **Authentication** — email/password sign-up, SMTP email verification (24h single-use
+  tokens, resend), login/logout with a JWT session cookie, and `requireAuth` protection of
+  business endpoints. Passwords are hashed with Argon2id.
+- **Auth screens** — sign-up, login, email-verification result, and resend, with a protected
+  board and a header log-out menu.
 - Backend health and readiness endpoints (`/api/health`, `/api/ready`) and a static API
   resource index (`/api`).
 - A scaffold Kanban board UI (static placeholder columns, not yet backed by the API).
-- Automated tests: a Vitest/Supertest backend suite (with a migration smoke test) and a
-  Playwright browser smoke test.
+- Automated tests: a Vitest/Supertest backend suite (migration smoke test + auth unit and
+  integration tests) and Playwright browser smoke and auth-flow tests.
 
 ### Not Yet Implemented
 
-- **Authentication** — sign-up, email verification, login/logout (planned: Phase 2).
 - **Teams** — create, rename, delete, with deletion guards (planned: Phase 3).
 - **Epics** — CRUD scoped to a team (planned: Phase 4).
 - **Tickets** — full lifecycle, fields, and the five-state workflow (planned: Phase 5).
@@ -53,8 +57,9 @@ The project is delivered in phases. The status below reflects what is actually b
 - **Kanban board** — real drag-and-drop persistence, filtering, and search (planned: Phase 7).
 - **Persistence-backed data** — the current board uses in-memory placeholder data only.
 
-See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap and the
-[Phase 1 plan](docs/phase-1.md) for the work in progress.
+See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap, the
+[Phase 1 plan](docs/phase-1.md) (persistence foundation, complete), and the
+[Phase 2 plan](docs/phase-2.md) (authentication, complete).
 
 ---
 
@@ -188,6 +193,7 @@ Then open the application in a browser:
 - Frontend: `http://localhost:${FRONTEND_HOST_PORT}`
 - Backend health: `http://localhost:${BACKEND_HOST_PORT}/api/health`
 - Backend database readiness: `http://localhost:${BACKEND_HOST_PORT}/api/ready`
+- Mailpit (captured verification emails): `http://localhost:${MAILPIT_UI_PORT}`
 
 Stop the stack (Docker / Podman):
 
@@ -215,6 +221,22 @@ DATABASE_URL=postgresql://kanban_user:change_this_local_password@localhost:5432/
 ```
 
 Roll back the most recent migration with `npm run migrate:down`.
+
+### Authentication & Email
+
+Authentication uses local email/password accounts. After sign-up, the backend sends a
+verification email through SMTP; an account cannot log in until it is verified.
+
+- **Local development:** the stack includes [Mailpit](https://github.com/axllent/mailpit), a
+  mail catcher. Sign-up emails are captured there instead of being delivered. Open the Mailpit
+  UI at `http://localhost:${MAILPIT_UI_PORT}` and click the verification link (or copy its
+  token). SMTP is configured via `SMTP_HOST`/`SMTP_PORT` (defaults point at Mailpit).
+- **Production:** set `SMTP_HOST=relay1.dataart.com` (and credentials if required) in `.env`,
+  set `COOKIE_SECURE=true` when serving over HTTPS, and provide a strong `JWT_SECRET`.
+
+Sessions are carried in an httpOnly cookie. The following endpoints are public: sign-up,
+login, verify, resend, `/api/health`, and `/api/ready`. All other business endpoints require
+authentication.
 
 ---
 
@@ -245,13 +267,16 @@ tests/e2e/           Browser smoke tests using Playwright in Podman
 ### Local Service Details
 
 - `frontend` serves the built React app with Nginx and proxies `/api` to `backend`.
-- `backend` exposes `/api/health`, `/api/ready`, and an initial API resource index.
+- `backend` exposes auth endpoints (`/api/auth/signup`, `/verify`, `/resend`, `/login`,
+  `/logout`, `/me`), health/readiness (`/api/health`, `/api/ready`), and an API resource index.
 - `db` runs PostgreSQL 15 using database settings from `.env`.
-- `e2e` runs Playwright with Chromium for browser automation.
+- `mailpit` captures outgoing verification emails locally (UI on `MAILPIT_UI_PORT`).
+- `e2e` runs Playwright with Chromium for browser automation (smoke + auth-flow tests).
 
 ### Running The Backend Tests
 
-The backend has a Vitest test suite (unit tests plus a migration smoke test):
+The backend has a Vitest test suite (auth unit tests plus DB-backed integration and migration
+smoke tests):
 
 ```shell
 cd backend
@@ -259,9 +284,9 @@ npm install
 npm test
 ```
 
-The migration smoke test is skipped unless `TEST_DATABASE_URL` (or `DATABASE_URL`) points at a
-freshly migrated database. To run it, start a Postgres, run `npm run migrate:up`, then run
-`npm test` with that variable set.
+The migration smoke test and auth integration tests are skipped unless `TEST_DATABASE_URL`
+(or `DATABASE_URL`) points at a freshly migrated database. To run them, start a Postgres, run
+`npm run migrate:up`, then run `npm test` with that variable set.
 
 ### Running The Browser Tests
 
@@ -282,5 +307,6 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 - [Product specification](docs/KanbanBoard.pdf) — the authoritative requirements (main doc).
 - [High Level Solution](docs/kanban-ticketing-hls.md) — phase-by-phase implementation plan with tech solutions.
 - [Phase 1 plan](docs/phase-1.md) — persistence foundation & migrations plan with a JIRA-style backlog.
+- [Phase 2 plan](docs/phase-2.md) — authentication plan with a JIRA-style backlog.
 - [Architecture](docs/architecture.md) — high-level architecture and delivery phases.
 - [Testing approach](docs/testing-approach.md) — grouped end-to-end scenario catalogue.

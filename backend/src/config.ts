@@ -13,6 +13,8 @@ export type AppConfig = {
   appBaseUrl: string;
   /** Optional until Phase 2 (authentication) wires it in. */
   jwtSecret?: string;
+  /** Whether the session cookie should require HTTPS. Defaults to false for local HTTP. */
+  cookieSecure: boolean;
   /** Optional until Phase 2 (email verification) wires it in. */
   smtp?: SmtpConfig;
 };
@@ -75,6 +77,7 @@ export function loadConfig(): AppConfig {
     databaseUrl: requireEnv("DATABASE_URL"),
     appBaseUrl: optionalEnv("APP_BASE_URL") ?? "http://localhost:3000",
     jwtSecret: optionalEnv("JWT_SECRET"),
+    cookieSecure: (optionalEnv("COOKIE_SECURE") ?? "false").toLowerCase() === "true",
     smtp: loadSmtp(),
   };
 }
