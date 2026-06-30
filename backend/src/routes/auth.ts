@@ -30,6 +30,15 @@ const verifyQuerySchema = z.object({
   token: z.string().min(1),
 });
 
+const forgotPasswordSchema = z.object({
+  email: emailField,
+});
+
+const resetPasswordSchema = z.object({
+  token: z.string().min(1),
+  password: z.string().min(8),
+});
+
 function parse<T>(schema: ZodType<T>, data: unknown): T {
   const result = schema.safeParse(data);
 
@@ -81,6 +90,20 @@ export function createAuthRouter(deps: AuthRouterDeps): Router {
     response.json({
       message: "If an unverified account exists for that email, a new verification link was sent.",
     });
+  });
+
+  router.post("/forgot-password", async (request: Request, response: Response) => {
+    const { email } = parse(forgotPasswordSchema, request.body);
+    await authService.requestPasswordReset(email);
+    response.json({
+      message: "If an account exists for that email, a password reset link was sent.",
+    });
+  });
+
+  router.post("/reset-password", async (request: Request, response: Response) => {
+    const { token, password } = parse(resetPasswordSchema, request.body);
+    await authService.resetPassword(token, password);
+    response.json({ message: "Password updated. You can now log in." });
   });
 
   router.post("/login", async (request: Request, response: Response) => {

@@ -4,7 +4,9 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Board } from "./pages/Board";
+import { ForgotPassword } from "./pages/ForgotPassword";
 import { Login } from "./pages/Login";
+import { ResetPassword } from "./pages/ResetPassword";
 import { Signup } from "./pages/Signup";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { useAuthStore } from "./store/auth";
@@ -23,6 +25,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify" element={<VerifyEmail />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route
           path="/"
           element={

@@ -55,3 +55,23 @@ export async function markUserVerified(pool: pg.Pool, id: string): Promise<void>
     [id],
   );
 }
+
+/**
+ * Updates a user's password. A successful reset also marks the email as
+ * verified, since clicking the emailed reset link proves control of the inbox.
+ */
+export async function updateUserPassword(
+  pool: pg.Pool,
+  id: string,
+  passwordHash: string,
+): Promise<void> {
+  await query(
+    pool,
+    `update users
+        set password_hash = $2,
+            email_verified = true,
+            modified_at = now()
+      where id = $1`,
+    [id, passwordHash],
+  );
+}
