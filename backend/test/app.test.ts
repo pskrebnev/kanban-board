@@ -44,4 +44,11 @@ describe("public API routes", () => {
     expect(response.status).toBe(401);
     expect(response.body.error.code).toBe("unauthorized");
   });
+
+  it("requires authentication to list teams", async () => {
+    const response = await request(app).get("/api/teams");
+
+    expect(response.status).toBe(401);
+    expect(response.body.error.code).toBe("unauthorized");
+  });
 });

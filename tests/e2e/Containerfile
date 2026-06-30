@@ -10,6 +10,7 @@ RUN npx playwright install --with-deps chromium
 
 COPY smoke-test.ts ./
 COPY auth-flow.ts ./
+COPY teams-flow.ts ./
 COPY tsconfig.json ./
 
 CMD ["npm", "test"]

@@ -18,8 +18,8 @@ The local runtime uses Podman and `podman-compose` for the application services,
 ## Current Phase
 
 Phase numbering follows the [High Level Solution](kanban-ticketing-hls.md). Phase 0
-(foundation scaffold), Phase 1 (persistence foundation & migrations), and Phase 2
-(authentication) are complete; the next phase is Phase 3 (teams).
+(foundation scaffold), Phase 1 (persistence foundation & migrations), Phase 2
+(authentication), and Phase 3 (teams) are complete; the next phase is Phase 4 (epics).
 
 Completed:
 
@@ -40,12 +40,16 @@ Completed:
 - Added Mailpit to the local stack for capturing verification emails, and frontend auth
   screens (sign-up, login, verification result, resend) with a protected board.
 - Added auth unit and integration tests and a Playwright auth-flow test.
+- Added team management (Phase 3): a `team-repository`/`team-service`, `/api/teams` endpoints
+  behind `requireAuth` (list with a `referenced` flag, create, rename, delete), case-insensitive
+  name uniqueness mapped to `409`, a referenced-delete guard, and a frontend `/teams` screen.
+  Covered by backend integration tests and a Playwright teams-flow.
 - Replaced Selenium with Playwright for browser testing.
 - Documented the high-level architecture and local development workflow.
 
 Not yet implemented:
 
-- Production API endpoints for teams, epics, tickets, and comments (Phases 3–6).
+- Production API endpoints for epics, tickets, and comments (Phases 4–6).
 - Real drag-and-drop ticket movement persistence (Phase 7).
 - CI pipeline and release packaging.
 
@@ -88,6 +92,8 @@ Core libraries:
 - Zustand
 - dnd-kit
 - Axios
+- Tailwind CSS v4 (via `@tailwindcss/vite`) — utility-first styling, adopted incrementally
+  alongside the existing hand-written CSS (Preflight intentionally deferred to a future restyle).
 
 Responsibilities:
 

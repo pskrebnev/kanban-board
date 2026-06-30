@@ -42,17 +42,22 @@ The project is delivered in phases. The status below reflects what is actually b
   business endpoints. Passwords are hashed with Argon2id.
 - **Password recovery** — request a reset link by email and set a new password via a 1-hour,
   single-use token; a successful reset also confirms the email.
+- **Teams** — create, list, inline-rename, and delete teams ([Phase 3](docs/phase-3.md)). Names
+  are trimmed, non-empty, and case-insensitively unique; deletion is blocked while a team is
+  referenced by epics or tickets. Endpoints sit behind `requireAuth`, and a `/teams` screen
+  provides the full management UI.
 - **Auth screens** — sign-up, login, email-verification result, resend, forgot-password, and
   reset-password, with a protected board and a header log-out menu.
 - Backend health and readiness endpoints (`/api/health`, `/api/ready`) and a static API
   resource index (`/api`).
 - A scaffold Kanban board UI (static placeholder columns, not yet backed by the API).
-- Automated tests: a Vitest/Supertest backend suite (migration smoke test + auth unit and
-  integration tests) and Playwright browser smoke and auth-flow tests.
+- Automated tests: a Vitest/Supertest backend suite (migration smoke test + auth and teams unit
+  and integration tests) and Playwright browser smoke, auth-flow, and teams-flow tests.
+- **Tailwind CSS v4** is available in the frontend (via `@tailwindcss/vite`) for incremental
+  adoption alongside the existing CSS — see [Frontend Styling](#frontend-styling-tailwind-css).
 
 ### Not Yet Implemented
 
-- **Teams** — create, rename, delete, with deletion guards (planned: [Phase 3](docs/phase-3.md)).
 - **Epics** — CRUD scoped to a team (planned: Phase 4).
 - **Tickets** — full lifecycle, fields, and the five-state workflow (planned: Phase 5).
 - **Comments** — chronological, immutable comments on tickets (planned: Phase 6).
@@ -62,7 +67,7 @@ The project is delivered in phases. The status below reflects what is actually b
 See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap, the
 [Phase 1 plan](docs/phase-1.md) (persistence foundation, complete), the
 [Phase 2 plan](docs/phase-2.md) (authentication, complete), and the
-[Phase 3 plan](docs/phase-3.md) (teams, next up).
+[Phase 3 plan](docs/phase-3.md) (teams, complete).
 
 ---
 
@@ -389,11 +394,12 @@ tests/e2e/           Browser smoke tests using Playwright in Podman
 
 - `frontend` serves the built React app with Nginx and proxies `/api` to `backend`.
 - `backend` exposes auth endpoints (`/api/auth/signup`, `/verify`, `/resend`,
-  `/forgot-password`, `/reset-password`, `/login`, `/logout`, `/me`), health/readiness
+  `/forgot-password`, `/reset-password`, `/login`, `/logout`, `/me`), team endpoints behind
+  authentication (`GET/POST /api/teams`, `PATCH/DELETE /api/teams/:id`), health/readiness
   (`/api/health`, `/api/ready`), and an API resource index.
 - `db` runs PostgreSQL 15 using database settings from `.env`.
 - `mailpit` captures outgoing verification emails locally (UI on `MAILPIT_UI_PORT`).
-- `e2e` runs Playwright with Chromium for browser automation (smoke + auth-flow tests).
+- `e2e` runs Playwright with Chromium for browser automation (smoke + auth-flow + teams-flow tests).
 
 ### Running The Backend Tests
 
@@ -423,6 +429,26 @@ This starts the required application services and runs the `e2e` container. Play
 ```shell
 podman-compose -f infra/podman/podman-compose.yml --profile test down
 ```
+
+### Frontend Styling (Tailwind CSS)
+
+The frontend has [Tailwind CSS v4](https://tailwindcss.com/) wired in via the first-party
+`@tailwindcss/vite` plugin, so components can adopt utility classes
+(`className="flex items-center gap-4 ..."`) at any time — no extra build step or config file is
+needed.
+
+How it is set up:
+
+- `@tailwindcss/vite` is registered in `frontend/vite.config.ts`.
+- `frontend/src/styles.css` imports Tailwind's **theme** and **utilities** layers. It deliberately
+  does **not** import Preflight (Tailwind's global reset) yet, so the existing hand-written styles
+  remain the source of truth and the current UI is unchanged. The Teams screen subtitle uses
+  Tailwind utilities as a first working example.
+
+Adoption is intended to be incremental (see the [High Level Solution](docs/kanban-ticketing-hls.md)):
+new screens in upcoming phases can be built primarily with Tailwind utilities, and a later styling
+phase can switch `styles.css` to the single `@import "tailwindcss";` line (enabling Preflight) as
+part of a deliberate restyle. Until then, plain CSS and Tailwind utilities coexist.
 
 ### Documentation
 

@@ -162,17 +162,22 @@ Story points are rough relative estimates. IDs are local references (e.g. `P3-1`
 
 ## Phase 3 Definition of Done
 
-- [ ] An authenticated user can create, list, rename, and delete teams through the UI, persisted
+- [x] An authenticated user can create, list, rename, and delete teams through the UI, persisted
       in PostgreSQL.
-- [ ] Team names are trimmed, non-empty, and case-insensitively unique; violations return `400`
+- [x] Team names are trimmed, non-empty, and case-insensitively unique; violations return `400`
       or `409` with clear messages.
-- [ ] Deleting a team referenced by epics or tickets is blocked with a `409` and a clear
+- [x] Deleting a team referenced by epics or tickets is blocked with a `409` and a clear
       message; no cascade occurs.
-- [ ] `GET /api/teams` exposes whether each team is referenced so the UI can disable delete.
-- [ ] All team endpoints require an authenticated, verified session; anonymous access → `401`.
-- [ ] The team screen shows loading, empty, success, and error states.
-- [ ] Backend integration tests pass; a Playwright `teams-*` flow is included.
-- [ ] README, architecture, and HLS docs reflect team management.
+- [x] `GET /api/teams` exposes whether each team is referenced so the UI can disable delete.
+- [x] All team endpoints require an authenticated, verified session; anonymous access → `401`.
+- [x] The team screen shows loading, empty, success, and error states.
+- [x] Backend integration tests pass; a Playwright `teams-*` flow is included.
+- [x] README, architecture, and HLS docs reflect team management.
+
+> **Status: complete.** Implemented across `team-repository.ts`, `team-service.ts`,
+> `routes/teams.ts` (mounted at `/api/teams` behind `requireAuth`), the frontend `Teams` page
+> and `teams` store, backend integration tests (`teams-integration.test.ts`), and the Playwright
+> `teams-flow.ts`.
 
 ## How To Test Locally
 

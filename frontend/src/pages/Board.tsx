@@ -43,6 +43,11 @@ export function Board(): ReactElement {
     <div className="app">
       <header className="topbar">
         <span className="brand">Kanban Ticketing</span>
+        <nav className="topbar-nav">
+          <button type="button" className="link-button" onClick={() => navigate("/teams")}>
+            Teams
+          </button>
+        </nav>
         <div className="user-menu">
           <button
             type="button"

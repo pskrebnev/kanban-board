@@ -7,7 +7,9 @@ import { errorHandler } from "./middleware/error-handler.js";
 import { createRequireAuth } from "./middleware/require-auth.js";
 import { createAuthRouter } from "./routes/auth.js";
 import { createApiRouter } from "./routes/index.js";
+import { createTeamsRouter } from "./routes/teams.js";
 import type { AuthService } from "./services/auth-service.js";
+import { createTeamService } from "./services/team-service.js";
 
 export type AppDeps = {
   pool: pg.Pool;
@@ -24,6 +26,7 @@ export type AppDeps = {
 export function createApp(deps: AppDeps): Express {
   const { pool, authService, jwtSecret, cookieSecure } = deps;
   const requireAuth = createRequireAuth(pool, jwtSecret);
+  const teamService = createTeamService({ pool });
 
   const app = express();
 
@@ -33,6 +36,7 @@ export function createApp(deps: AppDeps): Express {
 
   app.use("/api", createApiRouter(pool));
   app.use("/api/auth", createAuthRouter({ authService, jwtSecret, cookieSecure, requireAuth }));
+  app.use("/api/teams", createTeamsRouter({ teamService, requireAuth }));
 
   app.use(errorHandler);
 

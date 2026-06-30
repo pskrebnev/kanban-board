@@ -45,6 +45,7 @@ Tier boundaries (spec §2 — must remain clearly separated):
 | Tier / Concern | Technology | Notes |
 |---|---|---|
 | Presentation | React + TypeScript, Vite, React Router, Zustand, dnd-kit, Axios | Built to static assets, served by Nginx 1.27 |
+| Styling | Tailwind CSS v4 (`@tailwindcss/vite`) + hand-written CSS | Utilities available now; adopted incrementally per screen. Preflight (global reset) deferred to a dedicated restyle phase so current styles are unaffected |
 | Application/API | Node.js 22, Express 5, TypeScript | Layered: routes → services → repositories |
 | Validation | `zod` | Server-side validation of every input (spec §9) |
 | AuthN/AuthZ | `argon2` (Argon2id), `jsonwebtoken` | JWT in an httpOnly, SameSite cookie (spec §9: no tokens in URLs) |
@@ -162,7 +163,9 @@ testing, wireframe considerations, and exit criteria.
 - **Exit criteria:** a user can sign up, verify via the captured email, and log in;
   unverified users are blocked; protected endpoints reject anonymous access.
 
-## Phase 3 — Teams
+## Phase 3 — Teams (complete)
+
+See [phase-3.md](phase-3.md) for the detailed plan, backlog, and Definition of Done.
 
 - **Goal:** Manage teams that group tickets.
 - **Spec coverage:** §4, §9, §10 (team screen).
@@ -177,6 +180,9 @@ testing, wireframe considerations, and exit criteria.
   for referenced teams.
 - **Exit criteria:** teams CRUD works and persists; referenced-team deletion is blocked with
   a clear message.
+- **Status:** complete — teams CRUD, validation, conflict mapping, and the referenced-delete
+  guard are implemented behind `requireAuth`, with backend integration tests and a Playwright
+  `teams-flow` covering create/rename/delete.
 
 ## Phase 4 — Epics
 
@@ -280,6 +286,9 @@ testing, wireframe considerations, and exit criteria.
   is acceptable as long as all mandatory actions and states remain clear and usable. Refine
   loading/empty/success/error states, disabled-control affordances for referenced records, and
   overall consistency.
+- **Styling:** a good point to complete the Tailwind CSS adoption — migrate the remaining
+  hand-written CSS to utilities and switch `frontend/src/styles.css` to the single
+  `@import "tailwindcss";` (enabling Preflight) as a deliberate, tested restyle.
 - **Testing:** visual/flow review against wireframes; re-run the full Playwright suite.
 - **Exit criteria:** all primary flows match the wireframes' intent; UX states are consistent
   across the app.
