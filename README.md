@@ -16,6 +16,8 @@ flowchart LR
 
 See [docs/architecture.md](docs/architecture.md) for the high-level architecture plan.
 
+See [docs/implementation-plan-auth-teams-epics.md](docs/implementation-plan-auth-teams-epics.md) for the implementation and testing plan for authentication, teams, and epics (spec chapters 3–5).
+
 ## Project Structure
 
 ```text
