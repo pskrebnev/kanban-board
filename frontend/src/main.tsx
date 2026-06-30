@@ -10,6 +10,9 @@ import { Login } from "./pages/Login";
 import { ResetPassword } from "./pages/ResetPassword";
 import { Signup } from "./pages/Signup";
 import { Teams } from "./pages/Teams";
+import { TicketCreate } from "./pages/TicketCreate";
+import { TicketDetail } from "./pages/TicketDetail";
+import { Tickets } from "./pages/Tickets";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { useAuthStore } from "./store/auth";
 import "./styles.css";
@@ -50,6 +53,30 @@ function App() {
           element={
             <ProtectedRoute>
               <Epics />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tickets"
+          element={
+            <ProtectedRoute>
+              <Tickets />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tickets/new"
+          element={
+            <ProtectedRoute>
+              <TicketCreate />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tickets/:id"
+          element={
+            <ProtectedRoute>
+              <TicketDetail />
             </ProtectedRoute>
           }
         />

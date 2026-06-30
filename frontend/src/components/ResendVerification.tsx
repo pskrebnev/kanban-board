@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactElement } from "react";
+import { useState, type SyntheticEvent, type ReactElement } from "react";
 
 import { api, apiErrorMessage } from "../api";
 
@@ -7,7 +7,7 @@ export function ResendVerification({ initialEmail = "" }: { initialEmail?: strin
   const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error">("idle");
   const [message, setMessage] = useState("");
 
-  async function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: SyntheticEvent) {
     event.preventDefault();
     setStatus("loading");
 

@@ -4,10 +4,10 @@ This document groups end-to-end scenario candidates from `docs/KanbanBoard.pdf`.
 
 ## Current Phase
 
-Phases 0–4 are complete (foundation, persistence/migrations, authentication with password
-recovery, team management, and epic management). Phase 5 (tickets) is the next phase. Scenario
-sections below are marked **[implemented]** when covered by automated tests today, or
-**[planned]** when they document the target behavior for an upcoming phase.
+Phases 0–5 are complete (foundation, persistence/migrations, authentication with password
+recovery, team management, epic management, and ticket management). Phase 6 (comments) is the next
+phase. Scenario sections below are marked **[implemented]** when covered by automated tests today,
+or **[planned]** when they document the target behavior for an upcoming phase.
 
 Current automated coverage:
 
@@ -16,12 +16,17 @@ Current automated coverage:
   single-use/expired tokens, resend invalidation, full password-reset flow), teams integration
   tests (CRUD, trim, validation, case-insensitive conflict, referenced-delete guard, 401), epics
   integration tests (CRUD, trim/validation, optional description, unknown-team rejection,
-  team-immutability, `teamId` filter, referenced-delete guard, 404/401), and a migration smoke
-  test asserting a fresh database has schema + metadata only.
+  team-immutability, `teamId` filter, referenced-delete guard, 404/401), tickets integration
+  tests (CRUD, required-field/enum validation, unknown-team and cross-team-epic rejection,
+  `created_by` provenance, modified-timestamp semantics, immediate state change, team-change epic
+  consistency, comment cascade on delete, filters, 404/401), and a migration smoke test asserting
+  a fresh database has schema + metadata only.
 - Playwright containers under `tests/e2e/`: a smoke test (frontend shell loads), an auth-flow
   test (sign up, read the verification email from Mailpit, verify, log in, reach the board), a
-  teams-flow test (create, rename, and delete a team through the UI), and an epics-flow test
-  (create a team, then create, edit, and delete an epic for it through the UI).
+  teams-flow test (create, rename, and delete a team through the UI), an epics-flow test
+  (create a team, then create, edit, and delete an epic for it through the UI), and a tickets-flow
+  test (create a team + epic, then create a ticket, change its state, edit it, and delete it
+  through the UI).
 
 Target coverage:
 
@@ -114,7 +119,7 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 - `epics-require-auth`: all epic endpoints reject anonymous requests with `401`.
 - `epics-belongs-to-team-validator`: the reusable cross-team validator (for Phase 5 tickets) accepts an epic from the same team and rejects one from a different team.
 
-## Ticket Management [planned — Phase 5]
+## Ticket Management [implemented]
 
 - `tickets-create-view-edit-delete`: a verified user creates a ticket (team + type + title + body), views all fields on the details screen, edits it, and deletes it with confirmation; changes persist across refresh.
 - `tickets-title-required`: a blank or whitespace-only ticket title is rejected with `400`.

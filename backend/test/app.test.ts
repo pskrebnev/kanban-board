@@ -58,4 +58,11 @@ describe("public API routes", () => {
     expect(response.status).toBe(401);
     expect(response.body.error.code).toBe("unauthorized");
   });
+
+  it("requires authentication to list tickets", async () => {
+    const response = await request(app).get("/api/tickets");
+
+    expect(response.status).toBe(401);
+    expect(response.body.error.code).toBe("unauthorized");
+  });
 });

@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent, type ReactElement } from "react";
+import { useEffect, useState, type SyntheticEvent, type ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { apiErrorMessage } from "../api";
@@ -43,7 +43,7 @@ export function Epics(): ReactElement {
     navigate("/login", { replace: true });
   }
 
-  async function handleCreate(event: FormEvent) {
+  async function handleCreate(event: SyntheticEvent) {
     event.preventDefault();
     setCreateError("");
     setCreating(true);
@@ -72,6 +72,9 @@ export function Epics(): ReactElement {
           </button>
           <button type="button" className="link-button" onClick={() => navigate("/teams")}>
             Teams
+          </button>
+          <button type="button" className="link-button" onClick={() => navigate("/tickets")}>
+            Tickets
           </button>
         </nav>
         <div className="user-menu">
@@ -217,7 +220,7 @@ function EpicCard({ epic }: { epic: Epic }): ReactElement {
     setEditing(true);
   }
 
-  async function handleSave(event: FormEvent) {
+  async function handleSave(event: SyntheticEvent) {
     event.preventDefault();
     setError("");
     setBusy(true);

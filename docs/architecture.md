@@ -19,8 +19,8 @@ The local runtime uses Podman and `podman-compose` for the application services,
 
 Phase numbering follows the [High Level Solution](kanban-ticketing-hls.md). Phase 0
 (foundation scaffold), Phase 1 (persistence foundation & migrations), Phase 2
-(authentication), Phase 3 (teams), and Phase 4 (epics) are complete; the next phase is
-Phase 5 (tickets).
+(authentication), Phase 3 (teams), Phase 4 (epics), and Phase 5 (tickets) are complete; the next
+phase is Phase 6 (comments).
 
 Completed:
 
@@ -51,12 +51,20 @@ Completed:
   referenced-delete guard (`409`), a reusable `assertEpicBelongsToTeam` validator for Phase 5,
   and a Tailwind-built frontend `/epics` screen. Covered by backend integration tests and a
   Playwright epics-flow.
+- Added ticket management (Phase 5): a `ticket-repository`/`ticket-service`, `/api/tickets`
+  endpoints behind `requireAuth` (filterable list with team/epic/author names, detail, create,
+  update, delete, and a dedicated `PATCH /:id/state`), `bug|feature|fix` types and the fixed
+  five-state workflow, `created_by` taken from the session, same-team epic validation (reusing
+  `assertEpicBelongsToTeam`), modified-timestamp semantics (a no-op save does not bump
+  `modified_at`), and comment cascade on delete. Tailwind-built `/tickets`, `/tickets/new`, and
+  `/tickets/:id` screens provide the UI. Covered by backend integration tests and a Playwright
+  tickets-flow.
 - Replaced Selenium with Playwright for browser testing.
 - Documented the high-level architecture and local development workflow.
 
 Not yet implemented:
 
-- Production API endpoints for tickets and comments (Phases 5–6).
+- Production API endpoints for comments (Phase 6).
 - Real drag-and-drop ticket movement persistence (Phase 7).
 - CI pipeline and release packaging.
 

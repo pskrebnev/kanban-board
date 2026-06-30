@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactElement } from "react";
+import { useState, type SyntheticEvent, type ReactElement } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
 import { api, apiErrorMessage } from "../api";
@@ -11,7 +11,7 @@ export function ResetPassword(): ReactElement {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
 
-  async function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: SyntheticEvent) {
     event.preventDefault();
 
     if (!token) {

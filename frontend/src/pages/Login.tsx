@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactElement } from "react";
+import { useState, type SyntheticEvent, type ReactElement } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { apiErrorMessage } from "../api";
@@ -15,7 +15,7 @@ export function Login(): ReactElement {
   const [message, setMessage] = useState("");
   const [showResend, setShowResend] = useState(false);
 
-  async function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: SyntheticEvent) {
     event.preventDefault();
     setStatus("loading");
     setShowResend(false);
