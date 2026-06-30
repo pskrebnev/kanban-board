@@ -1,9 +1,15 @@
-version: "3.9"
+# Repository-root Compose file.
+#
+# Start the full stack from a clean checkout with:
+#   docker compose up --build
+#
+# Configuration is read from a local .env file (copy from .env.example).
+# The backend container applies database migrations on startup before serving.
 
 services:
   frontend:
     build:
-      context: ../../frontend
+      context: ./frontend
       dockerfile: Containerfile
     environment:
       FRONTEND_CONTAINER_PORT: ${FRONTEND_CONTAINER_PORT}
@@ -15,7 +21,7 @@ services:
 
   backend:
     build:
-      context: ../../backend
+      context: ./backend
       dockerfile: Containerfile
     environment:
       NODE_ENV: production
@@ -25,7 +31,8 @@ services:
     ports:
       - "${BACKEND_HOST_PORT}:${BACKEND_CONTAINER_PORT}"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     image: postgres:15
@@ -55,7 +62,7 @@ services:
     profiles:
       - test
     build:
-      context: ../../tests/e2e
+      context: ./tests/e2e
       dockerfile: Containerfile
     environment:
       APP_URL: ${E2E_APP_URL}

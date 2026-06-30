@@ -14,8 +14,6 @@ This HLS also consolidates the supporting docs in `./docs`:
 - [KanbanBoard.pdf](KanbanBoard.pdf) — **main spec** (Hackathon Ticketing System Requirements).
 - [architecture.md](architecture.md) — high-level 3-tier architecture and delivery phases.
 - [testing-approach.md](testing-approach.md) — grouped end-to-end scenario catalogue.
-- [implementation-plan-auth-teams-epics.md](implementation-plan-auth-teams-epics.md) —
-  detailed plan for spec chapters 3–5.
 
 Where this HLS and a supporting doc disagree, the PDF spec wins.
 
@@ -100,8 +98,14 @@ testing, wireframe considerations, and exit criteria.
 - **Exit criteria (met):** stack builds and runs; tiers are separated into distinct
   containers and folders.
 
-## Phase 1 — Persistence Foundation & Migrations
+## Phase 1 — Persistence Foundation & Migrations (complete)
 
+- **Status:** Done. `node-pg-migrate` applies the full schema (users, verification tokens,
+  teams, epics, tickets, comments) automatically on backend startup; the backend has a typed
+  config loader, shared pool, and central error handler; a repository-root `compose.yaml`
+  supports `docker compose up --build`; Mailpit is available under the `test` profile; and a
+  Vitest/Supertest suite (including a migration smoke test) is in place. See
+  [phase-1.md](phase-1.md).
 - **Goal:** Make the database authoritative and repeatable; prepare the API's layered
   structure and runtime guarantees.
 - **Spec coverage:** §2, §9 (persistence/migrations), §13 (fresh DB = schema only).

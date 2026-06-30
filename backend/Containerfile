@@ -17,5 +17,11 @@ COPY package.json ./
 RUN npm install --omit=dev
 
 COPY --from=build /app/dist ./dist
+COPY migrations ./migrations
+COPY entrypoint.sh ./entrypoint.sh
+# Normalize line endings (in case of a Windows checkout) and make executable.
+RUN sed -i 's/\r$//' ./entrypoint.sh && chmod +x ./entrypoint.sh
 
-CMD ["npm", "start"]
+# Clear the base image's inherited entrypoint so our script runs directly.
+ENTRYPOINT []
+CMD ["./entrypoint.sh"]

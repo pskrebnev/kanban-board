@@ -31,16 +31,21 @@ The project is delivered in phases. The status below reflects what is actually b
 ### Implemented
 
 - Three-tier containerized runtime (React SPA + Nginx, Express API, PostgreSQL 15).
-- Local development stack via Podman / `podman-compose`.
+- Single-command start from the repository root via `docker compose up --build`, plus a
+  Podman / `podman-compose` path.
+- **Database schema & migrations** (`node-pg-migrate`) for the full domain (users, teams,
+  epics, tickets, comments, verification tokens), applied automatically on backend startup.
+- Backend foundation: typed config loader, shared PostgreSQL pool, central error handler,
+  and a layered route structure.
 - Backend health and readiness endpoints (`/api/health`, `/api/ready`) and a static API
   resource index (`/api`).
 - A scaffold Kanban board UI (static placeholder columns, not yet backed by the API).
-- A Playwright browser smoke test that verifies the app shell loads.
+- Automated tests: a Vitest/Supertest backend suite (with a migration smoke test) and a
+  Playwright browser smoke test.
 
 ### Not Yet Implemented
 
 - **Authentication** — sign-up, email verification, login/logout (planned: Phase 2).
-- **Database schema & migrations** — no domain tables yet (planned: Phase 1).
 - **Teams** — create, rename, delete, with deletion guards (planned: Phase 3).
 - **Epics** — CRUD scoped to a team (planned: Phase 4).
 - **Tickets** — full lifecycle, fields, and the five-state workflow (planned: Phase 5).
@@ -162,7 +167,17 @@ Update `.env` for your local machine. Do not commit `.env`; it is ignored by Git
 
 ### Start The Application
 
-Start frontend, backend, and PostgreSQL from the repository root:
+From a clean checkout, start the whole stack from the repository root:
+
+```shell
+docker compose up --build
+```
+
+The backend container automatically applies database migrations before it starts serving, so
+no manual database setup is required. A fresh database starts with schema and migration
+metadata only — no sample or seed data.
+
+If you are using Podman instead of Docker, the equivalent command is:
 
 ```shell
 podman-compose -f infra/podman/podman-compose.yml up --build
@@ -174,21 +189,32 @@ Then open the application in a browser:
 - Backend health: `http://localhost:${BACKEND_HOST_PORT}/api/health`
 - Backend database readiness: `http://localhost:${BACKEND_HOST_PORT}/api/ready`
 
-Stop the stack:
+Stop the stack (Docker / Podman):
 
 ```shell
+docker compose down
 podman-compose -f infra/podman/podman-compose.yml down
 ```
 
-Remove the PostgreSQL development volume:
+Remove the PostgreSQL development volume (wipes local data):
 
 ```shell
+docker compose down -v
 podman-compose -f infra/podman/podman-compose.yml down -v
 ```
 
-> Note: the product specification targets a single-command `docker compose up --build` from
-> the repository root. A repo-root Compose entrypoint is planned in
-> [Phase 1](docs/phase-1.md); until then, use the `podman-compose` command above.
+### Database Migrations
+
+Migrations live in `backend/migrations/` and run automatically on backend startup. To run
+them manually against a database (for example, during backend development outside containers):
+
+```shell
+cd backend
+npm install
+DATABASE_URL=postgresql://kanban_user:change_this_local_password@localhost:5432/ticketing npm run migrate:up
+```
+
+Roll back the most recent migration with `npm run migrate:down`.
 
 ---
 
@@ -207,7 +233,9 @@ flowchart LR
 ### Project Structure
 
 ```text
+compose.yaml         Repository-root Docker Compose entrypoint
 backend/             TypeScript REST API service
+backend/migrations/  SQL database migrations (node-pg-migrate)
 docs/                Specification, architecture, and phase plans
 frontend/            TypeScript React Vite SPA
 infra/podman/        Podman compose runtime
@@ -220,6 +248,20 @@ tests/e2e/           Browser smoke tests using Playwright in Podman
 - `backend` exposes `/api/health`, `/api/ready`, and an initial API resource index.
 - `db` runs PostgreSQL 15 using database settings from `.env`.
 - `e2e` runs Playwright with Chromium for browser automation.
+
+### Running The Backend Tests
+
+The backend has a Vitest test suite (unit tests plus a migration smoke test):
+
+```shell
+cd backend
+npm install
+npm test
+```
+
+The migration smoke test is skipped unless `TEST_DATABASE_URL` (or `DATABASE_URL`) points at a
+freshly migrated database. To run it, start a Postgres, run `npm run migrate:up`, then run
+`npm test` with that variable set.
 
 ### Running The Browser Tests
 
@@ -241,5 +283,4 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 - [High Level Solution](docs/kanban-ticketing-hls.md) — phase-by-phase implementation plan with tech solutions.
 - [Phase 1 plan](docs/phase-1.md) — persistence foundation & migrations plan with a JIRA-style backlog.
 - [Architecture](docs/architecture.md) — high-level architecture and delivery phases.
-- [Auth/Teams/Epics plan](docs/implementation-plan-auth-teams-epics.md) — detailed plan for spec chapters 3–5.
 - [Testing approach](docs/testing-approach.md) — grouped end-to-end scenario catalogue.
