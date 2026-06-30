@@ -4,17 +4,32 @@ This document groups end-to-end scenario candidates from `docs/KanbanBoard.pdf`.
 
 ## Current Phase
 
-The project is currently in Phase 1: foundation and runtime scaffold.
+Phases 0–2 are complete (foundation, persistence/migrations, authentication with password
+recovery). Phase 3 (teams) is the next phase. Scenario sections below are marked
+**[implemented]** when covered by automated tests today, or **[planned]** when they document the
+target behavior for an upcoming phase.
 
 Current automated coverage:
 
-- A Playwright smoke test container exists under `tests/e2e/`.
-- The smoke test verifies that the frontend loads and renders the main application shell.
+- Backend `vitest`/`supertest` suite (`backend/test/`): auth unit tests (password hashing, token
+  hashing, JWT), auth integration tests (signup → verify → login, duplicates, weak password,
+  single-use/expired tokens, resend invalidation, full password-reset flow), and a migration
+  smoke test asserting a fresh database has schema + metadata only.
+- Playwright containers under `tests/e2e/`: a smoke test (frontend shell loads) and an auth-flow
+  test (sign up, read the verification email from Mailpit, verify, log in, reach the board).
 
 Target coverage:
 
-- Add e2e coverage for core user workflows once authentication, teams, epics, tickets, comments, and persisted board operations are implemented.
+- Add e2e coverage for core user workflows as teams, epics, tickets, comments, and persisted
+  board operations are implemented (each phase contributes its scenario group below).
 - Keep browser tests runnable through Podman using the `e2e` compose profile.
+
+## How To Read These Cases
+
+Each bullet is a text test case: an `id` followed by the behavior to verify (preconditions,
+action, and expected result). They are deliberately tool-agnostic — most become Playwright e2e
+tests, some become backend integration tests — and are written so QA can also execute them
+manually.
 
 ## Running Headless Tests
 
@@ -34,30 +49,50 @@ Clean up the test stack:
 podman-compose -f infra/podman/podman-compose.yml --profile test down
 ```
 
-## Authentication
+## Authentication [implemented]
 
-- `auth-signup-verification-login`: user signs up, receives verification flow, verifies email, then logs in.
-- `auth-unverified-user-blocked`: newly registered unverified user cannot access the main app.
-- `auth-resend-verification`: unverified user requests a new verification email; old token becomes invalid.
-- `auth-token-expired`: expired verification token shows a clear result and allows resend.
-- `auth-email-normalization`: emails are trimmed and compared case-insensitively.
-- `auth-logout`: authenticated user logs out and protected screens become inaccessible.
+- `auth-signup-verification-login`: user signs up, receives the verification email (Mailpit), verifies, then logs in successfully.
+- `auth-signup-duplicate-email`: signing up with an existing email (any case) returns a `409` conflict.
+- `auth-signup-weak-password`: a password shorter than 8 characters is rejected with `400`.
+- `auth-signup-invalid-email`: a malformed email is rejected with `400`; any well-formed domain (e.g. `name@mailpit.pit`) is accepted.
+- `auth-unverified-user-blocked`: a registered but unverified user cannot log in (`403`) or reach protected screens.
+- `auth-resend-verification`: an unverified user requests a new verification email; the previous token is invalidated and only the newest verifies.
+- `auth-token-single-use`: a verification token works once; reusing it returns `400`.
+- `auth-token-expired`: an expired verification token shows a clear result and allows resend.
+- `auth-email-normalization`: emails are trimmed and compared case-insensitively at signup, login, and resend.
+- `auth-login-bad-credentials`: wrong password or unknown email returns a generic `401` (no account enumeration).
+- `auth-session-me`: an authenticated request to `/api/auth/me` returns the current user; an anonymous request returns `401`.
+- `auth-logout`: an authenticated user logs out, the session cookie is cleared, and protected screens become inaccessible.
 
-## Team Management
+## Password Recovery [implemented]
 
-- `teams-create-rename-delete`: verified user creates, renames, and deletes an empty team.
-- `teams-name-validation`: empty or duplicate team names show validation errors.
-- `teams-delete-blocked-with-tickets`: team with tickets cannot be deleted and shows clear message.
-- `teams-delete-blocked-with-epics`: team with epics cannot be deleted and shows clear message.
+- `recovery-request-generic-response`: requesting a reset always returns the same generic message, whether or not the email exists (no account enumeration).
+- `recovery-email-sent`: for a known account, a "Reset your password" email is delivered (captured in Mailpit) containing a single-use link.
+- `recovery-reset-and-login`: opening the reset link and submitting a new password updates the credentials; the user can log in with the new password and the old one is refused (`401`).
+- `recovery-token-single-use`: a reset token works once; reusing it returns `400`.
+- `recovery-token-expired`: a reset token older than one hour is rejected with `400`.
+- `recovery-weak-password-rejected`: a new password shorter than 8 characters is rejected with `400`.
+- `recovery-verifies-email`: resetting the password for an unverified account also marks the email verified, allowing immediate login.
 
-## Epic Management
+## Team Management [planned — Phase 3]
+
+- `teams-create-rename-delete`: verified user creates, renames, and deletes an empty team; changes persist across refresh.
+- `teams-name-required`: an empty or whitespace-only team name is rejected with `400`.
+- `teams-name-unique-case-insensitive`: creating or renaming to an existing name (any case) returns `409`.
+- `teams-list-shows-reference-state`: `GET /api/teams` reports whether each team is referenced so the UI can disable delete.
+- `teams-delete-blocked-with-tickets`: a team with tickets cannot be deleted and shows a clear `409` message.
+- `teams-delete-blocked-with-epics`: a team with epics cannot be deleted and shows a clear `409` message.
+- `teams-rename-missing-404`: renaming or deleting a non-existent team id returns `404`.
+- `teams-require-auth`: all team endpoints reject anonymous requests with `401`.
+
+## Epic Management [planned — Phase 4]
 
 - `epics-crud`: user creates, lists, edits, and deletes an epic for a team.
 - `epics-title-validation`: blank epic title is rejected.
 - `epics-team-immutable`: epic team cannot be changed after creation.
 - `epics-delete-blocked-when-referenced`: epic referenced by tickets cannot be deleted.
 
-## Ticket Management
+## Ticket Management [planned — Phase 5]
 
 - `tickets-create-view-edit-delete`: user creates a ticket, views all fields, edits it, confirms delete.
 - `tickets-required-fields`: title, body, team, type, and state validation is enforced.
@@ -67,7 +102,7 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 - `tickets-team-change-clears-invalid-epic`: changing ticket team clears or replaces an incompatible epic.
 - `tickets-cross-team-epic-rejected`: backend rejects a ticket epic from another team.
 
-## Comments
+## Comments [planned — Phase 6]
 
 - `comments-add-and-display`: user adds comments and sees author, body, and timestamp.
 - `comments-empty-body-rejected`: empty comment body shows validation error.
@@ -75,7 +110,7 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 - `comments-do-not-update-ticket-modified`: adding a comment does not change the ticket modified timestamp.
 - `comments-deleted-with-ticket`: deleting a ticket removes its comments.
 
-## Kanban Board
+## Kanban Board [planned — Phase 7]
 
 - `board-five-workflow-columns`: board shows exactly five columns in required order.
 - `board-team-selector`: selecting a team shows only that team's tickets.
@@ -87,7 +122,7 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 - `board-direct-state-move`: card can move directly between any two states.
 - `board-order-by-modified-desc`: cards in a column are ordered by most recently modified first.
 
-## Filtering And Search
+## Filtering And Search [planned — Phase 7]
 
 - `filters-by-type`: board filters tickets by `bug`, `feature`, or `fix`.
 - `filters-by-epic`: board filters tickets by selected epic.
@@ -95,19 +130,30 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 - `filters-and-logic`: type, epic, and search filters combine using AND logic.
 - `filters-clear`: user can clear filters and restore the full board.
 
-## Persistence And Refresh
+## Seed / Test Data [implemented]
+
+- `seed-loads-on-start`: with the seed compose file, the backend loads the fixed dataset on startup (2 users, 2 teams, 2 epics, 5 tickets, 2 comments) and the demo account can log in.
+- `seed-idempotent-reload`: restarting the stack reloads the same fixed dataset (truncate + insert), producing identical row counts each time.
+- `seed-flushed-on-stop`: stopping the seeded stack flushes all data (tmpfs database); on the next start, migrations re-apply from scratch before reseeding.
+- `seed-absent-in-default-run`: the default `up` (without the seed compose file) leaves the database schema-only — no seed/application data — satisfying the Definition of Done.
+- `seed-default-dataset-file`: with no override, the seed imports the bundled `backend/seed/data.json`, and the startup log reports the file path and imported counts.
+- `seed-custom-file-import`: setting `SEED_FILE_HOST` (compose) or `SEED_FILE` (manual run) imports the referenced JSON instead of the bundled dataset; the database reflects the custom users/teams/tickets.
+- `seed-references-by-key`: the dataset resolves natural-key references (user email, team name, epic/ticket title); a ticket referencing an unknown epic/team or a comment referencing an unknown ticket fails with a clear "unknown <kind>" error.
+- `seed-invalid-file-rejected`: a malformed dataset (bad JSON, invalid email, ticket `type`/`state` outside the allowed sets) is rejected with a validation error and the backend exits non-zero rather than partially importing.
+
+## Persistence And Refresh [partly implemented — fresh-db smoke test; rest Phase 8]
 
 - `persistence-after-refresh`: teams, epics, tickets, comments, and board state survive browser refresh.
 - `persistence-after-restart`: created data survives application container restart.
 - `fresh-db-no-seed-data`: fresh database starts empty except migration metadata.
 
-## Access Control
+## Access Control [partly implemented — auth guard; full matrix Phase 8]
 
 - `protected-screens-require-auth`: board, teams, epics, tickets, and comments require login.
 - `protected-api-requires-auth`: protected API endpoints reject anonymous requests.
 - `public-auth-pages-accessible`: sign-up, login, verification, resend, health, and readiness stay public.
 
-## Smoke And Definition Of Done
+## Smoke And Definition Of Done [planned — Phase 8]
 
 - `dod-full-happy-path`: sign up, verify, log in, create team, create epic, create ticket, comment, drag ticket to done, refresh.
 - `dod-clean-checkout-start`: application starts from a clean checkout through Podman compose.

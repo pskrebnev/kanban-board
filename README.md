@@ -52,7 +52,7 @@ The project is delivered in phases. The status below reflects what is actually b
 
 ### Not Yet Implemented
 
-- **Teams** — create, rename, delete, with deletion guards (planned: Phase 3).
+- **Teams** — create, rename, delete, with deletion guards (planned: [Phase 3](docs/phase-3.md)).
 - **Epics** — CRUD scoped to a team (planned: Phase 4).
 - **Tickets** — full lifecycle, fields, and the five-state workflow (planned: Phase 5).
 - **Comments** — chronological, immutable comments on tickets (planned: Phase 6).
@@ -60,8 +60,9 @@ The project is delivered in phases. The status below reflects what is actually b
 - **Persistence-backed data** — the current board uses in-memory placeholder data only.
 
 See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap, the
-[Phase 1 plan](docs/phase-1.md) (persistence foundation, complete), and the
-[Phase 2 plan](docs/phase-2.md) (authentication, complete).
+[Phase 1 plan](docs/phase-1.md) (persistence foundation, complete), the
+[Phase 2 plan](docs/phase-2.md) (authentication, complete), and the
+[Phase 3 plan](docs/phase-3.md) (teams, next up).
 
 ---
 
@@ -224,6 +225,80 @@ DATABASE_URL=postgresql://kanban_user:change_this_local_password@localhost:5432/
 
 Roll back the most recent migration with `npm run migrate:down`.
 
+### Seed / Test Data (ephemeral)
+
+For local development and QA there is an optional **seed mode** that loads a fixed sample
+dataset (demo users, teams, epics, tickets, comments) on every start and keeps the database
+entirely in memory so it is **flushed when the stack stops**. This is opt-in and deliberately
+separate from the normal flow, because a clean-checkout start must leave a fresh database
+schema-only (spec §13).
+
+Start the seeded, ephemeral stack by adding the seed compose file:
+
+```shell
+# Docker
+docker compose -f compose.yaml -f compose.seed.yaml up --build
+
+# Podman
+podman-compose -f infra/podman/podman-compose.yml -f infra/podman/podman-compose.seed.yml up --build
+```
+
+How it works:
+
+- The database runs with `PGDATA` on a tmpfs mount (RAM), so **all data is flushed the moment
+  the db container stops**. Migrations re-run from scratch on the next start.
+- The backend runs the seed script on startup (`SEED_ON_START=true`), which truncates and
+  reloads the dataset, so every start yields the same known state.
+- Demo login: `demo@mailpit.pit` / `password123` (the demo accounts are pre-verified).
+
+#### Importing your own data
+
+The dataset is just a JSON file, `backend/seed/data.json`, that references entities by natural
+keys (user email, team name, epic/ticket title) so it is easy to hand-edit or export from
+elsewhere:
+
+```json
+{
+  "users": [{ "email": "demo@mailpit.pit", "password": "password123", "emailVerified": true }],
+  "teams": [{ "name": "Platform" }],
+  "epics": [{ "team": "Platform", "title": "Checkout revamp", "description": "..." }],
+  "tickets": [{ "team": "Platform", "epic": "Checkout revamp", "type": "feature", "state": "new", "title": "Add Apple Pay support", "body": "...", "createdBy": "demo@mailpit.pit" }],
+  "comments": [{ "ticket": "Add Apple Pay support", "author": "demo@mailpit.pit", "body": "..." }]
+}
+```
+
+There are two ways to import a dataset of your choice:
+
+- **Edit the bundled file** `backend/seed/data.json`, then rebuild (`up --build`). It is copied
+  into the image and imported on start.
+- **Point at an external file** with the `SEED_FILE_HOST` flag when bringing the stack up — it
+  is mounted over the bundled dataset, so no rebuild of the file is needed:
+
+```shell
+# Docker
+SEED_FILE_HOST=./my-export.json docker compose -f compose.yaml -f compose.seed.yaml up --build
+
+# Podman (path is relative to infra/podman/)
+SEED_FILE_HOST=../../my-export.json podman-compose -f infra/podman/podman-compose.yml -f infra/podman/podman-compose.seed.yml up --build
+```
+
+The dataset is validated on load (emails well-formed, ticket `type`/`state` from the allowed
+sets, references resolvable); a clear error is printed and the backend exits non-zero if it is
+malformed.
+
+You can also run the seed manually against any database (for example during backend
+development). Set `SEED_FILE` to import a specific file, otherwise `backend/seed/data.json` is used:
+
+```shell
+cd backend
+npm run build
+DATABASE_URL=postgresql://kanban_user:change_this_local_password@localhost:5432/ticketing npm run seed
+# import a custom dataset:
+SEED_FILE=./my-export.json DATABASE_URL=... npm run seed
+```
+
+The default `docker compose up` / `podman-compose up` (without the seed file) never seeds data.
+
 ### Authentication & Email
 
 Authentication uses local email/password accounts. After sign-up, the backend sends a
@@ -355,5 +430,6 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 - [High Level Solution](docs/kanban-ticketing-hls.md) — phase-by-phase implementation plan with tech solutions.
 - [Phase 1 plan](docs/phase-1.md) — persistence foundation & migrations plan with a JIRA-style backlog.
 - [Phase 2 plan](docs/phase-2.md) — authentication plan with a JIRA-style backlog.
+- [Phase 3 plan](docs/phase-3.md) — teams management plan with a JIRA-style backlog.
 - [Architecture](docs/architecture.md) — high-level architecture and delivery phases.
 - [Testing approach](docs/testing-approach.md) — grouped end-to-end scenario catalogue.

@@ -1,0 +1,25 @@
+{
+  "users": [
+    { "email": "demo@mailpit.pit", "password": "password123", "emailVerified": true },
+    { "email": "second@mailpit.pit", "password": "password123", "emailVerified": true }
+  ],
+  "teams": [
+    { "name": "Platform" },
+    { "name": "Mobile" }
+  ],
+  "epics": [
+    { "team": "Platform", "title": "Checkout revamp", "description": "Modernize the checkout flow." },
+    { "team": "Mobile", "title": "Offline mode", "description": "Let the app work without a connection." }
+  ],
+  "tickets": [
+    { "team": "Platform", "epic": "Checkout revamp", "type": "feature", "state": "new", "title": "Add Apple Pay support", "body": "Offer Apple Pay as a checkout option.", "createdBy": "demo@mailpit.pit" },
+    { "team": "Platform", "epic": "Checkout revamp", "type": "bug", "state": "in_progress", "title": "Fix tax rounding error", "body": "Tax is rounded incorrectly for some carts.", "createdBy": "demo@mailpit.pit" },
+    { "team": "Platform", "epic": null, "type": "fix", "state": "ready_for_acceptance", "title": "Update checkout copy", "body": "Clarify the confirmation step wording.", "createdBy": "demo@mailpit.pit" },
+    { "team": "Mobile", "epic": "Offline mode", "type": "feature", "state": "ready_for_implementation", "title": "Cache last sync", "body": "Persist the last successful sync timestamp.", "createdBy": "second@mailpit.pit" },
+    { "team": "Mobile", "epic": null, "type": "bug", "state": "done", "title": "Crash on cold start", "body": "App crashes when launched offline from cold.", "createdBy": "second@mailpit.pit" }
+  ],
+  "comments": [
+    { "ticket": "Add Apple Pay support", "author": "demo@mailpit.pit", "body": "Let's scope this for the next iteration." },
+    { "ticket": "Add Apple Pay support", "author": "second@mailpit.pit", "body": "I can take the backend part." }
+  ]
+}
