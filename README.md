@@ -33,6 +33,86 @@ tests/e2e/           Browser smoke tests using Playwright in Podman
 
 The stack is intended to run with rootless Podman.
 
+## Windows Setup (Podman + WSL2)
+
+On Windows, Podman runs containers inside a WSL2-backed virtual machine. Set this up once.
+
+1. Install Podman and `podman-compose`:
+
+```powershell
+winget install --id RedHat.Podman --exact
+pip install podman-compose
+```
+
+2. Ensure Podman uses the WSL provider. Create or edit `%APPDATA%\containers\containers.conf`:
+
+```toml
+[machine]
+provider = "wsl"
+```
+
+3. Install the WSL2 platform (requires administrator rights). Podman creates its own WSL distro, so no default distribution is needed:
+
+```powershell
+wsl --install --no-distribution
+```
+
+4. Reboot Windows. The Virtual Machine Platform feature only becomes active after a restart.
+
+5. After reboot, verify the tools resolve in a new terminal:
+
+```powershell
+podman --version
+podman-compose --version
+```
+
+### Troubleshooting: `podman-compose` not found
+
+`pip install podman-compose` performs a *user* installation, which places `podman-compose.exe` in your per-user Python scripts directory (for example `%APPDATA%\Python\Python314\Scripts`). If that directory is not on your PATH, both `podman-compose` and the built-in `podman compose` wrapper fail to find a provider:
+
+```text
+Error: looking up compose provider failed
+        * exec: "docker-compose": executable file not found in %PATH%
+        * exec: "podman-compose": executable file not found in %PATH%
+```
+
+First, confirm the executable exists and find its location:
+
+```powershell
+python -c "import sysconfig; print(sysconfig.get_path('scripts', 'nt_user'))"
+```
+
+Then add that directory to your user PATH permanently (adjust the Python version in the path if needed):
+
+```powershell
+$scripts = "$env:APPDATA\Python\Python314\Scripts"
+$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+if ($userPath -notlike "*$scripts*") {
+    [Environment]::SetEnvironmentVariable("Path", "$userPath;$scripts", "User")
+}
+```
+
+Open a new terminal (the permanent PATH change does not apply to already-open sessions) and verify:
+
+```powershell
+podman-compose --version
+```
+
+## Initialize The Podman Machine
+
+With the WSL provider, these commands do not require administrator rights. Run them once after installation (and after a reboot on Windows):
+
+```powershell
+podman machine init
+podman machine start
+```
+
+Confirm the machine is running:
+
+```powershell
+podman machine list
+```
+
 ## Environment Configuration
 
 Runtime ports, database credentials, and test URLs are read from a local `.env` file at the repository root.
