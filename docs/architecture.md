@@ -19,8 +19,8 @@ The local runtime uses Podman and `podman-compose` for the application services,
 
 Phase numbering follows the [High Level Solution](kanban-ticketing-hls.md). Phase 0
 (foundation scaffold), Phase 1 (persistence foundation & migrations), Phase 2
-(authentication), Phase 3 (teams), Phase 4 (epics), and Phase 5 (tickets) are complete; the next
-phase is Phase 6 (comments).
+(authentication), Phase 3 (teams), Phase 4 (epics), Phase 5 (tickets), and Phase 6 (comments)
+are complete; the next phase is Phase 7 (Kanban board, filtering & search).
 
 Completed:
 
@@ -59,12 +59,18 @@ Completed:
   `modified_at`), and comment cascade on delete. Tailwind-built `/tickets`, `/tickets/new`, and
   `/tickets/:id` screens provide the UI. Covered by backend integration tests and a Playwright
   tickets-flow.
+- Added comments (Phase 6): a `comment-repository`/`comment-service`, nested
+  `/api/tickets/:ticketId/comments` endpoints behind `requireAuth` (list oldest-first enriched with
+  the author email, add with `author_id` from the session and a server `created_at`), `zod`
+  body validation, the ticket-immutability invariant (adding a comment never bumps the ticket's
+  `modified_at`), comment immutability (no edit/per-comment delete), and removal via the existing
+  `ON DELETE CASCADE`. A comments section on the `/tickets/:id` screen provides the UI. Covered by
+  backend integration tests and a Playwright comments-flow.
 - Replaced Selenium with Playwright for browser testing.
 - Documented the high-level architecture and local development workflow.
 
 Not yet implemented:
 
-- Production API endpoints for comments (Phase 6).
 - Real drag-and-drop ticket movement persistence (Phase 7).
 - CI pipeline and release packaging.
 

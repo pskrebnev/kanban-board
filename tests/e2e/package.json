@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "tsx smoke-test.ts && tsx auth-flow.ts && tsx teams-flow.ts && tsx epics-flow.ts && tsx tickets-flow.ts",
+    "test": "tsx smoke-test.ts && tsx auth-flow.ts && tsx teams-flow.ts && tsx epics-flow.ts && tsx tickets-flow.ts && tsx comments-flow.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

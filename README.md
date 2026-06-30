@@ -57,21 +57,26 @@ The project is delivered in phases. The status below reflects what is actually b
   deleting a ticket cascades its comments. Tailwind-built `/tickets`, `/tickets/new`, and
   `/tickets/:id` screens provide list (filterable), create, and details/edit UIs behind
   `requireAuth`.
+- **Comments** — chronological, immutable comments on tickets ([Phase 6](docs/phase-6.md)).
+  Authenticated users add comments through a section on the ticket details screen and read them
+  oldest-first; the `body` is trimmed/non-empty, `author_id` comes from the session (never the
+  request body), and `created_at` is server-set. Adding a comment does **not** change the ticket's
+  `modified_at`, comments are immutable in mandatory scope, and they are removed with their ticket
+  (cascade). Nested endpoints (`GET/POST /api/tickets/:ticketId/comments`) sit behind `requireAuth`.
 - **Auth screens** — sign-up, login, email-verification result, resend, forgot-password, and
   reset-password, with a protected board and a header log-out menu.
 - Backend health and readiness endpoints (`/api/health`, `/api/ready`) and a static API
   resource index (`/api`).
 - A scaffold Kanban board UI (static placeholder columns, not yet backed by the API).
 - Automated tests: a Vitest/Supertest backend suite (migration smoke test + auth, teams, epics,
-  and tickets unit and integration tests) and Playwright browser smoke, auth-flow, teams-flow,
-  epics-flow, and tickets-flow tests.
+  tickets, and comments unit and integration tests) and Playwright browser smoke, auth-flow,
+  teams-flow, epics-flow, tickets-flow, and comments-flow tests.
 - **Tailwind CSS v4** is the frontend styling foundation (via `@tailwindcss/vite`, Preflight + a
   brand `@theme`, existing classes layered so utilities win) — see
   [Frontend Styling](#frontend-styling-tailwind-css).
 
 ### Not Yet Implemented
 
-- **Comments** — chronological, immutable comments on tickets (planned: Phase 6).
 - **Kanban board** — real drag-and-drop persistence, filtering, and search (planned: Phase 7).
 - **Persistence-backed data** — the current board uses in-memory placeholder data only.
 
@@ -79,8 +84,9 @@ See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap
 [Phase 1 plan](docs/phase-1.md) (persistence foundation, complete), the
 [Phase 2 plan](docs/phase-2.md) (authentication, complete), the
 [Phase 3 plan](docs/phase-3.md) (teams, complete), the
-[Phase 4 plan](docs/phase-4.md) (epics, complete), and the
-[Phase 5 plan](docs/phase-5.md) (tickets, complete).
+[Phase 4 plan](docs/phase-4.md) (epics, complete), the
+[Phase 5 plan](docs/phase-5.md) (tickets, complete), and the
+[Phase 6 plan](docs/phase-6.md) (comments, complete).
 
 ---
 
@@ -412,12 +418,13 @@ tests/e2e/           Browser smoke tests using Playwright in Podman
   authentication (`GET/POST /api/epics`, `PATCH/DELETE /api/epics/:id`, with an optional
   `?teamId=` filter on list), ticket endpoints behind authentication (`GET/POST /api/tickets`,
   `GET/PATCH/DELETE /api/tickets/:id`, `PATCH /api/tickets/:id/state`, with optional
-  `?teamId=`/`?state=`/`?type=`/`?epicId=` filters on list), health/readiness (`/api/health`,
-  `/api/ready`), and an API resource index.
+  `?teamId=`/`?state=`/`?type=`/`?epicId=` filters on list), comment endpoints behind
+  authentication nested under a ticket (`GET/POST /api/tickets/:ticketId/comments`),
+  health/readiness (`/api/health`, `/api/ready`), and an API resource index.
 - `db` runs PostgreSQL 15 using database settings from `.env`.
 - `mailpit` captures outgoing verification emails locally (UI on `MAILPIT_UI_PORT`).
 - `e2e` runs Playwright with Chromium for browser automation (smoke + auth-flow + teams-flow +
-  epics-flow + tickets-flow tests).
+  epics-flow + tickets-flow + comments-flow tests).
 
 ### Running The Backend Tests
 
@@ -478,5 +485,6 @@ compile automatically.
 - [Phase 3 plan](docs/phase-3.md) — teams management plan with a JIRA-style backlog.
 - [Phase 4 plan](docs/phase-4.md) — epics management plan with a JIRA-style backlog.
 - [Phase 5 plan](docs/phase-5.md) — tickets management plan with a JIRA-style backlog.
+- [Phase 6 plan](docs/phase-6.md) — comments management plan with a JIRA-style backlog.
 - [Architecture](docs/architecture.md) — high-level architecture and delivery phases.
 - [Testing approach](docs/testing-approach.md) — grouped end-to-end scenario catalogue.
