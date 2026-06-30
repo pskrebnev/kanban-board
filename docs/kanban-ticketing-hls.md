@@ -207,7 +207,9 @@ See [phase-4.md](phase-4.md) for the detailed plan, JIRA-style backlog, and Defi
   Tailwind-built `/epics` screen, all covered by backend integration tests and a Playwright
   epics-flow.
 
-## Phase 5 — Tickets
+## Phase 5 — Tickets (next phase)
+
+See [phase-5.md](phase-5.md) for the detailed plan, JIRA-style backlog, and Definition of Done.
 
 - **Goal:** Full ticket lifecycle with the fixed five-state workflow.
 - **Spec coverage:** §6, §9, §10 (ticket create/edit/details).

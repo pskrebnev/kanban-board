@@ -116,13 +116,29 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 
 ## Ticket Management [planned — Phase 5]
 
-- `tickets-create-view-edit-delete`: user creates a ticket, views all fields, edits it, confirms delete.
-- `tickets-required-fields`: title, body, team, type, and state validation is enforced.
-- `tickets-invalid-enums-rejected`: invalid ticket type or state is rejected by the backend/API flow.
-- `tickets-created-by-and-timestamps`: created by, created at, and modified at are shown correctly.
-- `tickets-unchanged-save-does-not-update-modified`: saving unchanged ticket values does not advance the modified timestamp.
-- `tickets-team-change-clears-invalid-epic`: changing ticket team clears or replaces an incompatible epic.
-- `tickets-cross-team-epic-rejected`: backend rejects a ticket epic from another team.
+- `tickets-create-view-edit-delete`: a verified user creates a ticket (team + type + title + body), views all fields on the details screen, edits it, and deletes it with confirmation; changes persist across refresh.
+- `tickets-title-required`: a blank or whitespace-only ticket title is rejected with `400`.
+- `tickets-title-trimmed`: a title with surrounding whitespace is stored trimmed.
+- `tickets-title-max-length`: a title longer than the allowed maximum is rejected with `400`.
+- `tickets-body-required`: a blank or whitespace-only body is rejected with `400`.
+- `tickets-team-required`: creating a ticket without a `teamId` is rejected with `400`.
+- `tickets-create-unknown-team`: creating a ticket for a non-existent team is rejected with `400`/`404` and a clear message.
+- `tickets-invalid-type-rejected`: a `type` outside {bug, feature, fix} is rejected with `400`.
+- `tickets-invalid-state-rejected`: a `state` outside the five workflow states is rejected with `400`.
+- `tickets-default-state-new`: a ticket created without an explicit state defaults to `new`.
+- `tickets-epic-optional`: a ticket can be created and edited with no epic (null) and with a same-team epic.
+- `tickets-cross-team-epic-rejected`: an `epicId` belonging to another team (or unknown) is rejected with `400` (reusing the Phase 4 cross-team validator).
+- `tickets-created-by-from-session`: `created_by` always equals the authenticated caller; a `createdBy` supplied in the request body is ignored.
+- `tickets-created-by-and-timestamps-displayed`: the details screen shows `created_by` (author email), `created_at`, and `modified_at`.
+- `tickets-edit-updates-modified`: a real field/state change advances `modified_at`.
+- `tickets-unchanged-save-does-not-update-modified`: saving identical values leaves `modified_at` unchanged (no-op save).
+- `tickets-state-change-persists-immediately`: a state transition persists immediately and survives a refresh; `modified_at` advances.
+- `tickets-team-change-clears-invalid-epic`: changing the ticket's team to one the current epic does not belong to clears/replaces the epic in the UI and is rejected by the API if forced (`400`).
+- `tickets-list-filter`: `GET /api/tickets` supports optional `teamId`, `state`, `type`, and `epicId` filters combined with AND logic; results are ordered most-recently-modified first.
+- `tickets-detail-missing-404`: fetching, editing, state-changing, or deleting a non-existent ticket id returns `404`.
+- `tickets-id-format-validated`: a non-UUID `:id` is rejected with `400`.
+- `tickets-delete-cascades-comments`: deleting a ticket removes its comments (cascade); deleting succeeds with `204`.
+- `tickets-require-auth`: all ticket endpoints reject anonymous requests with `401`.
 
 ## Comments [planned — Phase 6]
 
