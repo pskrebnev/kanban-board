@@ -4,8 +4,8 @@ This document groups end-to-end scenario candidates from `docs/KanbanBoard.pdf`.
 
 ## Current Phase
 
-Phases 0–2 are complete (foundation, persistence/migrations, authentication with password
-recovery). Phase 3 (teams) is the next phase. Scenario sections below are marked
+Phases 0–3 are complete (foundation, persistence/migrations, authentication with password
+recovery, and team management). Phase 4 (epics) is the next phase. Scenario sections below are marked
 **[implemented]** when covered by automated tests today, or **[planned]** when they document the
 target behavior for an upcoming phase.
 
@@ -13,10 +13,12 @@ Current automated coverage:
 
 - Backend `vitest`/`supertest` suite (`backend/test/`): auth unit tests (password hashing, token
   hashing, JWT), auth integration tests (signup → verify → login, duplicates, weak password,
-  single-use/expired tokens, resend invalidation, full password-reset flow), and a migration
-  smoke test asserting a fresh database has schema + metadata only.
-- Playwright containers under `tests/e2e/`: a smoke test (frontend shell loads) and an auth-flow
-  test (sign up, read the verification email from Mailpit, verify, log in, reach the board).
+  single-use/expired tokens, resend invalidation, full password-reset flow), teams integration
+  tests (CRUD, trim, validation, case-insensitive conflict, referenced-delete guard, 401), and a
+  migration smoke test asserting a fresh database has schema + metadata only.
+- Playwright containers under `tests/e2e/`: a smoke test (frontend shell loads), an auth-flow
+  test (sign up, read the verification email from Mailpit, verify, log in, reach the board), and
+  a teams-flow test (create, rename, and delete a team through the UI).
 
 Target coverage:
 
@@ -74,14 +76,19 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 - `recovery-weak-password-rejected`: a new password shorter than 8 characters is rejected with `400`.
 - `recovery-verifies-email`: resetting the password for an unverified account also marks the email verified, allowing immediate login.
 
-## Team Management [planned — Phase 3]
+## Team Management [implemented]
 
-- `teams-create-rename-delete`: verified user creates, renames, and deletes an empty team; changes persist across refresh.
+- `teams-create-rename-delete`: verified user creates, renames, and deletes an empty team; changes persist across refresh. (Playwright `teams-flow`.)
+- `teams-name-trimmed`: a name with surrounding whitespace is stored trimmed.
 - `teams-name-required`: an empty or whitespace-only team name is rejected with `400`.
+- `teams-name-max-length`: a name longer than 100 characters is rejected with `400`.
 - `teams-name-unique-case-insensitive`: creating or renaming to an existing name (any case) returns `409`.
+- `teams-list-ordered`: `GET /api/teams` returns teams ordered by name.
 - `teams-list-shows-reference-state`: `GET /api/teams` reports whether each team is referenced so the UI can disable delete.
-- `teams-delete-blocked-with-tickets`: a team with tickets cannot be deleted and shows a clear `409` message.
-- `teams-delete-blocked-with-epics`: a team with epics cannot be deleted and shows a clear `409` message.
+- `teams-delete-blocked-with-epics`: a team with epics cannot be deleted and returns a clear `409` ("Team has epics or tickets and cannot be deleted"); no cascade occurs.
+- `teams-delete-blocked-with-tickets`: a team with tickets cannot be deleted and returns the same `409` message. (Exercised once tickets exist; the guard checks both epics and tickets.)
+- `teams-delete-unreferenced-succeeds`: an unreferenced team is deleted with `204`.
+- `teams-id-format-validated`: a non-UUID `:id` is rejected with `400`.
 - `teams-rename-missing-404`: renaming or deleting a non-existent team id returns `404`.
 - `teams-require-auth`: all team endpoints reject anonymous requests with `401`.
 

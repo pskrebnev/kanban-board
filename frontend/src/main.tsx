@@ -8,6 +8,7 @@ import { ForgotPassword } from "./pages/ForgotPassword";
 import { Login } from "./pages/Login";
 import { ResetPassword } from "./pages/ResetPassword";
 import { Signup } from "./pages/Signup";
+import { Teams } from "./pages/Teams";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { useAuthStore } from "./store/auth";
 import "./styles.css";
@@ -32,6 +33,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Board />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/teams"
+          element={
+            <ProtectedRoute>
+              <Teams />
             </ProtectedRoute>
           }
         />
