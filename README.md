@@ -50,21 +50,27 @@ The project is delivered in phases. The status below reflects what is actually b
   An epic belongs to one team (immutable after creation), titles are trimmed/non-empty with an
   optional description, and deletion is blocked while tickets reference it. A Tailwind-built
   `/epics` screen provides the management UI; endpoints sit behind `requireAuth`.
+- **Tickets** — full lifecycle and the fixed five-state workflow ([Phase 5](docs/phase-5.md)).
+  A ticket belongs to a team with a `bug|feature|fix` type, an optional same-team epic, a
+  trimmed/non-empty title and body, and `created_by` taken from the session. `modified_at`
+  advances only on a real change, state changes persist immediately via a dedicated endpoint, and
+  deleting a ticket cascades its comments. Tailwind-built `/tickets`, `/tickets/new`, and
+  `/tickets/:id` screens provide list (filterable), create, and details/edit UIs behind
+  `requireAuth`.
 - **Auth screens** — sign-up, login, email-verification result, resend, forgot-password, and
   reset-password, with a protected board and a header log-out menu.
 - Backend health and readiness endpoints (`/api/health`, `/api/ready`) and a static API
   resource index (`/api`).
 - A scaffold Kanban board UI (static placeholder columns, not yet backed by the API).
-- Automated tests: a Vitest/Supertest backend suite (migration smoke test + auth, teams, and
-  epics unit and integration tests) and Playwright browser smoke, auth-flow, teams-flow, and
-  epics-flow tests.
+- Automated tests: a Vitest/Supertest backend suite (migration smoke test + auth, teams, epics,
+  and tickets unit and integration tests) and Playwright browser smoke, auth-flow, teams-flow,
+  epics-flow, and tickets-flow tests.
 - **Tailwind CSS v4** is the frontend styling foundation (via `@tailwindcss/vite`, Preflight + a
   brand `@theme`, existing classes layered so utilities win) — see
   [Frontend Styling](#frontend-styling-tailwind-css).
 
 ### Not Yet Implemented
 
-- **Tickets** — full lifecycle, fields, and the five-state workflow (planned: [Phase 5](docs/phase-5.md)).
 - **Comments** — chronological, immutable comments on tickets (planned: Phase 6).
 - **Kanban board** — real drag-and-drop persistence, filtering, and search (planned: Phase 7).
 - **Persistence-backed data** — the current board uses in-memory placeholder data only.
@@ -74,7 +80,7 @@ See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap
 [Phase 2 plan](docs/phase-2.md) (authentication, complete), the
 [Phase 3 plan](docs/phase-3.md) (teams, complete), the
 [Phase 4 plan](docs/phase-4.md) (epics, complete), and the
-[Phase 5 plan](docs/phase-5.md) (tickets, next up).
+[Phase 5 plan](docs/phase-5.md) (tickets, complete).
 
 ---
 
@@ -404,12 +410,14 @@ tests/e2e/           Browser smoke tests using Playwright in Podman
   `/forgot-password`, `/reset-password`, `/login`, `/logout`, `/me`), team endpoints behind
   authentication (`GET/POST /api/teams`, `PATCH/DELETE /api/teams/:id`), epic endpoints behind
   authentication (`GET/POST /api/epics`, `PATCH/DELETE /api/epics/:id`, with an optional
-  `?teamId=` filter on list), health/readiness (`/api/health`, `/api/ready`), and an API resource
-  index.
+  `?teamId=` filter on list), ticket endpoints behind authentication (`GET/POST /api/tickets`,
+  `GET/PATCH/DELETE /api/tickets/:id`, `PATCH /api/tickets/:id/state`, with optional
+  `?teamId=`/`?state=`/`?type=`/`?epicId=` filters on list), health/readiness (`/api/health`,
+  `/api/ready`), and an API resource index.
 - `db` runs PostgreSQL 15 using database settings from `.env`.
 - `mailpit` captures outgoing verification emails locally (UI on `MAILPIT_UI_PORT`).
 - `e2e` runs Playwright with Chromium for browser automation (smoke + auth-flow + teams-flow +
-  epics-flow tests).
+  epics-flow + tickets-flow tests).
 
 ### Running The Backend Tests
 

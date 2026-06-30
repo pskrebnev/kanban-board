@@ -50,6 +50,9 @@ export function Board(): ReactElement {
           <button type="button" className="link-button" onClick={() => navigate("/epics")}>
             Epics
           </button>
+          <button type="button" className="link-button" onClick={() => navigate("/tickets")}>
+            Tickets
+          </button>
         </nav>
         <div className="user-menu">
           <button

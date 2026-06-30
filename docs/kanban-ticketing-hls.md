@@ -207,7 +207,7 @@ See [phase-4.md](phase-4.md) for the detailed plan, JIRA-style backlog, and Defi
   Tailwind-built `/epics` screen, all covered by backend integration tests and a Playwright
   epics-flow.
 
-## Phase 5 — Tickets (next phase)
+## Phase 5 — Tickets (complete)
 
 See [phase-5.md](phase-5.md) for the detailed plan, JIRA-style backlog, and Definition of Done.
 
@@ -231,7 +231,7 @@ See [phase-5.md](phase-5.md) for the detailed plan, JIRA-style backlog, and Defi
 - **Exit criteria:** tickets can be created, viewed, edited, and deleted with full server-side
   validation and correct timestamp behavior.
 
-## Phase 6 — Comments
+## Phase 6 — Comments (next phase)
 
 - **Goal:** Threaded, immutable comments on tickets.
 - **Spec coverage:** §7, §9.

@@ -9,9 +9,11 @@ import { createAuthRouter } from "./routes/auth.js";
 import { createEpicsRouter } from "./routes/epics.js";
 import { createApiRouter } from "./routes/index.js";
 import { createTeamsRouter } from "./routes/teams.js";
+import { createTicketsRouter } from "./routes/tickets.js";
 import type { AuthService } from "./services/auth-service.js";
 import { createEpicService } from "./services/epic-service.js";
 import { createTeamService } from "./services/team-service.js";
+import { createTicketService } from "./services/ticket-service.js";
 
 export type AppDeps = {
   pool: pg.Pool;
@@ -30,6 +32,7 @@ export function createApp(deps: AppDeps): Express {
   const requireAuth = createRequireAuth(pool, jwtSecret);
   const teamService = createTeamService({ pool });
   const epicService = createEpicService({ pool });
+  const ticketService = createTicketService({ pool });
 
   const app = express();
 
@@ -41,6 +44,7 @@ export function createApp(deps: AppDeps): Express {
   app.use("/api/auth", createAuthRouter({ authService, jwtSecret, cookieSecure, requireAuth }));
   app.use("/api/teams", createTeamsRouter({ teamService, requireAuth }));
   app.use("/api/epics", createEpicsRouter({ epicService, requireAuth }));
+  app.use("/api/tickets", createTicketsRouter({ ticketService, requireAuth }));
 
   app.use(errorHandler);
 

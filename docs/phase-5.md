@@ -12,9 +12,9 @@ layer (all ticket endpoints sit behind `requireAuth`, and `created_by` comes fro
 the Phase 3 teams resource, and the Phase 4 epics resource (reusing the exported
 `assertEpicBelongsToTeam` validator).
 
-> **Status: planned.** This document defines the plan only; no Phase 5 application code has been
-> written yet. Comments (Phase 6) and the drag-and-drop board (Phase 7) are explicitly out of
-> scope here.
+> **Status: implemented.** Ticket management is built end-to-end (backend repository/service/router,
+> frontend list/create/details screens, integration and Playwright tests). Comments (Phase 6) and
+> the drag-and-drop board (Phase 7) remain out of scope here.
 
 ## Goal
 
@@ -228,24 +228,24 @@ Story points are rough relative estimates. IDs are local references (e.g. `P5-1`
 
 ## Phase 5 Definition of Done
 
-- [ ] An authenticated user can create, view, edit, and delete tickets through the UI, persisted
+- [x] An authenticated user can create, view, edit, and delete tickets through the UI, persisted
       in PostgreSQL.
-- [ ] `title` and `body` are trimmed and non-empty (max length enforced); violations return `400`
+- [x] `title` and `body` are trimmed and non-empty (max length enforced); violations return `400`
       with clear messages.
-- [ ] `type` and `state` are constrained to their fixed enums; invalid values return `400`.
-- [ ] A ticket's `teamId` must reference an existing team; an optional `epicId` must reference an
+- [x] `type` and `state` are constrained to their fixed enums; invalid values return `400`.
+- [x] A ticket's `teamId` must reference an existing team; an optional `epicId` must reference an
       epic of the **same** team (reusing `assertEpicBelongsToTeam`); violations return `400`.
-- [ ] `created_by` is always taken from the authenticated session and cannot be spoofed by the
+- [x] `created_by` is always taken from the authenticated session and cannot be spoofed by the
       request body.
-- [ ] `modified_at` advances only on a real field/state change; a no-op save leaves it unchanged.
-- [ ] Changing a ticket's team rejects an epic that no longer belongs to it (`400`); clearing the
+- [x] `modified_at` advances only on a real field/state change; a no-op save leaves it unchanged.
+- [x] Changing a ticket's team rejects an epic that no longer belongs to it (`400`); clearing the
       epic succeeds.
-- [ ] State changes persist immediately via a dedicated endpoint.
-- [ ] Deleting a ticket deletes its comments (cascade); deleting a missing ticket returns `404`.
-- [ ] All ticket endpoints require an authenticated, verified session; anonymous access → `401`.
-- [ ] The ticket screens show loading, empty, success, and error states.
-- [ ] Backend integration tests pass; a Playwright `tickets-*` flow is included.
-- [ ] README, architecture, and HLS docs reflect ticket management.
+- [x] State changes persist immediately via a dedicated endpoint.
+- [x] Deleting a ticket deletes its comments (cascade); deleting a missing ticket returns `404`.
+- [x] All ticket endpoints require an authenticated, verified session; anonymous access → `401`.
+- [x] The ticket screens show loading, empty, success, and error states.
+- [x] Backend integration tests pass; a Playwright `tickets-flow` is included.
+- [x] README, architecture, and HLS docs reflect ticket management.
 
 ## How To Test Locally
 

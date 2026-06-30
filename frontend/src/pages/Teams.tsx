@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent, type ReactElement } from "react";
+import { useEffect, useState, type SyntheticEvent, type ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { apiErrorMessage } from "../api";
@@ -28,7 +28,7 @@ export function Teams(): ReactElement {
     navigate("/login", { replace: true });
   }
 
-  async function handleCreate(event: FormEvent) {
+  async function handleCreate(event: SyntheticEvent) {
     event.preventDefault();
     setCreateError("");
     setCreating(true);
@@ -53,6 +53,9 @@ export function Teams(): ReactElement {
           </button>
           <button type="button" className="link-button" onClick={() => navigate("/epics")}>
             Epics
+          </button>
+          <button type="button" className="link-button" onClick={() => navigate("/tickets")}>
+            Tickets
           </button>
         </nav>
         <div className="user-menu">
@@ -125,7 +128,7 @@ function TeamRow({ team }: { team: Team }): ReactElement {
     setEditing(true);
   }
 
-  async function handleRename(event: FormEvent) {
+  async function handleRename(event: SyntheticEvent) {
     event.preventDefault();
     setError("");
     setBusy(true);
