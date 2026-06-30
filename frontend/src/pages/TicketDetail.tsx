@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { apiErrorMessage } from "../api";
 import { AppHeader } from "../components/AppHeader";
+import { useCommentsStore } from "../store/comments";
 import { useEpicsStore } from "../store/epics";
 import { useTeamsStore } from "../store/teams";
 import {
@@ -37,8 +38,18 @@ export function TicketDetail(): ReactElement {
   const changeState = useTicketsStore((state) => state.changeState);
   const deleteTicket = useTicketsStore((state) => state.deleteTicket);
 
+  const comments = useCommentsStore((state) => state.comments);
+  const commentsStatus = useCommentsStore((state) => state.status);
+  const fetchComments = useCommentsStore((state) => state.fetchComments);
+  const postComment = useCommentsStore((state) => state.postComment);
+  const resetComments = useCommentsStore((state) => state.reset);
+
   const [ticket, setTicket] = useState<Ticket | null>(null);
   const [loadError, setLoadError] = useState("");
+
+  const [commentBody, setCommentBody] = useState("");
+  const [commentError, setCommentError] = useState("");
+  const [postingComment, setPostingComment] = useState(false);
 
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -79,7 +90,29 @@ export function TicketDetail(): ReactElement {
     };
   }, [id, getTicket]);
 
+  useEffect(() => {
+    resetComments();
+    void fetchComments(id);
+  }, [id, fetchComments, resetComments]);
+
   const teamEpics = useMemo(() => epics.filter((epic) => epic.teamId === teamId), [epics, teamId]);
+
+  async function handleAddComment(event: SyntheticEvent) {
+    event.preventDefault();
+    setCommentError("");
+    setPostingComment(true);
+    try {
+      await postComment(id, commentBody);
+      // Clear the input before refetching, so the re-rendered list can't race
+      // with (and clobber) a value the user starts typing next.
+      setCommentBody("");
+      await fetchComments(id);
+    } catch (err) {
+      setCommentError(apiErrorMessage(err, "Could not add comment."));
+    } finally {
+      setPostingComment(false);
+    }
+  }
 
   function handleTeamChange(nextTeamId: string) {
     setTeamId(nextTeamId);
@@ -323,6 +356,76 @@ export function TicketDetail(): ReactElement {
             <dt className="font-bold text-muted">Last modified</dt>
             <dd>{new Date(ticket.modifiedAt).toLocaleString()}</dd>
           </dl>
+
+          <section
+            aria-label="Comments"
+            className="rounded-2xl border border-line bg-white p-6 shadow-[0_16px_40px_rgb(23_32_51/6%)]"
+          >
+            <div className="mb-4 flex items-baseline justify-between">
+              <h2 className="text-lg font-bold">Comments</h2>
+              {commentsStatus === "ready" && comments.length > 0 && (
+                <span className="text-[0.85rem] text-muted">{comments.length}</span>
+              )}
+            </div>
+
+            {commentsStatus === "loading" && (
+              <p className="text-[0.85rem] text-muted">Loading comments…</p>
+            )}
+
+            {commentsStatus === "error" && (
+              <p className="error">Could not load comments.</p>
+            )}
+
+            {commentsStatus === "ready" && comments.length === 0 && (
+              <p className="text-[0.85rem] text-muted">No comments yet.</p>
+            )}
+
+            {commentsStatus === "ready" && comments.length > 0 && (
+              <ul className="mb-5 space-y-3">
+                {comments.map((comment) => (
+                  <li
+                    key={comment.id}
+                    className="rounded-lg border border-line bg-ticket p-4"
+                  >
+                    <div className="mb-1 flex items-baseline justify-between gap-3">
+                      <span className="text-[0.85rem] font-bold">{comment.authorEmail}</span>
+                      <span className="text-xs text-muted">
+                        {new Date(comment.createdAt).toLocaleString()}
+                      </span>
+                    </div>
+                    <p className="whitespace-pre-wrap break-words text-[0.9rem]">{comment.body}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <form className="grid gap-3" onSubmit={handleAddComment}>
+              <label htmlFor="new-comment" className={labelClass}>
+                Add comment
+              </label>
+              <textarea
+                id="new-comment"
+                aria-label="Add comment"
+                className={fieldClass}
+                placeholder="Write a comment…"
+                value={commentBody}
+                onChange={(event) => setCommentBody(event.target.value)}
+                maxLength={20000}
+                rows={3}
+                required
+              />
+              {commentError && <p className="error">{commentError}</p>}
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className={primaryBtn}
+                  disabled={postingComment || commentBody.trim() === ""}
+                >
+                  {postingComment ? "Posting…" : "Post comment"}
+                </button>
+              </div>
+            </form>
+          </section>
         </div>
       </main>
     </div>

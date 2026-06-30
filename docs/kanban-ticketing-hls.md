@@ -231,7 +231,9 @@ See [phase-5.md](phase-5.md) for the detailed plan, JIRA-style backlog, and Defi
 - **Exit criteria:** tickets can be created, viewed, edited, and deleted with full server-side
   validation and correct timestamp behavior.
 
-## Phase 6 — Comments (next phase)
+## Phase 6 — Comments (complete)
+
+See [phase-6.md](phase-6.md) for the detailed plan, JIRA-style backlog, and Definition of Done.
 
 - **Goal:** Threaded, immutable comments on tickets.
 - **Spec coverage:** §7, §9.
@@ -246,8 +248,14 @@ See [phase-5.md](phase-5.md) for the detailed plan, JIRA-style backlog, and Defi
 - **Wireframe considerations (§15, Wireframe 3):** comments section under ticket details.
 - **Exit criteria:** comments can be added and are displayed with author/timestamp; do not
   affect board ordering.
+- **Status:** complete — a `comment-repository`/`comment-service`, nested
+  `/api/tickets/:ticketId/comments` endpoints behind `requireAuth` (list oldest-first with the
+  author email, add with `author_id` from the session and a server `created_at`), `zod` body
+  validation, the ticket-`modified_at` invariant, comment immutability, and cascade removal with
+  the ticket, plus a comments section on the ticket-details screen, backend integration tests, and
+  a Playwright `comments-flow`.
 
-## Phase 7 — Kanban Board, Filtering & Search
+## Phase 7 — Kanban Board, Filtering & Search (next phase)
 
 - **Goal:** The primary board screen with drag-and-drop and filtering.
 - **Spec coverage:** §8, §9, §10 (board with team selector).

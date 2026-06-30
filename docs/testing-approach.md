@@ -4,10 +4,11 @@ This document groups end-to-end scenario candidates from `docs/KanbanBoard.pdf`.
 
 ## Current Phase
 
-Phases 0–5 are complete (foundation, persistence/migrations, authentication with password
-recovery, team management, epic management, and ticket management). Phase 6 (comments) is the next
-phase. Scenario sections below are marked **[implemented]** when covered by automated tests today,
-or **[planned]** when they document the target behavior for an upcoming phase.
+Phases 0–6 are complete (foundation, persistence/migrations, authentication with password
+recovery, team management, epic management, ticket management, and comments). Phase 7 (the Kanban
+board, filtering & search) is the next phase. Scenario sections below are marked **[implemented]**
+when covered by automated tests today, or **[planned]** when they document the target behavior for
+an upcoming phase.
 
 Current automated coverage:
 
@@ -19,14 +20,19 @@ Current automated coverage:
   team-immutability, `teamId` filter, referenced-delete guard, 404/401), tickets integration
   tests (CRUD, required-field/enum validation, unknown-team and cross-team-epic rejection,
   `created_by` provenance, modified-timestamp semantics, immediate state change, team-change epic
-  consistency, comment cascade on delete, filters, 404/401), and a migration smoke test asserting
-  a fresh database has schema + metadata only.
+  consistency, comment cascade on delete, filters, 404/401), comments integration tests (add with
+  author/timestamp from the server, body trim/empty/oversize validation, oldest-first order, the
+  ticket-`modified_at` invariant, `author_id` provenance, unknown-ticket 404 / non-UUID 400,
+  cascade delete, 401), and a migration smoke test asserting a fresh database has schema + metadata
+  only.
 - Playwright containers under `tests/e2e/`: a smoke test (frontend shell loads), an auth-flow
   test (sign up, read the verification email from Mailpit, verify, log in, reach the board), a
   teams-flow test (create, rename, and delete a team through the UI), an epics-flow test
-  (create a team, then create, edit, and delete an epic for it through the UI), and a tickets-flow
+  (create a team, then create, edit, and delete an epic for it through the UI), a tickets-flow
   test (create a team + epic, then create a ticket, change its state, edit it, and delete it
-  through the UI).
+  through the UI), and a comments-flow test (create a team + ticket, add two comments, confirm
+  oldest-first order with author + timestamp, that the ticket's modified time is unchanged, and
+  that they survive a refresh).
 
 Target coverage:
 
@@ -145,13 +151,23 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 - `tickets-delete-cascades-comments`: deleting a ticket removes its comments (cascade); deleting succeeds with `204`.
 - `tickets-require-auth`: all ticket endpoints reject anonymous requests with `401`.
 
-## Comments [planned — Phase 6]
+## Comments [implemented]
 
-- `comments-add-and-display`: user adds comments and sees author, body, and timestamp.
-- `comments-empty-body-rejected`: empty comment body shows validation error.
-- `comments-chronological-order`: comments display oldest first.
-- `comments-do-not-update-ticket-modified`: adding a comment does not change the ticket modified timestamp.
-- `comments-deleted-with-ticket`: deleting a ticket removes its comments.
+- `comments-add-and-display`: a verified user adds a comment to a ticket and sees it in the list with the author email, body, and a timestamp; the add form clears on success.
+- `comments-add-returns-created`: `POST /api/tickets/:ticketId/comments` returns `201` with the created comment (id, body, author email, `createdAt`).
+- `comments-body-required`: a blank or whitespace-only comment body is rejected with `400` and a clear message.
+- `comments-body-trimmed`: a body with surrounding whitespace is stored trimmed.
+- `comments-body-max-length`: a body longer than the allowed maximum is rejected with `400`.
+- `comments-chronological-order`: `GET /api/tickets/:ticketId/comments` returns comments oldest-first with a stable tiebreak (`created_at ASC`, then `id`); the UI renders them in that order.
+- `comments-author-from-session`: `author_id` always equals the authenticated caller; an `authorId` supplied in the request body is ignored.
+- `comments-created-at-server-set`: `created_at` is assigned by the server, not the client.
+- `comments-do-not-update-ticket-modified`: adding a comment does not change the parent ticket's `modified_at` (recorded before vs after the add).
+- `comments-immutable`: there are no edit or per-comment delete endpoints in mandatory scope; comments cannot be modified once created.
+- `comments-unknown-ticket-404`: listing or adding a comment for a non-existent ticket id returns `404`.
+- `comments-ticket-id-format-validated`: a non-UUID `:ticketId` is rejected with `400`.
+- `comments-deleted-with-ticket`: deleting a ticket removes its comments (cascade); the comment rows are gone afterward.
+- `comments-require-auth`: all comment endpoints reject anonymous requests with `401`.
+- `comments-empty-state`: a ticket with no comments shows an explicit "No comments yet" empty state.
 
 ## Kanban Board [planned — Phase 7]
 
