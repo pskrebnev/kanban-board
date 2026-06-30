@@ -1,0 +1,32 @@
+# Ephemeral seed override (local development / QA only).
+#
+# Use together with the base file:
+#   podman-compose -f infra/podman/podman-compose.yml \
+#                  -f infra/podman/podman-compose.seed.yml up --build
+#
+# Behavior:
+#   - The database stores its data in tmpfs (RAM) via PGDATA, so ALL data is
+#     flushed the moment the db container stops. The base named volume is left
+#     untouched and unused.
+#   - The backend reseeds a fixed test dataset on every start (SEED_ON_START).
+#
+# Do NOT use this for the clean-checkout / Definition-of-Done flow: the spec
+# requires a fresh database to contain schema + migration metadata only.
+version: "3.9"
+
+services:
+  backend:
+    environment:
+      SEED_ON_START: "true"
+      SEED_FILE: /app/seed/data.json
+    # Import a dataset of your choice by pointing SEED_FILE_HOST at a JSON file
+    # (defaults to the bundled backend/seed/data.json). Example:
+    #   SEED_FILE_HOST=../../my-export.json podman-compose -f infra/podman/podman-compose.yml -f infra/podman/podman-compose.seed.yml up --build
+    volumes:
+      - ${SEED_FILE_HOST:-../../backend/seed/data.json}:/app/seed/data.json:ro
+
+  db:
+    environment:
+      PGDATA: /var/lib/postgresql/ephemeral/pgdata
+    tmpfs:
+      - /var/lib/postgresql/ephemeral

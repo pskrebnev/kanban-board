@@ -10,6 +10,8 @@
     "migrate": "node-pg-migrate",
     "migrate:up": "node-pg-migrate up",
     "migrate:down": "node-pg-migrate down",
+    "seed": "node dist/seed.js",
+    "seed:dev": "tsx src/seed.ts",
     "test": "vitest run"
   },
   "dependencies": {

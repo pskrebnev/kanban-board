@@ -20,5 +20,15 @@ until npm run migrate:up; do
   sleep 2
 done
 
-echo "Migrations applied. Starting API."
+echo "Migrations applied."
+
+# Optional development/QA seed data. Disabled by default so a fresh database
+# stays schema-only (spec §13). Enabled via SEED_ON_START=true in the ephemeral
+# seed compose file; the seed script truncates and reloads a fixed dataset.
+if [ "$SEED_ON_START" = "true" ]; then
+  echo "SEED_ON_START=true -> loading test data."
+  node dist/seed.js
+fi
+
+echo "Starting API."
 exec node dist/server.js
