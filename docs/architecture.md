@@ -17,24 +17,28 @@ The local runtime uses Podman and `podman-compose` for the application services,
 
 ## Current Phase
 
-The project is in Phase 1: foundation and runtime scaffold.
+Phase numbering follows the [High Level Solution](kanban-ticketing-hls.md). Phase 0
+(foundation scaffold) and Phase 1 (persistence foundation & migrations) are complete; the
+next phase is Phase 2 (authentication).
 
-Completed in this phase:
+Completed:
 
 - Created the initial repository structure for frontend, backend, infrastructure, documentation, and e2e tests.
 - Added a TypeScript React SPA scaffold.
-- Added a TypeScript REST API scaffold.
+- Added a TypeScript REST API scaffold with a typed config loader, shared PostgreSQL pool, and a central error handler.
 - Added PostgreSQL as the local development database.
-- Added Podman compose configuration for local runtime.
+- Added automated database migrations (`node-pg-migrate`) covering the full domain schema, applied on backend startup.
+- Added a repository-root `docker compose up --build` entrypoint alongside the Podman compose configuration.
+- Added Mailpit under a test profile for local email verification testing in later phases.
+- Added a Vitest/Supertest backend test suite, including a migration smoke test.
 - Replaced Selenium with Playwright for browser testing.
 - Documented the high-level architecture and local development workflow.
 
 Not yet implemented:
 
-- Authentication and authorization.
-- Persistent domain models and database migrations.
-- Production API endpoints for teams, epics, tickets, and comments.
-- Real drag-and-drop ticket movement persistence.
+- Authentication and authorization (Phase 2).
+- Production API endpoints for teams, epics, tickets, and comments (Phases 3–6).
+- Real drag-and-drop ticket movement persistence (Phase 7).
 - CI pipeline and release packaging.
 
 ## Technical Solution

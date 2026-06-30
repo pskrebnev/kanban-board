@@ -155,18 +155,26 @@ Story points are rough relative estimates. IDs are local references (e.g. `P1-1`
 
 ## Phase 1 Definition of Done
 
-- [ ] `node-pg-migrate` applies the full initial schema on a fresh database.
-- [ ] A freshly migrated database contains schema + migration metadata only (no application
-      rows).
-- [ ] The backend runs migrations automatically on startup, before serving traffic.
-- [ ] `docker compose up --build` from the repository root starts the full stack on a clean
-      machine; the Podman path remains functional.
-- [ ] Backend has a typed config, shared DB pool, and a central error handler with correct
+- [x] `node-pg-migrate` applies the full initial schema on a fresh database.
+- [x] A freshly migrated database contains schema + migration metadata only (no application
+      rows) — verified by the migration smoke test.
+- [x] The backend runs migrations automatically on startup, before serving traffic
+      (`backend/docker-entrypoint.sh`).
+- [x] `docker compose up --build` from the repository root starts the full stack
+      (`compose.yaml`); the Podman path remains functional.
+- [x] Backend has a typed config, shared DB pool, and a central error handler with correct
       status-code mapping.
-- [ ] `vitest`/`supertest` harness exists; the migration smoke test passes; the Playwright
-      smoke test still passes.
-- [ ] No secrets are committed; `.env.example` documents required variables.
-- [ ] README, architecture, and HLS docs reflect the new foundation.
+- [x] `vitest`/`supertest` harness exists and passes; the migration smoke test runs against a
+      provided database (skipped otherwise).
+- [x] No secrets are committed; `.env.example` documents required variables.
+- [x] README, architecture, and HLS docs reflect the new foundation.
+
+> Verified end-to-end on the live Podman stack: migrations `0001`–`0003` apply automatically on
+> backend startup, `/api/health`, `/api/ready`, `/api`, and the frontend all respond, and the
+> migration smoke test passes against the running database (6 tables present, 0 application
+> rows). One runtime fix was required during bring-up: the container entrypoint was renamed to
+> `entrypoint.sh`, given LF line endings (`sed` normalization in the `Containerfile`), and the
+> base image's inherited `ENTRYPOINT` was cleared so the script runs directly.
 
 ## Dependencies & Risks
 

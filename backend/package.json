@@ -6,11 +6,16 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "migrate": "node-pg-migrate",
+    "migrate:up": "node-pg-migrate up",
+    "migrate:down": "node-pg-migrate down",
+    "test": "vitest run"
   },
   "dependencies": {
     "cors": "latest",
     "express": "latest",
+    "node-pg-migrate": "latest",
     "pg": "latest"
   },
   "devDependencies": {
@@ -18,7 +23,10 @@
     "@types/express": "latest",
     "@types/node": "latest",
     "@types/pg": "latest",
+    "@types/supertest": "latest",
+    "supertest": "latest",
     "tsx": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "vitest": "latest"
   }
 }
