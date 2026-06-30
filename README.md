@@ -14,6 +14,8 @@ flowchart LR
     testRunner[Playwright Test Runner] -->|"launches browser"| chrome[Chromium Browser]
 ```
 
+See [docs/kanban-ticketing-hls.md](docs/kanban-ticketing-hls.md) for the consolidated High Level Solution (phase-by-phase implementation plan with tech solutions).
+
 See [docs/architecture.md](docs/architecture.md) for the high-level architecture plan.
 
 See [docs/implementation-plan-auth-teams-epics.md](docs/implementation-plan-auth-teams-epics.md) for the implementation and testing plan for authentication, teams, and epics (spec chapters 3–5).
