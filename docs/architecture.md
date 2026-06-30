@@ -19,8 +19,9 @@ The local runtime uses Podman and `podman-compose` for the application services,
 
 Phase numbering follows the [High Level Solution](kanban-ticketing-hls.md). Phase 0
 (foundation scaffold), Phase 1 (persistence foundation & migrations), Phase 2
-(authentication), Phase 3 (teams), Phase 4 (epics), Phase 5 (tickets), and Phase 6 (comments)
-are complete; the next phase is Phase 7 (Kanban board, filtering & search).
+(authentication), Phase 3 (teams), Phase 4 (epics), Phase 5 (tickets), Phase 6 (comments), and
+Phase 7 (Kanban board, filtering & search) are complete; the next phase is Phase 8 (quality gates &
+Definition-of-Done hardening).
 
 Completed:
 

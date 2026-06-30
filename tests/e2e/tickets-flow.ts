@@ -99,7 +99,7 @@ try {
   await page.locator('input[type="email"]').fill(email);
   await page.locator('input[type="password"]').fill(password);
   await page.getByRole("button", { name: "Log in" }).click();
-  await page.getByText(/kanban workflow/i).waitFor({ timeout: 20_000 });
+  await page.getByRole("heading", { name: "Kanban board" }).waitFor({ timeout: 20_000 });
 
   // A ticket needs a team; create one (and an epic to exercise association).
   await page.getByRole("button", { name: "Teams", exact: true }).click();

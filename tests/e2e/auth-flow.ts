@@ -97,7 +97,7 @@ try {
   await page.locator('input[type="email"]').fill(email);
   await page.locator('input[type="password"]').fill(password);
   await page.getByRole("button", { name: "Log in" }).click();
-  await page.getByText(/kanban workflow/i).waitFor({ timeout: 20_000 });
+  await page.getByRole("heading", { name: "Kanban board" }).waitFor({ timeout: 20_000 });
 
   console.log("E2E auth flow test passed");
 } finally {

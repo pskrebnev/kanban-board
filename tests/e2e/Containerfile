@@ -14,6 +14,7 @@ COPY teams-flow.ts ./
 COPY epics-flow.ts ./
 COPY tickets-flow.ts ./
 COPY comments-flow.ts ./
+COPY board-flow.ts ./
 COPY tsconfig.json ./
 
 CMD ["npm", "test"]

@@ -65,21 +65,25 @@ The project is delivered in phases. The status below reflects what is actually b
   (cascade). Nested endpoints (`GET/POST /api/tickets/:ticketId/comments`) sit behind `requireAuth`.
 - **Auth screens** — sign-up, login, email-verification result, resend, forgot-password, and
   reset-password, with a protected board and a header log-out menu.
+- **Kanban board** — the primary screen ([Phase 7](docs/phase-7.md)): a team selector and five
+  fixed workflow columns of the selected team's tickets, with drag-and-drop that persists state
+  changes through the ticket API (optimistic move, rolled back with a visible error on failure),
+  cards showing type/title/epic ordered most-recently-modified first, type/epic filters plus a
+  case-insensitive title search combined with AND logic (and a Clear action), and create/open
+  actions. Built on the existing ticket endpoints — no backend changes.
 - Backend health and readiness endpoints (`/api/health`, `/api/ready`) and a static API
   resource index (`/api`).
-- A scaffold Kanban board UI (static placeholder columns, not yet backed by the API).
 - Automated tests: a Vitest/Supertest backend suite (migration smoke test + auth, teams, epics,
   tickets, and comments unit and integration tests) and Playwright browser smoke, auth-flow,
-  teams-flow, epics-flow, tickets-flow, and comments-flow tests.
+  teams-flow, epics-flow, tickets-flow, comments-flow, and board-flow tests.
 - **Tailwind CSS v4** is the frontend styling foundation (via `@tailwindcss/vite`, Preflight + a
   brand `@theme`, existing classes layered so utilities win) — see
   [Frontend Styling](#frontend-styling-tailwind-css).
 
 ### Not Yet Implemented
 
-- **Kanban board** — real drag-and-drop persistence, filtering, and search
-  (planned: [Phase 7](docs/phase-7.md)).
-- **Persistence-backed data** — the current board uses in-memory placeholder data only.
+- **Quality-gate & Definition-of-Done hardening** (planned: Phase 8) and **reference-wireframe
+  fidelity / UX polish** (planned: Phase 9). All mandatory functional scope is now implemented.
 
 See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap, the
 [Phase 1 plan](docs/phase-1.md) (persistence foundation, complete), the
@@ -88,7 +92,7 @@ See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap
 [Phase 4 plan](docs/phase-4.md) (epics, complete), the
 [Phase 5 plan](docs/phase-5.md) (tickets, complete), the
 [Phase 6 plan](docs/phase-6.md) (comments, complete), and the
-[Phase 7 plan](docs/phase-7.md) (Kanban board, filtering & search, planned).
+[Phase 7 plan](docs/phase-7.md) (Kanban board, filtering & search, complete).
 
 ---
 
@@ -426,7 +430,7 @@ tests/e2e/           Browser smoke tests using Playwright in Podman
 - `db` runs PostgreSQL 15 using database settings from `.env`.
 - `mailpit` captures outgoing verification emails locally (UI on `MAILPIT_UI_PORT`).
 - `e2e` runs Playwright with Chromium for browser automation (smoke + auth-flow + teams-flow +
-  epics-flow + tickets-flow + comments-flow tests).
+  epics-flow + tickets-flow + comments-flow + board-flow tests).
 
 ### Running The Backend Tests
 
@@ -488,6 +492,6 @@ compile automatically.
 - [Phase 4 plan](docs/phase-4.md) — epics management plan with a JIRA-style backlog.
 - [Phase 5 plan](docs/phase-5.md) — tickets management plan with a JIRA-style backlog.
 - [Phase 6 plan](docs/phase-6.md) — comments management plan with a JIRA-style backlog.
-- [Phase 7 plan](docs/phase-7.md) — Kanban board, filtering & search plan with a JIRA-style backlog.
+- [Phase 7 plan](docs/phase-7.md) — Kanban board, filtering & search plan with a JIRA-style backlog (complete).
 - [Architecture](docs/architecture.md) — high-level architecture and delivery phases.
 - [Testing approach](docs/testing-approach.md) — grouped end-to-end scenario catalogue.

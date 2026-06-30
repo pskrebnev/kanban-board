@@ -255,7 +255,7 @@ See [phase-6.md](phase-6.md) for the detailed plan, JIRA-style backlog, and Defi
   the ticket, plus a comments section on the ticket-details screen, backend integration tests, and
   a Playwright `comments-flow`.
 
-## Phase 7 — Kanban Board, Filtering & Search (next phase)
+## Phase 7 — Kanban Board, Filtering & Search (complete)
 
 See [phase-7.md](phase-7.md) for the detailed plan, JIRA-style backlog, and Definition of Done.
 
@@ -275,8 +275,14 @@ See [phase-7.md](phase-7.md) for the detailed plan, JIRA-style backlog, and Defi
   column layout, card content, and create/open affordances.
 - **Exit criteria:** drag-and-drop persists and survives refresh; failures roll back; filters
   and search behave per spec; board remains usable at 100+ tickets.
+- **Status:** complete — a `board` store and a real Board screen with a team selector, five fixed
+  columns, dnd-kit drag-and-drop that persists via the existing `PATCH /api/tickets/:id/state`
+  (optimistic move, rollback + error on failure), most-recently-modified ordering, client-side
+  type/epic/title filtering with AND logic and a Clear action, and create/open actions — reusing
+  the Phase 5 ticket endpoints with no backend changes. Covered by a Playwright `board-flow`
+  (columns, drag persistence across refresh, drag-failure rollback, filtering/search).
 
-## Phase 8 — Quality Gates, Persistence Hardening & Definition of Done
+## Phase 8 — Quality Gates, Persistence Hardening & Definition of Done (next phase)
 
 - **Goal:** Lock in cross-cutting expectations and prove the Definition of Done.
 - **Spec coverage:** §9 (API/persistence), §11 (non-functional), §13 (DoD).
