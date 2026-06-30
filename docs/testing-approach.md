@@ -4,21 +4,24 @@ This document groups end-to-end scenario candidates from `docs/KanbanBoard.pdf`.
 
 ## Current Phase
 
-Phases 0–3 are complete (foundation, persistence/migrations, authentication with password
-recovery, and team management). Phase 4 (epics) is the next phase. Scenario sections below are marked
-**[implemented]** when covered by automated tests today, or **[planned]** when they document the
-target behavior for an upcoming phase.
+Phases 0–4 are complete (foundation, persistence/migrations, authentication with password
+recovery, team management, and epic management). Phase 5 (tickets) is the next phase. Scenario
+sections below are marked **[implemented]** when covered by automated tests today, or
+**[planned]** when they document the target behavior for an upcoming phase.
 
 Current automated coverage:
 
 - Backend `vitest`/`supertest` suite (`backend/test/`): auth unit tests (password hashing, token
   hashing, JWT), auth integration tests (signup → verify → login, duplicates, weak password,
   single-use/expired tokens, resend invalidation, full password-reset flow), teams integration
-  tests (CRUD, trim, validation, case-insensitive conflict, referenced-delete guard, 401), and a
-  migration smoke test asserting a fresh database has schema + metadata only.
+  tests (CRUD, trim, validation, case-insensitive conflict, referenced-delete guard, 401), epics
+  integration tests (CRUD, trim/validation, optional description, unknown-team rejection,
+  team-immutability, `teamId` filter, referenced-delete guard, 404/401), and a migration smoke
+  test asserting a fresh database has schema + metadata only.
 - Playwright containers under `tests/e2e/`: a smoke test (frontend shell loads), an auth-flow
-  test (sign up, read the verification email from Mailpit, verify, log in, reach the board), and
-  a teams-flow test (create, rename, and delete a team through the UI).
+  test (sign up, read the verification email from Mailpit, verify, log in, reach the board), a
+  teams-flow test (create, rename, and delete a team through the UI), and an epics-flow test
+  (create a team, then create, edit, and delete an epic for it through the UI).
 
 Target coverage:
 
@@ -92,12 +95,24 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 - `teams-rename-missing-404`: renaming or deleting a non-existent team id returns `404`.
 - `teams-require-auth`: all team endpoints reject anonymous requests with `401`.
 
-## Epic Management [planned — Phase 4]
+## Epic Management [implemented]
 
-- `epics-crud`: user creates, lists, edits, and deletes an epic for a team.
-- `epics-title-validation`: blank epic title is rejected.
-- `epics-team-immutable`: epic team cannot be changed after creation.
-- `epics-delete-blocked-when-referenced`: epic referenced by tickets cannot be deleted.
+- `epics-crud`: a verified user creates, lists, edits, and deletes an epic for a team; changes persist across refresh.
+- `epics-title-required`: a blank or whitespace-only epic title is rejected with `400`.
+- `epics-title-trimmed`: a title with surrounding whitespace is stored trimmed.
+- `epics-title-max-length`: a title longer than the allowed maximum is rejected with `400`.
+- `epics-description-optional`: an epic can be created and edited with no description (null) and with a description.
+- `epics-create-requires-team`: creating an epic without a `teamId` is rejected with `400`.
+- `epics-create-unknown-team`: creating an epic for a non-existent team is rejected with `400`/`404` and a clear message.
+- `epics-team-immutable`: editing an epic cannot change its team; a `PATCH` carrying a different `teamId` returns `400` ("team is immutable").
+- `epics-list-filter-by-team`: `GET /api/epics?teamId=…` returns only that team's epics; omitting the filter returns all.
+- `epics-list-shows-team-and-reference-state`: each listed epic includes its `teamName` and a `referenced` flag so the UI can label it and disable delete.
+- `epics-delete-unreferenced-succeeds`: an epic with no tickets is deleted with `204`.
+- `epics-delete-blocked-when-referenced`: an epic referenced by tickets cannot be deleted and returns a clear `409`; no cascade occurs.
+- `epics-id-format-validated`: a non-UUID `:id` is rejected with `400`.
+- `epics-missing-404`: editing or deleting a non-existent epic id returns `404`.
+- `epics-require-auth`: all epic endpoints reject anonymous requests with `401`.
+- `epics-belongs-to-team-validator`: the reusable cross-team validator (for Phase 5 tickets) accepts an epic from the same team and rejects one from a different team.
 
 ## Ticket Management [planned — Phase 5]
 

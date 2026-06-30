@@ -51,4 +51,11 @@ describe("public API routes", () => {
     expect(response.status).toBe(401);
     expect(response.body.error.code).toBe("unauthorized");
   });
+
+  it("requires authentication to list epics", async () => {
+    const response = await request(app).get("/api/epics");
+
+    expect(response.status).toBe(401);
+    expect(response.body.error.code).toBe("unauthorized");
+  });
 });

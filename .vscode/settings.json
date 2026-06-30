@@ -1,0 +1,6 @@
+{
+  "//": "Tailwind CSS v4 uses at-rules (@theme, @apply, @custom-variant, …) that the built-in CSS language service does not recognize. Silence the false 'Unknown at rule' warnings; the @tailwindcss/vite plugin handles these at build time.",
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore"
+}
