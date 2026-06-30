@@ -257,6 +257,8 @@ See [phase-6.md](phase-6.md) for the detailed plan, JIRA-style backlog, and Defi
 
 ## Phase 7 — Kanban Board, Filtering & Search (next phase)
 
+See [phase-7.md](phase-7.md) for the detailed plan, JIRA-style backlog, and Definition of Done.
+
 - **Goal:** The primary board screen with drag-and-drop and filtering.
 - **Spec coverage:** §8, §9, §10 (board with team selector).
 - **Presentation:** five fixed columns in workflow order; team selector; cards showing at
