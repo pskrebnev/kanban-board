@@ -8,18 +8,22 @@ import type { AuthService } from "../services/auth-service.js";
 
 const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
+// Trim first, then validate the email format. In Zod 4 the format validators
+// live at the top level (z.email()) rather than as z.string().email().
+const emailField = z.string().trim().pipe(z.email());
+
 const signupSchema = z.object({
-  email: z.string().trim().email(),
+  email: emailField,
   password: z.string().min(8),
 });
 
 const loginSchema = z.object({
-  email: z.string().trim().email(),
+  email: emailField,
   password: z.string().min(1),
 });
 
 const resendSchema = z.object({
-  email: z.string().trim().email(),
+  email: emailField,
 });
 
 const verifyQuerySchema = z.object({

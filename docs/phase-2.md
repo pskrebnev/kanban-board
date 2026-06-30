@@ -196,6 +196,40 @@ Story points are rough relative estimates. IDs are local references (e.g. `P2-1`
 - [x] No secrets are committed; `.env.example` documents required variables.
 - [x] README, architecture, and HLS docs reflect authentication.
 
+## Local Testing Guide
+
+Authentication can be exercised end-to-end locally without any real email account. Sign-up only
+validates that the address is well-formed; it does **not** require a deliverable provider. Use a
+local-only domain such as `tester@mailpit.pit` — Mailpit captures every message regardless of
+domain, so nothing is ever delivered externally and there is no spam risk.
+
+### Manual (browser)
+
+1. Start the stack: `docker compose up --build` (or
+   `podman-compose -f infra/podman/podman-compose.yml up --build`).
+2. Open `http://localhost:3000` — you are redirected to **Log in**.
+3. Click **Create an account**, enter e.g. `tester@mailpit.pit` and a password ≥ 8 characters,
+   and submit. A "Check your email" message appears.
+4. Open Mailpit at `http://localhost:8025`, open the verification email, and click its link
+   (the app shows "Email verified").
+5. Log in with the same credentials → you land on the protected board.
+6. Open the top-right account menu → **Log out** → you return to the login page.
+
+### Negative paths to verify
+
+- **Unverified login blocked:** try logging in before clicking the Mailpit link → refused with a
+  "verify your email" message and a resend option.
+- **Resend invalidates prior link:** request a new link; the older link stops working and the
+  newest one verifies the account.
+- **Single-use / expiry:** a link works once and expires after 24 hours.
+
+### Automated
+
+- **Backend** (unit + DB-backed integration): from `backend/`, run `npm test`. Integration tests
+  run when `TEST_DATABASE_URL`/`DATABASE_URL` points at a migrated database.
+- **End-to-end** (Playwright drives the UI and reads the email from Mailpit):
+  `podman-compose -f infra/podman/podman-compose.yml --profile test up --build --abort-on-container-exit e2e`.
+
 ## Dependencies & Risks
 
 - **SMTP availability:** local/test relies on Mailpit; production requires `relay1.dataart.com`

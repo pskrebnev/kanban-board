@@ -231,12 +231,45 @@ verification email through SMTP; an account cannot log in until it is verified.
   mail catcher. Sign-up emails are captured there instead of being delivered. Open the Mailpit
   UI at `http://localhost:${MAILPIT_UI_PORT}` and click the verification link (or copy its
   token). SMTP is configured via `SMTP_HOST`/`SMTP_PORT` (defaults point at Mailpit).
+- **Any email domain works locally.** A real, deliverable address (e.g. `@gmail.com`) is *not*
+  required — sign-up only checks that the address is well-formed. Use a local-only domain such
+  as `tester@mailpit.pit` for testing; Mailpit captures every message regardless of domain, so
+  nothing is ever delivered to a real provider and there is no spam risk.
 - **Production:** set `SMTP_HOST=relay1.dataart.com` (and credentials if required) in `.env`,
   set `COOKIE_SECURE=true` when serving over HTTPS, and provide a strong `JWT_SECRET`.
 
 Sessions are carried in an httpOnly cookie. The following endpoints are public: sign-up,
 login, verify, resend, `/api/health`, and `/api/ready`. All other business endpoints require
 authentication.
+
+### Try The Sign-Up & Login Flow Locally
+
+With the stack running (`docker compose up --build`, or the Podman equivalent), test the full
+authentication journey through the browser — no real email account required:
+
+1. Open the app at `http://localhost:${FRONTEND_HOST_PORT}`. You are redirected to **Log in**
+   because you are not authenticated yet.
+2. Click **Create an account**, enter a local-only email such as `tester@mailpit.pit` and a
+   password of at least 8 characters, then submit. You see a "Check your email" confirmation.
+3. Open the Mailpit inbox at `http://localhost:${MAILPIT_UI_PORT}`. Open the
+   "Verify your Kanban Ticketing account" message and click the verification link (it opens the
+   app's verification page and confirms "Email verified").
+4. Back on the **Log in** page, sign in with the same email and password. You land on the
+   protected board.
+5. Use the account menu in the top-right and click **Log out**. You are returned to the login
+   page, and the board is no longer accessible until you log in again.
+
+Things to try for the negative paths:
+
+- **Unverified login is blocked:** sign up, then try to log in *before* clicking the Mailpit
+  link — login is refused with a "verify your email" message and a resend option appears.
+- **Resend:** request a new link from the login or verification page; the previous link stops
+  working and the newest one in Mailpit verifies the account.
+- **Single-use / expiry:** a verification link works only once and expires after 24 hours.
+
+You can also exercise the same flow over HTTP without a browser. See
+[Running The Browser Tests](#running-the-browser-tests) for the automated Playwright auth-flow
+test that performs these steps end-to-end (including reading the email from Mailpit).
 
 ---
 
