@@ -64,7 +64,7 @@ The project is delivered in phases. The status below reflects what is actually b
 
 ### Not Yet Implemented
 
-- **Tickets** — full lifecycle, fields, and the five-state workflow (planned: Phase 5).
+- **Tickets** — full lifecycle, fields, and the five-state workflow (planned: [Phase 5](docs/phase-5.md)).
 - **Comments** — chronological, immutable comments on tickets (planned: Phase 6).
 - **Kanban board** — real drag-and-drop persistence, filtering, and search (planned: Phase 7).
 - **Persistence-backed data** — the current board uses in-memory placeholder data only.
@@ -72,8 +72,9 @@ The project is delivered in phases. The status below reflects what is actually b
 See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap, the
 [Phase 1 plan](docs/phase-1.md) (persistence foundation, complete), the
 [Phase 2 plan](docs/phase-2.md) (authentication, complete), the
-[Phase 3 plan](docs/phase-3.md) (teams, complete), and the
-[Phase 4 plan](docs/phase-4.md) (epics, complete).
+[Phase 3 plan](docs/phase-3.md) (teams, complete), the
+[Phase 4 plan](docs/phase-4.md) (epics, complete), and the
+[Phase 5 plan](docs/phase-5.md) (tickets, next up).
 
 ---
 
@@ -468,5 +469,6 @@ compile automatically.
 - [Phase 2 plan](docs/phase-2.md) — authentication plan with a JIRA-style backlog.
 - [Phase 3 plan](docs/phase-3.md) — teams management plan with a JIRA-style backlog.
 - [Phase 4 plan](docs/phase-4.md) — epics management plan with a JIRA-style backlog.
+- [Phase 5 plan](docs/phase-5.md) — tickets management plan with a JIRA-style backlog.
 - [Architecture](docs/architecture.md) — high-level architecture and delivery phases.
 - [Testing approach](docs/testing-approach.md) — grouped end-to-end scenario catalogue.
