@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Board } from "./pages/Board";
+import { Epics } from "./pages/Epics";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import { Login } from "./pages/Login";
 import { ResetPassword } from "./pages/ResetPassword";
@@ -41,6 +42,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Teams />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/epics"
+          element={
+            <ProtectedRoute>
+              <Epics />
             </ProtectedRoute>
           }
         />

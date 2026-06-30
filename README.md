@@ -46,19 +46,24 @@ The project is delivered in phases. The status below reflects what is actually b
   are trimmed, non-empty, and case-insensitively unique; deletion is blocked while a team is
   referenced by epics or tickets. Endpoints sit behind `requireAuth`, and a `/teams` screen
   provides the full management UI.
+- **Epics** — create, list (filterable by team), edit, and delete epics ([Phase 4](docs/phase-4.md)).
+  An epic belongs to one team (immutable after creation), titles are trimmed/non-empty with an
+  optional description, and deletion is blocked while tickets reference it. A Tailwind-built
+  `/epics` screen provides the management UI; endpoints sit behind `requireAuth`.
 - **Auth screens** — sign-up, login, email-verification result, resend, forgot-password, and
   reset-password, with a protected board and a header log-out menu.
 - Backend health and readiness endpoints (`/api/health`, `/api/ready`) and a static API
   resource index (`/api`).
 - A scaffold Kanban board UI (static placeholder columns, not yet backed by the API).
-- Automated tests: a Vitest/Supertest backend suite (migration smoke test + auth and teams unit
-  and integration tests) and Playwright browser smoke, auth-flow, and teams-flow tests.
-- **Tailwind CSS v4** is available in the frontend (via `@tailwindcss/vite`) for incremental
-  adoption alongside the existing CSS — see [Frontend Styling](#frontend-styling-tailwind-css).
+- Automated tests: a Vitest/Supertest backend suite (migration smoke test + auth, teams, and
+  epics unit and integration tests) and Playwright browser smoke, auth-flow, teams-flow, and
+  epics-flow tests.
+- **Tailwind CSS v4** is the frontend styling foundation (via `@tailwindcss/vite`, Preflight + a
+  brand `@theme`, existing classes layered so utilities win) — see
+  [Frontend Styling](#frontend-styling-tailwind-css).
 
 ### Not Yet Implemented
 
-- **Epics** — CRUD scoped to a team (planned: Phase 4).
 - **Tickets** — full lifecycle, fields, and the five-state workflow (planned: Phase 5).
 - **Comments** — chronological, immutable comments on tickets (planned: Phase 6).
 - **Kanban board** — real drag-and-drop persistence, filtering, and search (planned: Phase 7).
@@ -66,8 +71,9 @@ The project is delivered in phases. The status below reflects what is actually b
 
 See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap, the
 [Phase 1 plan](docs/phase-1.md) (persistence foundation, complete), the
-[Phase 2 plan](docs/phase-2.md) (authentication, complete), and the
-[Phase 3 plan](docs/phase-3.md) (teams, complete).
+[Phase 2 plan](docs/phase-2.md) (authentication, complete), the
+[Phase 3 plan](docs/phase-3.md) (teams, complete), and the
+[Phase 4 plan](docs/phase-4.md) (epics, complete).
 
 ---
 
@@ -395,11 +401,14 @@ tests/e2e/           Browser smoke tests using Playwright in Podman
 - `frontend` serves the built React app with Nginx and proxies `/api` to `backend`.
 - `backend` exposes auth endpoints (`/api/auth/signup`, `/verify`, `/resend`,
   `/forgot-password`, `/reset-password`, `/login`, `/logout`, `/me`), team endpoints behind
-  authentication (`GET/POST /api/teams`, `PATCH/DELETE /api/teams/:id`), health/readiness
-  (`/api/health`, `/api/ready`), and an API resource index.
+  authentication (`GET/POST /api/teams`, `PATCH/DELETE /api/teams/:id`), epic endpoints behind
+  authentication (`GET/POST /api/epics`, `PATCH/DELETE /api/epics/:id`, with an optional
+  `?teamId=` filter on list), health/readiness (`/api/health`, `/api/ready`), and an API resource
+  index.
 - `db` runs PostgreSQL 15 using database settings from `.env`.
 - `mailpit` captures outgoing verification emails locally (UI on `MAILPIT_UI_PORT`).
-- `e2e` runs Playwright with Chromium for browser automation (smoke + auth-flow + teams-flow tests).
+- `e2e` runs Playwright with Chromium for browser automation (smoke + auth-flow + teams-flow +
+  epics-flow tests).
 
 ### Running The Backend Tests
 
@@ -432,23 +441,24 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 
 ### Frontend Styling (Tailwind CSS)
 
-The frontend has [Tailwind CSS v4](https://tailwindcss.com/) wired in via the first-party
-`@tailwindcss/vite` plugin, so components can adopt utility classes
-(`className="flex items-center gap-4 ..."`) at any time — no extra build step or config file is
-needed.
+The frontend uses [Tailwind CSS v4](https://tailwindcss.com/) as its styling foundation, wired in
+via the first-party `@tailwindcss/vite` plugin — no `tailwind.config.js`, PostCSS config, or extra
+build step required.
 
 How it is set up:
 
 - `@tailwindcss/vite` is registered in `frontend/vite.config.ts`.
-- `frontend/src/styles.css` imports Tailwind's **theme** and **utilities** layers. It deliberately
-  does **not** import Preflight (Tailwind's global reset) yet, so the existing hand-written styles
-  remain the source of truth and the current UI is unchanged. The Teams screen subtitle uses
-  Tailwind utilities as a first working example.
+- `frontend/src/styles.css` enables the full framework with a single `@import "tailwindcss";`
+  (theme + Preflight + utilities). Brand design tokens are declared in an `@theme` block, so
+  utilities like `bg-brand`, `text-muted`, and `border-line` are available.
+- The existing hand-written component classes live in `@layer components`, so **utility classes
+  win over them** — new screens can be authored utility-first while older classes keep the current
+  look. A few base rules restore the heading/link styling that Preflight resets.
 
-Adoption is intended to be incremental (see the [High Level Solution](docs/kanban-ticketing-hls.md)):
-new screens in upcoming phases can be built primarily with Tailwind utilities, and a later styling
-phase can switch `styles.css` to the single `@import "tailwindcss";` line (enabling Preflight) as
-part of a deliberate restyle. Until then, plain CSS and Tailwind utilities coexist.
+Adoption is incremental: new screens (e.g. the Phase 4 epics page) are built primarily with Tailwind
+utilities, and the remaining component classes are migrated to utilities over time. To use it,
+just add utility classes in JSX (e.g. `className="flex items-center gap-4 rounded-lg p-4"`); they
+compile automatically.
 
 ### Documentation
 
@@ -457,5 +467,6 @@ part of a deliberate restyle. Until then, plain CSS and Tailwind utilities coexi
 - [Phase 1 plan](docs/phase-1.md) — persistence foundation & migrations plan with a JIRA-style backlog.
 - [Phase 2 plan](docs/phase-2.md) — authentication plan with a JIRA-style backlog.
 - [Phase 3 plan](docs/phase-3.md) — teams management plan with a JIRA-style backlog.
+- [Phase 4 plan](docs/phase-4.md) — epics management plan with a JIRA-style backlog.
 - [Architecture](docs/architecture.md) — high-level architecture and delivery phases.
 - [Testing approach](docs/testing-approach.md) — grouped end-to-end scenario catalogue.

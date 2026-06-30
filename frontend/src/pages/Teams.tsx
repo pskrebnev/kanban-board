@@ -51,6 +51,9 @@ export function Teams(): ReactElement {
           <button type="button" className="link-button" onClick={() => navigate("/")}>
             Board
           </button>
+          <button type="button" className="link-button" onClick={() => navigate("/epics")}>
+            Epics
+          </button>
         </nav>
         <div className="user-menu">
           <span className="user-button" aria-hidden="true">
@@ -66,7 +69,7 @@ export function Teams(): ReactElement {
         <section className="hero">
           <p className="eyebrow">Team management</p>
           <h1>Teams</h1>
-          <p className="text-[0.85rem] text-[#5a6680]">
+          <p className="text-[0.85rem] text-muted">
             Teams group the epics and tickets created in later phases.
           </p>
         </section>

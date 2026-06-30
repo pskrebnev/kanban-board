@@ -72,17 +72,18 @@ async function findVerificationToken(email: string): Promise<string> {
 await waitForHttp(appUrl, "Frontend");
 await waitForHttp(`${mailpitUrl}/api/v1/messages`, "Mailpit");
 
-const email = `e2e-teams+${Date.now()}@example.com`;
+const email = `e2e-epics+${Date.now()}@example.com`;
 const password = "supersecret123";
-const teamName = `Team-${Date.now()}`;
-const renamedTeam = `${teamName}-renamed`;
+const teamName = `EpicTeam-${Date.now()}`;
+const epicTitle = `Epic-${Date.now()}`;
+const renamedEpic = `${epicTitle}-renamed`;
 
 const browser = await chromium.launch({ headless: true });
 
 try {
   const page = await browser.newPage();
 
-  // Sign up, verify, and log in (Teams sits behind authentication).
+  // Sign up, verify, and log in (Epics sits behind authentication).
   await page.goto(`${appUrl}/signup`);
   await page.locator('input[type="email"]').fill(email);
   await page.locator('input[type="password"]').fill(password);
@@ -99,41 +100,43 @@ try {
   await page.getByRole("button", { name: "Log in" }).click();
   await page.getByText(/kanban workflow/i).waitFor({ timeout: 20_000 });
 
-  // Navigate to the Teams screen from the board header. Use an exact match so
-  // the nav button is not confused with the account button (the test email can
-  // contain the substring "teams").
+  // An epic needs a team, so create one first via the Teams screen.
   await page.getByRole("button", { name: "Teams", exact: true }).click();
   await page.getByRole("heading", { name: "Teams", exact: true }).waitFor({ timeout: 20_000 });
-
-  // Create a team.
   await page.getByPlaceholder("New team name").fill(teamName);
   await page.getByRole("button", { name: "Create team" }).click();
   await page.getByText(teamName, { exact: true }).waitFor({ timeout: 20_000 });
 
-  // Rename it inline. Click Rename on this team's row (while its name is still
-  // shown), then use the single open edit form. Only one row edits at a time,
-  // so `.team-edit input` and the Save button are unambiguous even if other
-  // teams already exist.
+  // Go to the Epics screen (exact match: the account button shows the email,
+  // which contains the substring "epics").
+  await page.getByRole("button", { name: "Epics", exact: true }).click();
+  await page.getByRole("heading", { name: "Epics", exact: true }).waitFor({ timeout: 20_000 });
+
+  // Create an epic for the team.
+  await page.getByLabel("Team", { exact: true }).selectOption({ label: teamName });
+  await page.getByPlaceholder("Epic title").fill(epicTitle);
+  await page.getByRole("button", { name: "Create epic" }).click();
+  await page.getByText(epicTitle, { exact: true }).waitFor({ timeout: 20_000 });
+
+  // Edit it. Scope the Edit click to this epic's card (its title is shown), then
+  // use the single open edit form (the only inputs inside an <li>).
   await page
-    .getByText(teamName, { exact: true })
+    .getByText(epicTitle, { exact: true })
     .locator("xpath=ancestor::li")
-    .getByRole("button", { name: "Rename" })
+    .getByRole("button", { name: "Edit" })
     .click();
-  await page.locator(".team-edit input").fill(renamedTeam);
+  await page.locator("li form input").first().fill(renamedEpic);
   await page.getByRole("button", { name: "Save" }).click();
-  await page.getByText(renamedTeam, { exact: true }).waitFor({ timeout: 20_000 });
+  await page.getByText(renamedEpic, { exact: true }).waitFor({ timeout: 20_000 });
 
-  // Delete it (unreferenced, so deletion succeeds). Assert the specific team is
-  // gone rather than a global empty state, since teams are shared across users
-  // and the database may legitimately contain other teams. The name stays
-  // visible while the inline delete confirmation is shown, so the row locator
-  // resolves for both the Delete and Confirm clicks.
-  const renamedRow = page.getByText(renamedTeam, { exact: true }).locator("xpath=ancestor::li");
-  await renamedRow.getByRole("button", { name: "Delete" }).click();
-  await renamedRow.getByRole("button", { name: "Confirm" }).click();
-  await page.getByText(renamedTeam, { exact: true }).waitFor({ state: "detached", timeout: 20_000 });
+  // Delete it (unreferenced, so deletion succeeds). Assert the specific epic is
+  // gone rather than a global empty state.
+  const renamedCard = page.getByText(renamedEpic, { exact: true }).locator("xpath=ancestor::li");
+  await renamedCard.getByRole("button", { name: "Delete" }).click();
+  await renamedCard.getByRole("button", { name: "Confirm" }).click();
+  await page.getByText(renamedEpic, { exact: true }).waitFor({ state: "detached", timeout: 20_000 });
 
-  console.log("E2E teams flow test passed");
+  console.log("E2E epics flow test passed");
 } finally {
   await browser.close();
 }

@@ -45,7 +45,7 @@ Tier boundaries (spec §2 — must remain clearly separated):
 | Tier / Concern | Technology | Notes |
 |---|---|---|
 | Presentation | React + TypeScript, Vite, React Router, Zustand, dnd-kit, Axios | Built to static assets, served by Nginx 1.27 |
-| Styling | Tailwind CSS v4 (`@tailwindcss/vite`) + hand-written CSS | Utilities available now; adopted incrementally per screen. Preflight (global reset) deferred to a dedicated restyle phase so current styles are unaffected |
+| Styling | Tailwind CSS v4 (`@tailwindcss/vite`) | Full framework enabled (theme + Preflight + utilities); brand tokens in `@theme`; legacy component classes kept in `@layer components` so utilities win. New screens authored utility-first; older classes migrated over time |
 | Application/API | Node.js 22, Express 5, TypeScript | Layered: routes → services → repositories |
 | Validation | `zod` | Server-side validation of every input (spec §9) |
 | AuthN/AuthZ | `argon2` (Argon2id), `jsonwebtoken` | JWT in an httpOnly, SameSite cookie (spec §9: no tokens in URLs) |
@@ -184,7 +184,9 @@ See [phase-3.md](phase-3.md) for the detailed plan, backlog, and Definition of D
   guard are implemented behind `requireAuth`, with backend integration tests and a Playwright
   `teams-flow` covering create/rename/delete.
 
-## Phase 4 — Epics
+## Phase 4 — Epics (complete)
+
+See [phase-4.md](phase-4.md) for the detailed plan, JIRA-style backlog, and Definition of Done.
 
 - **Goal:** Manage epics that belong to exactly one team.
 - **Spec coverage:** §5, §9, §10 (epic screen).
@@ -200,6 +202,10 @@ See [phase-3.md](phase-3.md) for the detailed plan, backlog, and Definition of D
   selector.
 - **Exit criteria:** epics CRUD works; team is immutable post-creation; referenced-epic
   deletion is blocked.
+- **Status:** complete — epics CRUD, `teamId` filter, team immutability, unknown-team rejection,
+  the referenced-delete guard (`409`), the `assertEpicBelongsToTeam` validator, and a
+  Tailwind-built `/epics` screen, all covered by backend integration tests and a Playwright
+  epics-flow.
 
 ## Phase 5 — Tickets
 
@@ -286,9 +292,10 @@ See [phase-3.md](phase-3.md) for the detailed plan, backlog, and Definition of D
   is acceptable as long as all mandatory actions and states remain clear and usable. Refine
   loading/empty/success/error states, disabled-control affordances for referenced records, and
   overall consistency.
-- **Styling:** a good point to complete the Tailwind CSS adoption — migrate the remaining
-  hand-written CSS to utilities and switch `frontend/src/styles.css` to the single
-  `@import "tailwindcss";` (enabling Preflight) as a deliberate, tested restyle.
+- **Styling:** Tailwind CSS is the foundation (Preflight on, brand `@theme`, utilities authoritative
+  via `@layer components`). A good point to finish the migration — convert the remaining component
+  classes in `frontend/src/styles.css` to utilities so the stylesheet is essentially just
+  `@import "tailwindcss";` plus the theme.
 - **Testing:** visual/flow review against wireframes; re-run the full Playwright suite.
 - **Exit criteria:** all primary flows match the wireframes' intent; UX states are consistent
   across the app.

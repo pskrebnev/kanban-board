@@ -19,7 +19,8 @@ The local runtime uses Podman and `podman-compose` for the application services,
 
 Phase numbering follows the [High Level Solution](kanban-ticketing-hls.md). Phase 0
 (foundation scaffold), Phase 1 (persistence foundation & migrations), Phase 2
-(authentication), and Phase 3 (teams) are complete; the next phase is Phase 4 (epics).
+(authentication), Phase 3 (teams), and Phase 4 (epics) are complete; the next phase is
+Phase 5 (tickets).
 
 Completed:
 
@@ -44,12 +45,18 @@ Completed:
   behind `requireAuth` (list with a `referenced` flag, create, rename, delete), case-insensitive
   name uniqueness mapped to `409`, a referenced-delete guard, and a frontend `/teams` screen.
   Covered by backend integration tests and a Playwright teams-flow.
+- Added epic management (Phase 4): an `epic-repository`/`epic-service`, `/api/epics` endpoints
+  behind `requireAuth` (list with `teamName` + `referenced` and an optional `teamId` filter,
+  create, edit, delete), team immutability after creation, unknown-team rejection, a
+  referenced-delete guard (`409`), a reusable `assertEpicBelongsToTeam` validator for Phase 5,
+  and a Tailwind-built frontend `/epics` screen. Covered by backend integration tests and a
+  Playwright epics-flow.
 - Replaced Selenium with Playwright for browser testing.
 - Documented the high-level architecture and local development workflow.
 
 Not yet implemented:
 
-- Production API endpoints for epics, tickets, and comments (Phases 4–6).
+- Production API endpoints for tickets and comments (Phases 5–6).
 - Real drag-and-drop ticket movement persistence (Phase 7).
 - CI pipeline and release packaging.
 
@@ -92,8 +99,9 @@ Core libraries:
 - Zustand
 - dnd-kit
 - Axios
-- Tailwind CSS v4 (via `@tailwindcss/vite`) — utility-first styling, adopted incrementally
-  alongside the existing hand-written CSS (Preflight intentionally deferred to a future restyle).
+- Tailwind CSS v4 (via `@tailwindcss/vite`) — utility-first styling foundation with Preflight
+  enabled and a brand `@theme`; existing component classes are kept in `@layer components` so
+  utilities take precedence, and screens migrate to utilities incrementally.
 
 Responsibilities:
 
