@@ -1,43 +1,70 @@
 # Kanban Ticketing System
 
-Kanban Ticketing is a starter TypeScript-first 3-tier application with a React SPA, REST API, PostgreSQL database, and Podman-based local runtime.
+A Kanban-style ticket tracker built as a three-tier single-page application: a React SPA, a
+TypeScript REST API, and a PostgreSQL database, all run in containers.
 
-Current phase: Phase 1, foundation and runtime scaffold. The project currently has the TypeScript app skeleton, Podman runtime, PostgreSQL service, and Playwright smoke-test container in place.
+---
 
-## Architecture
+## A. What This App Is For
 
-```mermaid
-flowchart LR
-    user[User] --> frontend[React SPA]
-    frontend -->|"REST API calls"| backend[Backend API]
-    backend -->|"SQL queries"| db[(PostgreSQL)]
-    testRunner[Playwright Test Runner] -->|"launches browser"| chrome[Chromium Browser]
-```
-
-See [docs/kanban-ticketing-hls.md](docs/kanban-ticketing-hls.md) for the consolidated High Level Solution (phase-by-phase implementation plan with tech solutions).
-
-See [docs/architecture.md](docs/architecture.md) for the high-level architecture plan.
-
-See [docs/implementation-plan-auth-teams-epics.md](docs/implementation-plan-auth-teams-epics.md) for the implementation and testing plan for authentication, teams, and epics (spec chapters 3–5).
-
-## Project Structure
+Kanban Ticketing helps teams organize work as tickets and move them through a fixed Kanban
+workflow. Registered users sign in, group tickets by **team**, optionally organize them under
+**epics**, and track each ticket across five workflow states on a draggable board:
 
 ```text
-backend/             TypeScript REST API service
-docs/                Architecture documentation
-frontend/            TypeScript React Vite SPA
-infra/podman/        Podman compose runtime
-tests/e2e/           Browser smoke tests using Playwright in Podman
+new → ready_for_implementation → in_progress → ready_for_acceptance → done
 ```
 
-## Prerequisites
+The goal is a small, complete, self-hosted ticket tracker that demonstrates a clear separation
+between presentation, application/API, and persistence tiers. Scrum, sprints, SSO, and
+advanced project-management features are intentionally out of scope.
+
+For the full product specification see [docs/KanbanBoard.pdf](docs/KanbanBoard.pdf), and for
+the planned solution see the [High Level Solution](docs/kanban-ticketing-hls.md).
+
+---
+
+## B. Functionality
+
+The project is delivered in phases. The status below reflects what is actually built today.
+
+### Implemented
+
+- Three-tier containerized runtime (React SPA + Nginx, Express API, PostgreSQL 15).
+- Local development stack via Podman / `podman-compose`.
+- Backend health and readiness endpoints (`/api/health`, `/api/ready`) and a static API
+  resource index (`/api`).
+- A scaffold Kanban board UI (static placeholder columns, not yet backed by the API).
+- A Playwright browser smoke test that verifies the app shell loads.
+
+### Not Yet Implemented
+
+- **Authentication** — sign-up, email verification, login/logout (planned: Phase 2).
+- **Database schema & migrations** — no domain tables yet (planned: Phase 1).
+- **Teams** — create, rename, delete, with deletion guards (planned: Phase 3).
+- **Epics** — CRUD scoped to a team (planned: Phase 4).
+- **Tickets** — full lifecycle, fields, and the five-state workflow (planned: Phase 5).
+- **Comments** — chronological, immutable comments on tickets (planned: Phase 6).
+- **Kanban board** — real drag-and-drop persistence, filtering, and search (planned: Phase 7).
+- **Persistence-backed data** — the current board uses in-memory placeholder data only.
+
+See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap and the
+[Phase 1 plan](docs/phase-1.md) for the work in progress.
+
+---
+
+## C. How To Deploy
+
+The stack runs in containers. On Windows it uses Podman with a WSL2-backed virtual machine.
+
+### Prerequisites
 
 - Podman
 - `podman-compose`
 
 The stack is intended to run with rootless Podman.
 
-## Windows Setup (Podman + WSL2)
+### Windows Setup (Podman + WSL2)
 
 On Windows, Podman runs containers inside a WSL2-backed virtual machine. Set this up once.
 
@@ -70,7 +97,7 @@ podman --version
 podman-compose --version
 ```
 
-### Troubleshooting: `podman-compose` not found
+#### Troubleshooting: `podman-compose` not found
 
 `pip install podman-compose` performs a *user* installation, which places `podman-compose.exe` in your per-user Python scripts directory (for example `%APPDATA%\Python\Python314\Scripts`). If that directory is not on your PATH, both `podman-compose` and the built-in `podman compose` wrapper fail to find a provider:
 
@@ -102,7 +129,7 @@ Open a new terminal (the permanent PATH change does not apply to already-open se
 podman-compose --version
 ```
 
-## Initialize The Podman Machine
+### Initialize The Podman Machine
 
 With the WSL provider, these commands do not require administrator rights. Run them once after installation (and after a reboot on Windows):
 
@@ -117,13 +144,11 @@ Confirm the machine is running:
 podman machine list
 ```
 
-## Environment Configuration
+### Configure Environment
 
-Runtime ports, database credentials, and test URLs are read from a local `.env` file at the repository root.
+Runtime ports, database credentials, and test URLs are read from a local `.env` file at the repository root. Create it from the committed template before running the project:
 
-Create it from the committed template before running the project:
-
-```shell
+```powershell
 copy .env.example .env
 ```
 
@@ -135,7 +160,7 @@ cp .env.example .env
 
 Update `.env` for your local machine. Do not commit `.env`; it is ignored by Git.
 
-## Run In UI Mode
+### Start The Application
 
 Start frontend, backend, and PostgreSQL from the repository root:
 
@@ -161,7 +186,42 @@ Remove the PostgreSQL development volume:
 podman-compose -f infra/podman/podman-compose.yml down -v
 ```
 
-## Run Headless Playwright Tests
+> Note: the product specification targets a single-command `docker compose up --build` from
+> the repository root. A repo-root Compose entrypoint is planned in
+> [Phase 1](docs/phase-1.md); until then, use the `podman-compose` command above.
+
+---
+
+## D. Other Useful Info
+
+### Architecture
+
+```mermaid
+flowchart LR
+    user[User] --> frontend[React SPA]
+    frontend -->|"REST API calls"| backend[Backend API]
+    backend -->|"SQL queries"| db[(PostgreSQL)]
+    testRunner[Playwright Test Runner] -->|"launches browser"| chrome[Chromium Browser]
+```
+
+### Project Structure
+
+```text
+backend/             TypeScript REST API service
+docs/                Specification, architecture, and phase plans
+frontend/            TypeScript React Vite SPA
+infra/podman/        Podman compose runtime
+tests/e2e/           Browser smoke tests using Playwright in Podman
+```
+
+### Local Service Details
+
+- `frontend` serves the built React app with Nginx and proxies `/api` to `backend`.
+- `backend` exposes `/api/health`, `/api/ready`, and an initial API resource index.
+- `db` runs PostgreSQL 15 using database settings from `.env`.
+- `e2e` runs Playwright with Chromium for browser automation.
+
+### Running The Browser Tests
 
 Run the headless Playwright smoke test from the repository root:
 
@@ -169,19 +229,17 @@ Run the headless Playwright smoke test from the repository root:
 podman-compose -f infra/podman/podman-compose.yml --profile test up --build --abort-on-container-exit e2e
 ```
 
-This starts the required application services and runs the `e2e` container. Playwright launches Chromium headlessly inside the Podman container.
-
-Clean up the test stack:
+This starts the required application services and runs the `e2e` container. Playwright launches Chromium headlessly inside the Podman container. Clean up the test stack:
 
 ```shell
 podman-compose -f infra/podman/podman-compose.yml --profile test down
 ```
 
-See [docs/testing-approach.md](docs/testing-approach.md) for the grouped e2e scenario plan.
+### Documentation
 
-## Local Service Details
-
-- `frontend` serves the built React app with Nginx and proxies `/api` to `backend`.
-- `backend` exposes `/api/health`, `/api/ready`, and an initial API resource index.
-- `db` runs PostgreSQL 15 using database settings from `.env`.
-- `e2e` runs Playwright with Chromium for browser automation.
+- [Product specification](docs/KanbanBoard.pdf) — the authoritative requirements (main doc).
+- [High Level Solution](docs/kanban-ticketing-hls.md) — phase-by-phase implementation plan with tech solutions.
+- [Phase 1 plan](docs/phase-1.md) — persistence foundation & migrations plan with a JIRA-style backlog.
+- [Architecture](docs/architecture.md) — high-level architecture and delivery phases.
+- [Auth/Teams/Epics plan](docs/implementation-plan-auth-teams-epics.md) — detailed plan for spec chapters 3–5.
+- [Testing approach](docs/testing-approach.md) — grouped end-to-end scenario catalogue.
