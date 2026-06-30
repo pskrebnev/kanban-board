@@ -22,6 +22,13 @@ services:
       PORT: ${BACKEND_CONTAINER_PORT}
       DATABASE_URL: ${DATABASE_URL}
       APP_BASE_URL: ${APP_BASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      COOKIE_SECURE: ${COOKIE_SECURE}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_FROM: ${SMTP_FROM}
     ports:
       - "${BACKEND_HOST_PORT}:${BACKEND_CONTAINER_PORT}"
     depends_on:
@@ -45,8 +52,6 @@ services:
 
   mailpit:
     image: axllent/mailpit:latest
-    profiles:
-      - test
     ports:
       - "${MAILPIT_UI_PORT}:8025"
       - "${MAILPIT_SMTP_PORT}:1025"
@@ -59,9 +64,11 @@ services:
       dockerfile: Containerfile
     environment:
       APP_URL: ${E2E_APP_URL}
+      E2E_MAILPIT_URL: ${E2E_MAILPIT_URL}
     depends_on:
       - frontend
       - backend
+      - mailpit
 
 volumes:
   postgres-data:

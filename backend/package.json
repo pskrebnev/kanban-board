@@ -13,15 +13,23 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@node-rs/argon2": "latest",
+    "cookie-parser": "latest",
     "cors": "latest",
     "express": "latest",
+    "jsonwebtoken": "latest",
     "node-pg-migrate": "latest",
-    "pg": "latest"
+    "nodemailer": "latest",
+    "pg": "latest",
+    "zod": "latest"
   },
   "devDependencies": {
+    "@types/cookie-parser": "latest",
     "@types/cors": "latest",
     "@types/express": "latest",
+    "@types/jsonwebtoken": "latest",
     "@types/node": "latest",
+    "@types/nodemailer": "latest",
     "@types/pg": "latest",
     "@types/supertest": "latest",
     "supertest": "latest",

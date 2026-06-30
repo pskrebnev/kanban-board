@@ -3,11 +3,19 @@ import request from "supertest";
 import { describe, expect, it } from "vitest";
 
 import { createApp } from "../src/app.js";
+import type { AuthService } from "../src/services/auth-service.js";
 
-// The public routes exercised here do not touch the database, so a stub pool is
-// sufficient to assert the app wiring.
+// The public routes exercised here do not touch the database or auth service,
+// so stubs are sufficient to assert the app wiring.
 const stubPool = {} as unknown as pg.Pool;
-const app = createApp(stubPool);
+const stubAuthService = {} as unknown as AuthService;
+
+const app = createApp({
+  pool: stubPool,
+  authService: stubAuthService,
+  jwtSecret: "test-secret",
+  cookieSecure: false,
+});
 
 describe("public API routes", () => {
   it("reports health", async () => {
@@ -30,9 +38,10 @@ describe("public API routes", () => {
     ]);
   });
 
-  it("returns 404 JSON for unknown routes handled by Express default", async () => {
-    const response = await request(app).get("/api/does-not-exist");
+  it("requires authentication for the current-user endpoint", async () => {
+    const response = await request(app).get("/api/auth/me");
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(401);
+    expect(response.body.error.code).toBe("unauthorized");
   });
 });

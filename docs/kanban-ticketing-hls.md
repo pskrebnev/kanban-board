@@ -128,8 +128,14 @@ testing, wireframe considerations, and exit criteria.
 - **Exit criteria:** migrations apply cleanly on an empty DB; API boots only after a
   successful migration; documented migration commands.
 
-## Phase 2 — User Accounts & Authentication
+## Phase 2 — User Accounts & Authentication (complete)
 
+- **Status:** Done. Email/password sign-up with Argon2id hashing, SMTP email verification
+  (24h single-use tokens, resend via Mailpit locally / relay1.dataart.com in prod),
+  login/logout with a JWT httpOnly cookie, `requireAuth` protection with a public allow-list,
+  frontend auth screens with a protected board, and auth unit/integration/e2e tests. See
+  [phase-2.md](phase-2.md).
+- **Detailed plan:** [phase-2.md](phase-2.md).
 - **Goal:** Local sign-up, email verification, login/logout, and protection of all business
   endpoints.
 - **Spec coverage:** §3, §9 (auth transport, status codes), §10 (auth screens), §11

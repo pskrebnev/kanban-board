@@ -1,11 +1,15 @@
-FROM mcr.microsoft.com/playwright:latest
+FROM node:22
 
 WORKDIR /app
 
 COPY package.json ./
 RUN npm install
+# Install the Chromium build matching the installed Playwright version, along
+# with its OS dependencies. Sourcing both from npm avoids version drift.
+RUN npx playwright install --with-deps chromium
 
 COPY smoke-test.ts ./
+COPY auth-flow.ts ./
 COPY tsconfig.json ./
 
 CMD ["npm", "test"]
