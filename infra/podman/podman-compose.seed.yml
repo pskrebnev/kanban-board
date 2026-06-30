@@ -12,7 +12,6 @@
 #
 # Do NOT use this for the clean-checkout / Definition-of-Done flow: the spec
 # requires a fresh database to contain schema + migration metadata only.
-version: "3.9"
 
 services:
   backend:
