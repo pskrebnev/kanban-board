@@ -14,7 +14,11 @@ COMPOSE      ?= docker compose
 SEED_FILES   := -f compose.yaml -f compose.seed.yaml
 GENERATED    := ./backend/seed/generated-data.json
 
-.PHONY: up seed verify down help
+.PHONY: up seed verify dev down help
+
+## dev: start the hot-reload development stack (bind-mounted source, no image rebuilds)
+dev:
+	$(COMPOSE) -f compose.dev.yaml up
 
 ## up: build and start the whole stack with NO application data (clean, schema-only DB)
 up:

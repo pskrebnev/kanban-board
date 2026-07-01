@@ -1,0 +1,81 @@
+# Development stack with hot reload — no image rebuilds for code changes.
+#
+#   docker compose -f compose.dev.yaml up          (or: make dev)
+#   podman-compose -f compose.dev.yaml up
+#
+# How it differs from the production stack (compose.yaml):
+#   - frontend runs the Vite dev server (instant HMR) instead of the Nginx image.
+#   - backend runs `tsx watch` (auto-restart on change) instead of the compiled dist.
+#   - Source is bind-mounted; node_modules live in named volumes so the fast,
+#     container-installed deps are not shadowed by the host (important on WSL2).
+#
+# Edit files under frontend/src or backend/src and the change is picked up in ~1s
+# with no rebuild. This is a standalone stack — use it instead of compose.yaml,
+# not alongside it (it uses the same host ports).
+services:
+  frontend:
+    image: node:22-alpine
+    working_dir: /app
+    command: sh -c "npm install && npm run dev"
+    environment:
+      VITE_PORT: ${FRONTEND_HOST_PORT}
+      VITE_API_PROXY: http://backend:${BACKEND_CONTAINER_PORT}
+    ports:
+      - "${FRONTEND_HOST_PORT}:${FRONTEND_HOST_PORT}"
+    volumes:
+      - ./frontend:/app
+      - frontend-node-modules:/app/node_modules
+    depends_on:
+      - backend
+
+  backend:
+    image: node:22-alpine
+    working_dir: /app
+    command: sh -c "npm install && npm run migrate:up && npm run dev"
+    environment:
+      NODE_ENV: development
+      PORT: ${BACKEND_CONTAINER_PORT}
+      DATABASE_URL: ${DATABASE_URL}
+      APP_BASE_URL: ${APP_BASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      COOKIE_SECURE: ${COOKIE_SECURE}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_FROM: ${SMTP_FROM}
+    ports:
+      - "${BACKEND_HOST_PORT}:${BACKEND_CONTAINER_PORT}"
+    volumes:
+      - ./backend:/app
+      - backend-node-modules:/app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_HOST_PORT}:${POSTGRES_CONTAINER_PORT}"
+    volumes:
+      - postgres-data-dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "${MAILPIT_UI_PORT}:8025"
+      - "${MAILPIT_SMTP_PORT}:1025"
+
+volumes:
+  frontend-node-modules:
+  backend-node-modules:
+  postgres-data-dev:
