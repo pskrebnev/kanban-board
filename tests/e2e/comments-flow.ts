@@ -160,7 +160,12 @@ try {
   await page.getByText(email, { exact: true }).first().waitFor({ timeout: 20_000 });
 
   // Oldest-first order: the first comment must appear before the second in the DOM.
-  const bodies = await page.locator("section[aria-label='Comments'] li p").allTextContents();
+  // Wait for the second comment item to be present before snapshotting — posting
+  // triggers a refetch that briefly unmounts the list, and allTextContents() does
+  // not auto-wait, so an early snapshot could catch the empty loading window.
+  const commentBodies = page.locator("section[aria-label='Comments'] li p");
+  await commentBodies.nth(1).waitFor({ timeout: 20_000 });
+  const bodies = await commentBodies.allTextContents();
   const firstIndex = bodies.indexOf(firstComment);
   const secondIndex = bodies.indexOf(secondComment);
   if (firstIndex === -1 || secondIndex === -1 || firstIndex > secondIndex) {
@@ -181,7 +186,9 @@ try {
   await page.reload();
   await page.getByText(firstComment, { exact: true }).waitFor({ timeout: 20_000 });
   await page.getByText(secondComment, { exact: true }).waitFor({ timeout: 20_000 });
-  const reloadedBodies = await page.locator("section[aria-label='Comments'] li p").allTextContents();
+  const reloadedBodyLocator = page.locator("section[aria-label='Comments'] li p");
+  await reloadedBodyLocator.nth(1).waitFor({ timeout: 20_000 });
+  const reloadedBodies = await reloadedBodyLocator.allTextContents();
   if (reloadedBodies.indexOf(firstComment) > reloadedBodies.indexOf(secondComment)) {
     throw new Error(`Comments not in oldest-first order after refresh: ${JSON.stringify(reloadedBodies)}`);
   }
