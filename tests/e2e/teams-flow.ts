@@ -97,11 +97,7 @@ try {
   await page.locator('input[type="email"]').fill(email);
   await page.locator('input[type="password"]').fill(password);
   await page.getByRole("button", { name: "Log in" }).click();
-<<<<<<< HEAD
   await page.getByRole("heading", { name: "Kanban board" }).waitFor({ timeout: 20_000 });
-=======
-  await page.getByText(/kanban workflow/i).waitFor({ timeout: 20_000 });
->>>>>>> 38c086d85be695e4709f7537890cbca79299944a
 
   // Navigate to the Teams screen from the board header. Use an exact match so
   // the nav button is not confused with the account button (the test email can

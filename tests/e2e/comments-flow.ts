@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { chromium, type Page } from "playwright";
-=======
-import { chromium } from "playwright";
->>>>>>> 38c086d85be695e4709f7537890cbca79299944a
 
 function requireEnv(name: string): string {
   const value = process.env[name];
@@ -21,7 +17,6 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-<<<<<<< HEAD
 // After a successful post the form clears asynchronously (post → clear → refetch).
 // Wait for that clear to land before typing the next comment, so the fill can't
 // race with — and be clobbered by — the reset.
@@ -35,8 +30,6 @@ async function waitForCommentBoxEmpty(page: Page): Promise<void> {
   throw new Error("Comment box did not clear after posting");
 }
 
-=======
->>>>>>> 38c086d85be695e4709f7537890cbca79299944a
 async function waitForHttp(url: string, label: string): Promise<void> {
   const deadline = Date.now() + 60_000;
   let lastError: Error | undefined;
@@ -119,11 +112,7 @@ try {
   await page.locator('input[type="email"]').fill(email);
   await page.locator('input[type="password"]').fill(password);
   await page.getByRole("button", { name: "Log in" }).click();
-<<<<<<< HEAD
   await page.getByRole("heading", { name: "Kanban board" }).waitFor({ timeout: 20_000 });
-=======
-  await page.getByText(/kanban workflow/i).waitFor({ timeout: 20_000 });
->>>>>>> 38c086d85be695e4709f7537890cbca79299944a
 
   // A comment needs a ticket, which needs a team. Create the team first.
   await page.getByRole("button", { name: "Teams", exact: true }).click();
@@ -161,12 +150,8 @@ try {
   await page.getByRole("button", { name: "Post comment" }).click();
   await page.getByText(firstComment, { exact: true }).waitFor({ timeout: 20_000 });
 
-<<<<<<< HEAD
   // Add the second comment (only once the form has cleared from the first post).
   await waitForCommentBoxEmpty(page);
-=======
-  // Add the second comment.
->>>>>>> 38c086d85be695e4709f7537890cbca79299944a
   await page.getByLabel("Add comment", { exact: true }).fill(secondComment);
   await page.getByRole("button", { name: "Post comment" }).click();
   await page.getByText(secondComment, { exact: true }).waitFor({ timeout: 20_000 });

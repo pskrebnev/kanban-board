@@ -11,7 +11,6 @@ Phase 5 tickets resource, which already provides the list endpoint (filterable, 
 `modified_at DESC`), the dedicated `PATCH /api/tickets/:id/state` endpoint, and the ticket
 create/details screens the board's "create" and "open" actions navigate to.
 
-<<<<<<< HEAD
 > **Status: implemented.** The placeholder board has been replaced with a real, team-scoped Kanban
 > board: a `board` store, five fixed columns, drag-and-drop persistence via the existing ticket
 > state endpoint (with optimistic move and rollback-on-failure), type/epic/title filtering with AND
@@ -19,11 +18,6 @@ create/details screens the board's "create" and "open" actions navigate to.
 > [Board.tsx](../frontend/src/pages/Board.tsx) and [board.ts](../frontend/src/store/board.ts).
 > Covered by a Playwright `board-flow` exercising columns, drag persistence across refresh,
 > drag-failure rollback, and filtering/search.
-=======
-> **Status: planned.** This document defines the plan only; no Phase 7 application code has been
-> written yet. The current `Board` screen is a static placeholder (hard-coded columns, one sample
-> card, an empty `DndContext`) — see [Board.tsx](../frontend/src/pages/Board.tsx).
->>>>>>> 38c086d85be695e4709f7537890cbca79299944a
 
 ## Goal
 
@@ -272,7 +266,6 @@ Story points are rough relative estimates. IDs are local references (e.g. `P7-1`
 
 ## Phase 7 Definition of Done
 
-<<<<<<< HEAD
 - [x] The board shows exactly five columns, in workflow order, for the selected team.
 - [x] A team selector switches the board to show only that team's tickets.
 - [x] Each card shows at least title and type; epic is shown when set.
@@ -291,26 +284,6 @@ Story points are rough relative estimates. IDs are local references (e.g. `P7-1`
 - [x] A Playwright `board-flow` covers the board columns, drag persistence across refresh, the
       drag-failure-rollback case, and filtering/search.
 - [x] README, architecture, and HLS docs reflect the real Kanban board.
-=======
-- [ ] The board shows exactly five columns, in workflow order, for the selected team.
-- [ ] A team selector switches the board to show only that team's tickets.
-- [ ] Each card shows at least title and type; epic is shown when set.
-- [ ] Dragging a card to another column changes its state and persists the change through the
-      existing ticket API.
-- [ ] A failed drag-and-drop update returns the card to its previous column and shows a visible
-      error.
-- [ ] Cards can move directly between any two states; no sequential-transition restriction exists.
-- [ ] Within a column, cards are ordered by most-recently-modified first.
-- [ ] The board provides a clear way to create a new ticket and to open an existing one.
-- [ ] Filtering by type and by epic, plus a case-insensitive title substring search, are all
-      available and combine using AND logic; a "Clear" action resets them.
-- [ ] The board remains usable with at least 100 tickets on one team.
-- [ ] The board shows loading, empty, success, and error states.
-- [ ] A state change made by dragging survives a page refresh.
-- [ ] Playwright `board-flow`, `persistence-flow`, a drag-failure-rollback case, and `filters-flow`
-      all pass.
-- [ ] README, architecture, and HLS docs reflect the real Kanban board.
->>>>>>> 38c086d85be695e4709f7537890cbca79299944a
 
 ## How To Test Locally
 
@@ -337,13 +310,8 @@ states (and at least one epic):
 ### Automated
 
 - **End-to-end:** `podman-compose -f infra/podman/podman-compose.yml --profile test up --build --abort-on-container-exit e2e`
-<<<<<<< HEAD
   runs the Playwright `board-flow`, which consolidates the board, drag-persistence-across-refresh,
   drag-failure-rollback, and filtering/search cases described above into one end-to-end journey.
-=======
-  runs the `board-flow`, `persistence-flow`, drag-failure-rollback, and `filters-flow` Playwright
-  cases described above.
->>>>>>> 38c086d85be695e4709f7537890cbca79299944a
 - No new backend integration tests are anticipated (Phase 7 reuses the existing Phase 5 ticket
   endpoints); if a server-side search or any other backend change is added during implementation,
   it must get its own backend integration tests at that time.

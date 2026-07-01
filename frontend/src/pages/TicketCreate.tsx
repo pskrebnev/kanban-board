@@ -1,9 +1,5 @@
 import { useEffect, useMemo, useState, type SyntheticEvent, type ReactElement } from "react";
-<<<<<<< HEAD
 import { useNavigate, useSearchParams } from "react-router-dom";
-=======
-import { useNavigate } from "react-router-dom";
->>>>>>> 38c086d85be695e4709f7537890cbca79299944a
 
 import { apiErrorMessage } from "../api";
 import { AppHeader } from "../components/AppHeader";
@@ -19,10 +15,7 @@ const labelClass = "mb-1 block text-[0.85rem] font-bold text-muted";
 
 export function TicketCreate(): ReactElement {
   const navigate = useNavigate();
-<<<<<<< HEAD
   const [searchParams] = useSearchParams();
-=======
->>>>>>> 38c086d85be695e4709f7537890cbca79299944a
 
   const teams = useTeamsStore((state) => state.teams);
   const fetchTeams = useTeamsStore((state) => state.fetchTeams);
@@ -30,12 +23,8 @@ export function TicketCreate(): ReactElement {
   const setFilterTeam = useEpicsStore((state) => state.setFilterTeam);
   const createTicket = useTicketsStore((state) => state.createTicket);
 
-<<<<<<< HEAD
   // Pre-select a team when arriving from the board's "New ticket" action.
   const [teamId, setTeamId] = useState(searchParams.get("teamId") ?? "");
-=======
-  const [teamId, setTeamId] = useState("");
->>>>>>> 38c086d85be695e4709f7537890cbca79299944a
   const [type, setType] = useState<TicketType>("feature");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");

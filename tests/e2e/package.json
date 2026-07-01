@@ -4,11 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-<<<<<<< HEAD
     "test": "tsx smoke-test.ts && tsx auth-flow.ts && tsx teams-flow.ts && tsx epics-flow.ts && tsx tickets-flow.ts && tsx comments-flow.ts && tsx board-flow.ts",
-=======
-    "test": "tsx smoke-test.ts && tsx auth-flow.ts && tsx teams-flow.ts && tsx epics-flow.ts && tsx tickets-flow.ts && tsx comments-flow.ts",
->>>>>>> 38c086d85be695e4709f7537890cbca79299944a
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
