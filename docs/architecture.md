@@ -19,9 +19,9 @@ The local runtime uses Podman and `podman-compose` for the application services,
 
 Phase numbering follows the [High Level Solution](kanban-ticketing-hls.md). Phase 0
 (foundation scaffold), Phase 1 (persistence foundation & migrations), Phase 2
-(authentication), Phase 3 (teams), Phase 4 (epics), Phase 5 (tickets), Phase 6 (comments), and
-Phase 7 (Kanban board, filtering & search) are complete; the next phase is Phase 8 (quality gates &
-Definition-of-Done hardening).
+(authentication), Phase 3 (teams), Phase 4 (epics), Phase 5 (tickets), Phase 6 (comments),
+Phase 7 (Kanban board, filtering & search), and Phase 8 (quality gates & Definition-of-Done
+hardening) are complete; the next phase is Phase 9 (reference-wireframe fidelity & UX polish).
 
 Completed:
 
@@ -70,10 +70,15 @@ Completed:
 - Replaced Selenium with Playwright for browser testing.
 - Documented the high-level architecture and local development workflow.
 
+- Added Phase 8 quality gates: a backend `access-control-integration` suite (the `401`/`403`
+  matrix and the `400/404/409` status-code contract), a Playwright `dod-flow` covering the full
+  spec §13 journey, a GitHub Actions CI pipeline (backend + frontend + e2e), a repository-root
+  `Makefile` (up / seed / verify), a generated demo dataset, and a
+  [Definition-of-Done checklist](definition-of-done.md).
+
 Not yet implemented:
 
-- Real drag-and-drop ticket movement persistence (Phase 7).
-- CI pipeline and release packaging.
+- Reference-wireframe fidelity & UX polish (Phase 9).
 
 ## Technical Solution
 

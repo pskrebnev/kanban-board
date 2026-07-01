@@ -75,15 +75,17 @@ The project is delivered in phases. The status below reflects what is actually b
   resource index (`/api`).
 - Automated tests: a Vitest/Supertest backend suite (migration smoke test + auth, teams, epics,
   tickets, and comments unit and integration tests) and Playwright browser smoke, auth-flow,
-  teams-flow, epics-flow, tickets-flow, comments-flow, and board-flow tests.
+  teams-flow, epics-flow, tickets-flow, comments-flow, board-flow, and dod-flow tests, plus a
+  backend access-control matrix test.
 - **Tailwind CSS v4** is the frontend styling foundation (via `@tailwindcss/vite`, Preflight + a
   brand `@theme`, existing classes layered so utilities win) — see
   [Frontend Styling](#frontend-styling-tailwind-css).
 
 ### Not Yet Implemented
 
-- **Quality-gate & Definition-of-Done hardening** (planned: Phase 8) and **reference-wireframe
-  fidelity / UX polish** (planned: Phase 9). All mandatory functional scope is now implemented.
+- **Reference-wireframe fidelity / UX polish** (planned: Phase 9). All mandatory functional scope
+  and the [Phase 8](docs/phase-8.md) quality gates / Definition-of-Done verification are implemented
+  — see the [Definition-of-Done checklist](docs/definition-of-done.md).
 
 See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap, the
 [Phase 1 plan](docs/phase-1.md) (persistence foundation, complete), the
@@ -91,8 +93,9 @@ See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap
 [Phase 3 plan](docs/phase-3.md) (teams, complete), the
 [Phase 4 plan](docs/phase-4.md) (epics, complete), the
 [Phase 5 plan](docs/phase-5.md) (tickets, complete), the
-[Phase 6 plan](docs/phase-6.md) (comments, complete), and the
-[Phase 7 plan](docs/phase-7.md) (Kanban board, filtering & search, complete).
+[Phase 6 plan](docs/phase-6.md) (comments, complete), the
+[Phase 7 plan](docs/phase-7.md) (Kanban board, filtering & search, complete), and the
+[Phase 8 plan](docs/phase-8.md) (quality gates & Definition-of-Done hardening, complete).
 
 ---
 
@@ -203,6 +206,39 @@ cp .env.example .env
 
 Update `.env` for your local machine. Do not commit `.env`; it is ignored by Git.
 
+### Quick Commands
+
+Three short commands cover the common cases. They are thin wrappers around Compose, so no host
+runtime beyond a container engine is required. With **GNU Make** installed:
+
+| Command | What it does |
+|---|---|
+| `make up` | Build and start the whole stack with **no** application data (clean, schema-only DB). |
+| `make seed` | Build and start the whole stack with the **generated** demo dataset (ephemeral, in-RAM DB — see [Generated dataset](#generated-dataset-orionmobilewolfjuniper)). |
+| `make verify` | Build and start with the **generated** dataset, run the **full end-to-end suite**, and exit with its pass/fail result. |
+
+Add `COMPOSE="podman-compose"` to use Podman instead of Docker (e.g. `make up COMPOSE="podman-compose"`).
+
+Without Make, run the equivalent commands directly (Docker shown; for Podman replace
+`docker compose` with `podman-compose`):
+
+```shell
+# 1) No data (clean start)
+docker compose up --build
+
+# 2) Generated data (ephemeral)
+SEED_FILE_HOST=./backend/seed/generated-data.json \
+  docker compose -f compose.yaml -f compose.seed.yaml up --build
+
+# 3) Generated data + run all end-to-end tests (exits with the suite's result)
+SEED_FILE_HOST=./backend/seed/generated-data.json \
+  docker compose -f compose.yaml -f compose.seed.yaml --profile test up --build \
+  --abort-on-container-exit --exit-code-from e2e e2e
+```
+
+On Windows PowerShell, set the variable first (`$env:SEED_FILE_HOST = "./backend/seed/generated-data.json"`)
+and then run the compose command.
+
 ### Start The Application
 
 From a clean checkout, start the whole stack from the repository root:
@@ -312,6 +348,32 @@ SEED_FILE_HOST=./my-export.json docker compose -f compose.yaml -f compose.seed.y
 SEED_FILE_HOST=../../my-export.json podman-compose -f infra/podman/podman-compose.yml -f infra/podman/podman-compose.seed.yml up --build
 ```
 
+#### Generated dataset (Orion/MobileWolf/Juniper)
+
+A larger, ready-made dataset lives at [`backend/seed/generated-data.json`](backend/seed/generated-data.json)
+and is what `make seed` / `make verify` load. It is produced by the deterministic generator
+[`backend/seed/generate.mjs`](backend/seed/generate.mjs) and contains:
+
+- **3 teams** — `Orion`, `MobileWolf`, `Juniper`.
+- **5 projects** — `Banking App` and `MigrationToKafka` (Orion), `DocuUp` (MobileWolf), `MediaShop`
+  and `ArtistsInWeb` (Juniper).
+- **25 epics** — 5 per project.
+- **~160 tickets** — 5–8 tasks per epic (investigate / design / develop / test / fix / document /
+  refactor), spread across all five workflow states and all three types. Each task carries a
+  concise 5–9 word detail as its body (e.g. `"Implement Account Onboarding services and APIs"`).
+
+Because the app's model is **Team → Epic → Ticket** (there is no separate "project" entity), each
+project is represented as a group of epics under its team, with epic titles namespaced as
+`"<Project> — <Epic>"` (e.g. `"Banking App — Payments & Transfers"`). This also makes the board a
+realistic test of the ≥100-ticket usability requirement (spec §8).
+
+Load it with `make seed` (or the raw command in [Quick Commands](#quick-commands)). To change the
+data, edit `generate.mjs` and regenerate:
+
+```shell
+node backend/seed/generate.mjs
+```
+
 The dataset is validated on load (emails well-formed, ticket `type`/`state` from the allowed
 sets, references resolvable); a clear error is printed and the backend exits non-zero if it is
 malformed.
@@ -407,13 +469,32 @@ flowchart LR
 
 ```text
 compose.yaml         Repository-root Docker Compose entrypoint
+compose.seed.yaml    Ephemeral seed override (in-RAM DB + generated data)
+Makefile             Short commands: make up / make seed / make verify
+.github/workflows/   GitHub Actions CI (backend, frontend, e2e)
 backend/             TypeScript REST API service
 backend/migrations/  SQL database migrations (node-pg-migrate)
+backend/seed/        Seed datasets (data.json, generated-data.json) + generator
 docs/                Specification, architecture, and phase plans
 frontend/            TypeScript React Vite SPA
 infra/podman/        Podman compose runtime
 tests/e2e/           Browser smoke tests using Playwright in Podman
 ```
+
+### Continuous Integration (GitHub Actions)
+
+Every push and pull request runs the quality gates defined in
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml):
+
+- **backend** — `npm ci`, TypeScript typecheck, apply migrations against a Postgres service
+  container, then the Vitest/Supertest suite (`npm test`).
+- **frontend** — `npm ci`, then the typechecked production build (`npm run build`).
+- **e2e** — builds the whole stack with Docker Compose and runs the Playwright suite
+  (`docker compose --profile test up --build --abort-on-container-exit --exit-code-from e2e e2e`),
+  failing the pipeline on any browser-flow failure.
+
+The same gates run locally: `cd backend && npm test`, `cd frontend && npm run build`, and
+`make verify` (full e2e). Production deployment/CD is intentionally out of scope (spec §12).
 
 ### Local Service Details
 
@@ -430,7 +511,7 @@ tests/e2e/           Browser smoke tests using Playwright in Podman
 - `db` runs PostgreSQL 15 using database settings from `.env`.
 - `mailpit` captures outgoing verification emails locally (UI on `MAILPIT_UI_PORT`).
 - `e2e` runs Playwright with Chromium for browser automation (smoke + auth-flow + teams-flow +
-  epics-flow + tickets-flow + comments-flow + board-flow tests).
+  epics-flow + tickets-flow + comments-flow + board-flow + dod-flow tests).
 
 ### Running The Backend Tests
 
@@ -493,5 +574,7 @@ compile automatically.
 - [Phase 5 plan](docs/phase-5.md) — tickets management plan with a JIRA-style backlog.
 - [Phase 6 plan](docs/phase-6.md) — comments management plan with a JIRA-style backlog.
 - [Phase 7 plan](docs/phase-7.md) — Kanban board, filtering & search plan with a JIRA-style backlog (complete).
+- [Phase 8 plan](docs/phase-8.md) — quality gates, persistence hardening & Definition-of-Done plan with a JIRA-style backlog (complete).
+- [Definition-of-Done checklist](docs/definition-of-done.md) — maps every spec §13 item to its automated test, CI job, or documented proof.
 - [Architecture](docs/architecture.md) — high-level architecture and delivery phases.
 - [Testing approach](docs/testing-approach.md) — grouped end-to-end scenario catalogue.
