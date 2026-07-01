@@ -87,9 +87,14 @@ The project is delivered in phases. The status below reflects what is actually b
 ### Status
 
 All nine phases are implemented; the full mandatory scope and the [Phase 8](docs/phase-8.md)
-quality gates / [Definition-of-Done checklist](docs/definition-of-done.md) are complete. The one
-intentionally-deferred item is finishing the Tailwind migration of the remaining legacy CSS classes
-(a low-risk cleanup noted in [Phase 9](docs/phase-9.md)).
+quality gates / [Definition-of-Done checklist](docs/definition-of-done.md) are complete. The
+Tailwind migration of the legacy CSS classes (deferred from [Phase 9](docs/phase-9.md)) is also
+complete — screens are authored entirely with utility classes, and `styles.css` holds only the
+design tokens, base rules, the shared `<button>` baseline, and four small text helpers.
+
+A catalogue of potential future improvements (production hardening, DX, testing, UX) lives in
+[docs/improvements.md](docs/improvements.md) and is summarised in
+[Potential Improvements](#potential-improvements) below.
 
 See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap, the
 [Phase 1 plan](docs/phase-1.md) (persistence foundation, complete), the
@@ -100,8 +105,8 @@ See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap
 [Phase 6 plan](docs/phase-6.md) (comments, complete), the
 [Phase 7 plan](docs/phase-7.md) (Kanban board, filtering & search, complete), the
 [Phase 8 plan](docs/phase-8.md) (quality gates & Definition-of-Done hardening, complete), and the
-[Phase 9 plan](docs/phase-9.md) (reference-wireframe fidelity & UX polish, implemented — Tailwind
-migration deferred).
+[Phase 9 plan](docs/phase-9.md) (reference-wireframe fidelity & UX polish, complete — including
+the Tailwind migration).
 
 ---
 
@@ -588,14 +593,15 @@ How it is set up:
 - `frontend/src/styles.css` enables the full framework with a single `@import "tailwindcss";`
   (theme + Preflight + utilities). Brand design tokens are declared in an `@theme` block, so
   utilities like `bg-brand`, `text-muted`, and `border-line` are available.
-- The existing hand-written component classes live in `@layer components`, so **utility classes
-  win over them** — new screens can be authored utility-first while older classes keep the current
-  look. A few base rules restore the heading/link styling that Preflight resets.
+- Screens are authored entirely with utility classes. The `@layer components` block is now just
+  the app-wide `<button>` baseline (with `.secondary` / `.danger` variants) and four tiny text
+  helpers (`.eyebrow` / `.muted` / `.success` / `.error`); a few base rules restore the
+  heading/link styling that Preflight resets. Shared auth-screen class strings live in
+  `frontend/src/authUi.ts`.
 
-Adoption is incremental: new screens (e.g. the Phase 4 epics page) are built primarily with Tailwind
-utilities, and the remaining component classes are migrated to utilities over time. To use it,
-just add utility classes in JSX (e.g. `className="flex items-center gap-4 rounded-lg p-4"`); they
-compile automatically.
+The migration from the original hand-written component classes is complete — nothing structural
+remains in CSS. To style something, just add utility classes in JSX (e.g.
+`className="flex items-center gap-4 rounded-lg p-4"`); they compile automatically.
 
 ### Documentation
 
@@ -609,8 +615,109 @@ compile automatically.
 - [Phase 6 plan](docs/phase-6.md) — comments management plan with a JIRA-style backlog.
 - [Phase 7 plan](docs/phase-7.md) — Kanban board, filtering & search plan with a JIRA-style backlog (complete).
 - [Phase 8 plan](docs/phase-8.md) — quality gates, persistence hardening & Definition-of-Done plan with a JIRA-style backlog (complete).
-- [Phase 9 plan](docs/phase-9.md) — reference-wireframe fidelity & UX polish (type/state colour-coding + style) with a JIRA-style backlog (implemented; Tailwind migration deferred).
+- [Phase 9 plan](docs/phase-9.md) — reference-wireframe fidelity & UX polish (type/state colour-coding + style) with a JIRA-style backlog (complete, including the Tailwind migration).
 - [Definition-of-Done checklist](docs/definition-of-done.md) — maps every spec §13 item to its automated test, CI job, or documented proof.
 - [Fixing UI & workflow issues](docs/fixing-ui-issues.md) — CLI `npm run` shortcuts, Cursor-contributor removal investigation, stronger type/state colours, the edit-form state-save fix, board filter labels, and the active nav link.
 - [Architecture](docs/architecture.md) — high-level architecture and delivery phases.
 - [Testing approach](docs/testing-approach.md) — grouped end-to-end scenario catalogue.
+- [Improvement review](docs/improvements.md) — full repository audit with prioritised improvement
+  opportunities (summarised in [Potential Improvements](#potential-improvements) below).
+
+### Potential Improvements
+
+A full repository audit (backend, frontend, e2e, containers, CI/CD, docs) was performed on
+2026-07-01; the complete review with file references, rationale, and suggested sequencing lives in
+[docs/improvements.md](docs/improvements.md). None of these are blocking defects — the list below
+is the complete catalogue of identified opportunities.
+
+**Security & hardening (backend)**
+
+- Configure CORS with an origin allow-list (currently `cors()` accepts any origin).
+- Add rate limiting to the auth endpoints (login/signup/forgot-password/verify have none).
+- Set an explicit request body size limit on `express.json()`.
+- Configure Argon2 parameters explicitly (memory/time cost) instead of library defaults.
+- Reject an empty-string `JWT_SECRET` at startup (only a missing one is caught today).
+- Decide on a stored-XSS strategy: document React escaping as the boundary, or sanitize on write.
+- Reconsider the `SameSite=Strict` session cookie (`Lax` keeps CSRF safety but survives
+  navigation from external links, e.g. from emails).
+
+**Reliability & observability**
+
+- Introduce structured logging (e.g. pino) with request correlation IDs; today the only logging
+  is `console.error` in the error handler.
+- Configure the Postgres connection pool explicitly (`max`, idle/connection timeouts).
+- Close the check-then-act race in delete flows (transaction, or map FK-violation errors to the
+  same friendly message as the pre-check).
+- Enable Nodemailer connection pooling once email volume grows.
+
+**API design & data layer**
+
+- Add pagination (`limit`/`offset` or cursors) to the tickets/epics/teams list endpoints.
+- Share API types between backend and frontend (shared package, or OpenAPI + codegen) — types are
+  currently duplicated by hand and can drift silently.
+- Map raw zod error messages to human-friendly ones at the router boundary.
+- Document in the migrations which query each index serves.
+
+**Frontend architecture & UX**
+
+- Centralize the repeated Tailwind class constants (`primaryBtn`, `fieldClass`, …) declared
+  per-page in Board/Tickets/Epics/TicketDetail/TicketCreate into one module (extending the
+  `authUi.ts` pattern).
+- Add a top-level React error boundary (an uncaught render error currently white-screens the app).
+- Add a toast/notification system — most mutations succeed silently today.
+- Add axios interceptors: global 401 → logout/redirect, optional retry for idempotent GETs.
+- Add mobile responsiveness (the app is desktop-only; board columns are fixed-width).
+- Extend the board's optimistic-update pattern to team/epic/ticket mutations (they refetch today).
+- Polish items: loading skeletons, actionable empty states, per-page `document.title`, a shared
+  confirm dialog, consistent error-message copy, form-level validation (react-hook-form + zod).
+
+**Accessibility**
+
+- Enable dnd-kit's `KeyboardSensor` so board cards can be moved by keyboard (currently mouse/touch
+  only — a WCAG keyboard-equivalence gap); consider `aria-live` announcements for moves.
+
+**Testing**
+
+- Add frontend unit tests (Vitest + Testing Library) — there are currently none; the Zustand
+  stores are the natural starting point.
+- Migrate the hand-rolled e2e suite to `@playwright/test` for retries, per-test timeouts, and
+  traces/screenshots on failure, and upload them as CI artifacts.
+- Make the Mailpit polling helper dump the mailbox on timeout so email-flow failures are
+  diagnosable.
+- Add concurrency tests for races (simultaneous ticket moves, delete vs. reference creation).
+
+**CI/CD & containers**
+
+- Add lint/format/audit gates: ESLint + Prettier (none exist in the repo), a CI lint job,
+  `npm audit`, and optionally pre-commit hooks (Husky + lint-staged).
+- Run containers as a non-root user; pin `axllent/mailpit:latest` and base images to specific
+  minor versions.
+- Copy the Postgres healthcheck from `compose.yaml` into `compose.dev.yaml` (dev currently lacks
+  the `service_healthy` gate that production has).
+- Enable Docker layer caching for the e2e CI job (the Playwright browser re-downloads each run).
+
+**Repo hygiene & docs**
+
+- Replace the `"latest"` dependency pins in all three `package.json` files with caret ranges of
+  the currently-locked versions, and add Dependabot/Renovate.
+- Add a `.env.example` documenting every required environment variable.
+- Add the missing standard meta-files as needed: `CONTRIBUTING.md`, `.editorconfig` (a `LICENSE`
+  now exists — see below).
+- Add a structured API reference (endpoint/method/status/shape table, or an OpenAPI spec that
+  could also drive the shared-types work above).
+- Optional: changelog/release automation via conventional commits.
+
+## E. License
+
+This project is licensed under the [MIT License](LICENSE) — see the [LICENSE](LICENSE) file for
+the full text. In short:
+
+- **No warranty, no liability** — the authors and copyright holders are not liable for any claim,
+  damages, or other liability arising from the software or its use.
+- **No maintenance obligation** — the software is provided with no commitment to further updates,
+  fixes, or support of any kind.
+- **Free to use** — you may freely clone, copy, modify, merge, publish, distribute, sublicense,
+  and/or sell copies of the software, provided the copyright notice and permission notice are
+  included in all copies or substantial portions.
+- **Provided "as is"** — without warranty of any kind, express or implied, including
+  merchantability, fitness for a particular purpose, and non-infringement.
