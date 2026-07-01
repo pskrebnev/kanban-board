@@ -171,6 +171,25 @@ runOrSkip("tickets API (integration)", () => {
     );
   });
 
+  it("persists a state change sent through the general update endpoint (edit form)", async () => {
+    const teamId = await createTeam("Platform");
+    const created = await create(teamId);
+    const id = created.body.ticket.id as string;
+    expect(created.body.ticket.state).toBe("new");
+
+    // The ticket edit form saves state as part of PATCH /:id (not the dedicated
+    // /state endpoint); it must persist just like a drag-and-drop move does.
+    const updated = await request(app)
+      .patch(`/api/tickets/${id}`)
+      .set("Cookie", cookie)
+      .send({ state: "in_progress" });
+    expect(updated.status).toBe(200);
+    expect(updated.body.ticket.state).toBe("in_progress");
+
+    const reread = await request(app).get(`/api/tickets/${id}`).set("Cookie", cookie);
+    expect(reread.body.ticket.state).toBe("in_progress");
+  });
+
   it("changes state immediately via the state endpoint and ignores a same-state no-op", async () => {
     const teamId = await createTeam("Platform");
     const created = await create(teamId);

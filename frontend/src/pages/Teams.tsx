@@ -1,15 +1,10 @@
 import { useEffect, useState, type SyntheticEvent, type ReactElement } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { apiErrorMessage } from "../api";
-import { useAuthStore } from "../store/auth";
+import { AppHeader } from "../components/AppHeader";
 import { useTeamsStore, type Team } from "../store/teams";
 
 export function Teams(): ReactElement {
-  const navigate = useNavigate();
-  const user = useAuthStore((state) => state.user);
-  const logout = useAuthStore((state) => state.logout);
-
   const teams = useTeamsStore((state) => state.teams);
   const status = useTeamsStore((state) => state.status);
   const fetchTeams = useTeamsStore((state) => state.fetchTeams);
@@ -22,11 +17,6 @@ export function Teams(): ReactElement {
   useEffect(() => {
     void fetchTeams();
   }, [fetchTeams]);
-
-  async function handleLogout() {
-    await logout();
-    navigate("/login", { replace: true });
-  }
 
   async function handleCreate(event: SyntheticEvent) {
     event.preventDefault();
@@ -45,28 +35,7 @@ export function Teams(): ReactElement {
 
   return (
     <div className="app">
-      <header className="topbar">
-        <span className="brand">Kanban Ticketing</span>
-        <nav className="topbar-nav">
-          <button type="button" className="link-button" onClick={() => navigate("/")}>
-            Board
-          </button>
-          <button type="button" className="link-button" onClick={() => navigate("/epics")}>
-            Epics
-          </button>
-          <button type="button" className="link-button" onClick={() => navigate("/tickets")}>
-            Tickets
-          </button>
-        </nav>
-        <div className="user-menu">
-          <span className="user-button" aria-hidden="true">
-            {user?.email ?? "Account"}
-          </span>
-          <button type="button" className="link-button" onClick={handleLogout}>
-            Log out
-          </button>
-        </div>
-      </header>
+      <AppHeader />
 
       <main className="shell">
         <section className="hero">
@@ -163,6 +132,7 @@ function TeamRow({ team }: { team: Team }): ReactElement {
         <form className="team-edit" onSubmit={handleRename}>
           <input
             type="text"
+            aria-label="Team name"
             value={draftName}
             onChange={(event) => setDraftName(event.target.value)}
             maxLength={100}

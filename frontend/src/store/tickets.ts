@@ -33,20 +33,23 @@ export const STATE_LABELS: Record<TicketState, string> = {
 // so Tailwind detects and generates the utilities. Colour always accompanies the
 // text label (STATE_LABELS/TYPE_LABELS) — it is a reinforcement, not the sole cue.
 
-// Soft pill for a ticket type (background + text), used on cards and lists.
+// Type badge: a SOLID, saturated chip with white text so Bug / Feature / Fix
+// are unmistakable at a glance (each a distinct hue).
 export const TYPE_STYLES: Record<TicketType, string> = {
-  bug: "bg-type-bug-soft text-type-bug",
-  feature: "bg-type-feature-soft text-type-feature",
-  fix: "bg-type-fix-soft text-type-fix",
+  bug: "bg-type-bug text-white",
+  feature: "bg-type-feature text-white",
+  fix: "bg-type-fix text-white",
 };
 
-// Soft pill for a workflow state (background + text).
+// State pill: a soft, bordered chip in the state's colour — visually distinct
+// from the solid type badges, and each of the five states clearly different.
 export const STATE_STYLES: Record<TicketState, string> = {
-  new: "bg-state-new-soft text-state-new",
-  ready_for_implementation: "bg-state-ready-soft text-state-ready",
-  in_progress: "bg-state-progress-soft text-state-progress",
-  ready_for_acceptance: "bg-state-acceptance-soft text-state-acceptance",
-  done: "bg-state-done-soft text-state-done",
+  new: "bg-state-new-soft text-state-new ring-1 ring-inset ring-state-new/40",
+  ready_for_implementation: "bg-state-ready-soft text-state-ready ring-1 ring-inset ring-state-ready/40",
+  in_progress: "bg-state-progress-soft text-state-progress ring-1 ring-inset ring-state-progress/40",
+  ready_for_acceptance:
+    "bg-state-acceptance-soft text-state-acceptance ring-1 ring-inset ring-state-acceptance/40",
+  done: "bg-state-done-soft text-state-done ring-1 ring-inset ring-state-done/40",
 };
 
 // Top-border accent for a board column, in the state's strong colour.

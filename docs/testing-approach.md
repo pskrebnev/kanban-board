@@ -149,7 +149,8 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 - `tickets-created-by-and-timestamps-displayed`: the details screen shows `created_by` (author email), `created_at`, and `modified_at`.
 - `tickets-edit-updates-modified`: a real field/state change advances `modified_at`.
 - `tickets-unchanged-save-does-not-update-modified`: saving identical values leaves `modified_at` unchanged (no-op save).
-- `tickets-state-change-persists-immediately`: a state transition persists immediately and survives a refresh; `modified_at` advances.
+- `tickets-state-change-persists-immediately`: a drag-and-drop state transition persists immediately and survives a refresh; `modified_at` advances.
+- `tickets-edit-form-state-saves`: changing the **State** field on the ticket edit form and clicking **Save changes** persists the new state (via `PATCH /api/tickets/:id`), and it survives a refresh — the edit form saves state just like a board drag does. Covered by the backend `tickets-integration` update test and the Playwright `tickets-flow`.
 - `tickets-team-change-clears-invalid-epic`: changing the ticket's team to one the current epic does not belong to clears/replaces the epic in the UI and is rejected by the API if forced (`400`).
 - `tickets-list-filter`: `GET /api/tickets` supports optional `teamId`, `state`, `type`, and `epicId` filters combined with AND logic; results are ordered most-recently-modified first.
 - `tickets-detail-missing-404`: fetching, editing, state-changing, or deleting a non-existent ticket id returns `404`.
@@ -280,3 +281,5 @@ are manual review items.
 - `ui-wireframe-epics`: epic management matches Wireframe 5 (list + create/edit with team selector).
 - `ui-ux-states-consistent`: loading, empty, success, and error states are visually consistent across all screens (spec §11).
 - `ui-suite-still-green`: after the restyle, the full Playwright suite still passes — the visual changes preserve all test-facing hooks (aria-labels, `data-*`, placeholders, roles, headings, key text).
+- `ui-board-filter-labels`: the board's filter controls show visible captions — Team, Title, Type, Epic — above each control.
+- `ui-nav-active-link`: the top nav (Board/Teams/Epics/Tickets) is always visible; the current section's link is highlighted (bold + underlined, `aria-current="page"`) and is non-clickable (`disabled`) on its exact page, while sub-routes (e.g. `/tickets/:id`) keep it highlighted **but clickable** so you can return to the list.
