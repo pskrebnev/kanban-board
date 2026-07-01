@@ -6,9 +6,11 @@ import { useEpicsStore } from "../store/epics";
 import { useTeamsStore } from "../store/teams";
 import {
   STATE_LABELS,
+  STATE_STYLES,
   TICKET_STATES,
   TICKET_TYPES,
   TYPE_LABELS,
+  TYPE_STYLES,
   useTicketsStore,
   type TicketState,
   type TicketType,
@@ -134,14 +136,14 @@ export function Tickets(): ReactElement {
               {tickets.map((ticket) => (
                 <li
                   key={ticket.id}
-                  className="cursor-pointer rounded-2xl border border-line bg-white p-5 shadow-[0_16px_40px_rgb(23_32_51/6%)] hover:border-brand"
+                  className="cursor-pointer rounded-2xl border border-line bg-white p-5 shadow-[0_16px_40px_rgb(23_32_51/6%)] transition hover:-translate-y-0.5 hover:border-brand hover:shadow-[0_20px_48px_rgb(23_32_51/10%)]"
                   onClick={() => navigate(`/tickets/${ticket.id}`)}
                 >
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="rounded-full bg-brand-soft px-2 py-0.5 text-xs font-bold text-brand">
+                    <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${TYPE_STYLES[ticket.type]}`}>
                       {TYPE_LABELS[ticket.type]}
                     </span>
-                    <span className="rounded-full border border-line px-2 py-0.5 text-xs font-bold text-muted">
+                    <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${STATE_STYLES[ticket.state]}`}>
                       {STATE_LABELS[ticket.state]}
                     </span>
                     <span className="text-xs text-muted">{ticket.teamName}</span>

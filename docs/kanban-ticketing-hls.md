@@ -306,7 +306,15 @@ See [phase-8.md](phase-8.md) for the detailed plan and backlog, and the
   commands, a generated demo dataset, and a [Definition-of-Done checklist](definition-of-done.md)
   mapping every DoD item to its proof.
 
-## Phase 9 — Reference Wireframe Fidelity & UX Polish (next phase, final)
+## Phase 9 — Reference Wireframe Fidelity & UX Polish (final, implemented)
+
+See [phase-9.md](phase-9.md) for the detailed plan, JIRA-style backlog, and Definition of Done.
+**Status:** implemented — the three ticket types and five workflow states are colour-coded from a
+single token source (with text labels always shown), and the app has an overall style polish
+(smooth transitions, hover-lift cards, coloured column accents, focus rings, refined header/
+background, reduced-motion support), verified with the full Playwright suite still green. The one
+deferred item is finishing the Tailwind migration of the remaining legacy `@layer components`
+classes (low-risk cleanup).
 
 - **Goal:** Bring the UI to the information hierarchy and flows shown in the reference
   wireframes (spec §15), and polish UX states.

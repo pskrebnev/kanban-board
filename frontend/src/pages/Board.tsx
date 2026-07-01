@@ -16,10 +16,13 @@ import { useBoardStore } from "../store/board";
 import { useEpicsStore } from "../store/epics";
 import { useTeamsStore } from "../store/teams";
 import {
+  STATE_COLUMN_ACCENT,
   STATE_LABELS,
+  STATE_STYLES,
   TICKET_STATES,
   TICKET_TYPES,
   TYPE_LABELS,
+  TYPE_STYLES,
   type Ticket,
   type TicketState,
   type TicketType,
@@ -74,8 +77,10 @@ function BoardCard({ ticket, onOpen }: BoardCardProps): ReactElement {
       ref={setNodeRef}
       style={style}
       data-ticket-id={ticket.id}
-      className={`cursor-grab rounded-xl border border-line bg-white p-3 shadow-[0_8px_24px_rgb(23_32_51/6%)] ${
-        isDragging ? "opacity-60" : "hover:border-brand"
+      className={`cursor-grab rounded-xl border border-line bg-white p-3 shadow-[0_8px_24px_rgb(23_32_51/6%)] transition ${
+        isDragging
+          ? "opacity-60"
+          : "hover:-translate-y-0.5 hover:border-brand hover:shadow-[0_14px_30px_rgb(23_32_51/12%)]"
       }`}
       {...attributes}
       {...listeners}
@@ -83,7 +88,9 @@ function BoardCard({ ticket, onOpen }: BoardCardProps): ReactElement {
       onClick={handleClick}
     >
       <div className="mb-2 flex flex-wrap items-center gap-2">
-        <span className="rounded-full bg-brand-soft px-2 py-0.5 text-[0.7rem] font-bold uppercase tracking-wide text-brand">
+        <span
+          className={`rounded-full px-2 py-0.5 text-[0.7rem] font-bold uppercase tracking-wide ${TYPE_STYLES[ticket.type]}`}
+        >
           {TYPE_LABELS[ticket.type]}
         </span>
         {ticket.epicTitle && (
@@ -111,7 +118,7 @@ function BoardColumn({ state, tickets, onOpen }: BoardColumnProps): ReactElement
       ref={setNodeRef}
       data-column={state}
       aria-label={`${label} column`}
-      className={`flex min-h-[60vh] w-72 shrink-0 flex-col rounded-2xl border bg-canvas p-3 ${
+      className={`flex min-h-[60vh] w-72 shrink-0 flex-col rounded-2xl border border-t-4 bg-white/70 p-3 shadow-[0_10px_30px_rgb(23_32_51/6%)] transition ${STATE_COLUMN_ACCENT[state]} ${
         isOver ? "border-brand bg-brand-soft" : "border-line"
       }`}
     >
@@ -121,7 +128,7 @@ function BoardColumn({ state, tickets, onOpen }: BoardColumnProps): ReactElement
         </h2>
         <span
           data-column-count={state}
-          className="rounded-full bg-white px-2 py-0.5 text-xs font-bold text-muted"
+          className={`rounded-full px-2 py-0.5 text-xs font-bold ${STATE_STYLES[state]}`}
         >
           {tickets.length}
         </span>
