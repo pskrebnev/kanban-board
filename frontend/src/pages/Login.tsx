@@ -2,6 +2,7 @@ import { useState, type SyntheticEvent, type ReactElement } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { apiErrorMessage } from "../api";
+import { authAlt, authCard, authForm, authInput, authLabel, authShell, authTitle } from "../authUi";
 import { ResendVerification } from "../components/ResendVerification";
 import { useAuthStore } from "../store/auth";
 
@@ -34,25 +35,27 @@ export function Login(): ReactElement {
   }
 
   return (
-    <main className="auth-shell">
-      <section className="auth-card">
+    <main className={authShell}>
+      <section className={authCard}>
         <p className="eyebrow">Kanban Ticketing</p>
-        <h1>Log in</h1>
+        <h1 className={authTitle}>Log in</h1>
 
-        <form onSubmit={handleSubmit}>
-          <label>
+        <form className={authForm} onSubmit={handleSubmit}>
+          <label className={authLabel}>
             Email
             <input
               type="email"
+              className={authInput}
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               required
             />
           </label>
-          <label>
+          <label className={authLabel}>
             Password
             <input
               type="password"
+              className={authInput}
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               required
@@ -68,10 +71,10 @@ export function Login(): ReactElement {
 
         {showResend && <ResendVerification initialEmail={email} />}
 
-        <p className="auth-alt">
+        <p className={authAlt}>
           <Link to="/forgot-password">Forgot your password?</Link>
         </p>
-        <p className="auth-alt">
+        <p className={authAlt}>
           New here? <Link to="/signup">Create an account</Link>
         </p>
       </section>

@@ -1,15 +1,10 @@
 import { useEffect, useState, type SyntheticEvent, type ReactElement } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { apiErrorMessage } from "../api";
-import { useAuthStore } from "../store/auth";
+import { AppHeader } from "../components/AppHeader";
 import { useTeamsStore, type Team } from "../store/teams";
 
 export function Teams(): ReactElement {
-  const navigate = useNavigate();
-  const user = useAuthStore((state) => state.user);
-  const logout = useAuthStore((state) => state.logout);
-
   const teams = useTeamsStore((state) => state.teams);
   const status = useTeamsStore((state) => state.status);
   const fetchTeams = useTeamsStore((state) => state.fetchTeams);
@@ -22,11 +17,6 @@ export function Teams(): ReactElement {
   useEffect(() => {
     void fetchTeams();
   }, [fetchTeams]);
-
-  async function handleLogout() {
-    await logout();
-    navigate("/login", { replace: true });
-  }
 
   async function handleCreate(event: SyntheticEvent) {
     event.preventDefault();
@@ -45,42 +35,22 @@ export function Teams(): ReactElement {
 
   return (
     <div className="app">
-      <header className="topbar">
-        <span className="brand">Kanban Ticketing</span>
-        <nav className="topbar-nav">
-          <button type="button" className="link-button" onClick={() => navigate("/")}>
-            Board
-          </button>
-          <button type="button" className="link-button" onClick={() => navigate("/epics")}>
-            Epics
-          </button>
-          <button type="button" className="link-button" onClick={() => navigate("/tickets")}>
-            Tickets
-          </button>
-        </nav>
-        <div className="user-menu">
-          <span className="user-button" aria-hidden="true">
-            {user?.email ?? "Account"}
-          </span>
-          <button type="button" className="link-button" onClick={handleLogout}>
-            Log out
-          </button>
-        </div>
-      </header>
+      <AppHeader />
 
-      <main className="shell">
-        <section className="hero">
+      <main className="min-h-screen p-12">
+        <section className="mx-auto mb-8 max-w-[980px]">
           <p className="eyebrow">Team management</p>
-          <h1>Teams</h1>
+          <h1 className="mb-2 text-4xl font-bold">Teams</h1>
           <p className="text-[0.85rem] text-muted">
             Teams group the epics and tickets created in later phases.
           </p>
         </section>
 
-        <form className="team-create" onSubmit={handleCreate}>
+        <form className="mx-auto mb-6 flex max-w-[980px] gap-2" onSubmit={handleCreate}>
           <input
             type="text"
             placeholder="New team name"
+            className="flex-1 rounded-lg border border-field px-3.5 py-2.5 font-[inherit]"
             value={newName}
             onChange={(event) => setNewName(event.target.value)}
             maxLength={100}
@@ -90,23 +60,25 @@ export function Teams(): ReactElement {
             {creating ? "Creating…" : "Create team"}
           </button>
         </form>
-        {createError && <p className="error">{createError}</p>}
+        {createError && <p className="error mx-auto max-w-[980px]">{createError}</p>}
 
-        {status === "loading" && <p className="muted">Loading teams…</p>}
-        {status === "error" && (
-          <p className="error">Could not load teams. Please refresh and try again.</p>
-        )}
-        {status === "ready" && teams.length === 0 && (
-          <p className="muted">No teams yet. Create your first team above.</p>
-        )}
+        <div className="mx-auto max-w-[980px]">
+          {status === "loading" && <p className="muted">Loading teams…</p>}
+          {status === "error" && (
+            <p className="error">Could not load teams. Please refresh and try again.</p>
+          )}
+          {status === "ready" && teams.length === 0 && (
+            <p className="muted">No teams yet. Create your first team above.</p>
+          )}
 
-        {teams.length > 0 && (
-          <ul className="team-list">
-            {teams.map((team) => (
-              <TeamRow key={team.id} team={team} />
-            ))}
-          </ul>
-        )}
+          {teams.length > 0 && (
+            <ul className="mt-4 list-none space-y-3 p-0">
+              {teams.map((team) => (
+                <TeamRow key={team.id} team={team} />
+              ))}
+            </ul>
+          )}
+        </div>
       </main>
     </div>
   );
@@ -158,18 +130,19 @@ function TeamRow({ team }: { team: Team }): ReactElement {
   }
 
   return (
-    <li className="team-row">
+    <li className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-line bg-white px-5 py-4 shadow-[0_16px_40px_rgb(23_32_51/6%)] transition hover:shadow-[0_18px_44px_rgb(23_32_51/10%)]">
       {editing ? (
-        <form className="team-edit" onSubmit={handleRename}>
+        <form className="flex flex-1 items-center gap-2" onSubmit={handleRename}>
           <input
             type="text"
+            className="flex-1 rounded-lg border border-field px-3 py-2 font-[inherit]"
             value={draftName}
             onChange={(event) => setDraftName(event.target.value)}
             maxLength={100}
             autoFocus
             required
           />
-          <div className="team-actions">
+          <div className="flex items-center gap-2">
             <button type="submit" disabled={busy || draftName.trim().length === 0}>
               Save
             </button>
@@ -185,8 +158,8 @@ function TeamRow({ team }: { team: Team }): ReactElement {
         </form>
       ) : (
         <>
-          <span className="team-name">{team.name}</span>
-          <div className="team-actions">
+          <span className="font-bold">{team.name}</span>
+          <div className="flex items-center gap-2">
             <button type="button" className="secondary" onClick={startEditing} disabled={busy}>
               Rename
             </button>
@@ -225,7 +198,7 @@ function TeamRow({ team }: { team: Team }): ReactElement {
       )}
 
       {team.referenced && !editing && (
-        <span className="team-hint muted">Has epics or tickets — cannot be deleted</span>
+        <span className="muted basis-full">Has epics or tickets — cannot be deleted</span>
       )}
       {error && <span className="error">{error}</span>}
     </li>
