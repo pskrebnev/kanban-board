@@ -1,0 +1,1609 @@
+{
+  "users": [
+    {
+      "email": "demo@mailpit.pit",
+      "password": "password123",
+      "emailVerified": true
+    },
+    {
+      "email": "pm@mailpit.pit",
+      "password": "password123",
+      "emailVerified": true
+    },
+    {
+      "email": "dev@mailpit.pit",
+      "password": "password123",
+      "emailVerified": true
+    }
+  ],
+  "teams": [
+    {
+      "name": "Orion"
+    },
+    {
+      "name": "MobileWolf"
+    },
+    {
+      "name": "Juniper"
+    }
+  ],
+  "epics": [
+    {
+      "team": "Orion",
+      "title": "Banking App — Account Onboarding",
+      "description": "Account Onboarding for the Banking App project (building a retail banking application)."
+    },
+    {
+      "team": "Orion",
+      "title": "Banking App — Payments & Transfers",
+      "description": "Payments & Transfers for the Banking App project (building a retail banking application)."
+    },
+    {
+      "team": "Orion",
+      "title": "Banking App — Card Management",
+      "description": "Card Management for the Banking App project (building a retail banking application)."
+    },
+    {
+      "team": "Orion",
+      "title": "Banking App — Security & Fraud Detection",
+      "description": "Security & Fraud Detection for the Banking App project (building a retail banking application)."
+    },
+    {
+      "team": "Orion",
+      "title": "Banking App — Statements & Reporting",
+      "description": "Statements & Reporting for the Banking App project (building a retail banking application)."
+    },
+    {
+      "team": "Orion",
+      "title": "MigrationToKafka — Kafka Cluster Provisioning",
+      "description": "Kafka Cluster Provisioning for the MigrationToKafka project (migrating messaging from RabbitMQ to Kafka)."
+    },
+    {
+      "team": "Orion",
+      "title": "MigrationToKafka — Producer Migration",
+      "description": "Producer Migration for the MigrationToKafka project (migrating messaging from RabbitMQ to Kafka)."
+    },
+    {
+      "team": "Orion",
+      "title": "MigrationToKafka — Consumer Migration",
+      "description": "Consumer Migration for the MigrationToKafka project (migrating messaging from RabbitMQ to Kafka)."
+    },
+    {
+      "team": "Orion",
+      "title": "MigrationToKafka — Schema Registry & Contracts",
+      "description": "Schema Registry & Contracts for the MigrationToKafka project (migrating messaging from RabbitMQ to Kafka)."
+    },
+    {
+      "team": "Orion",
+      "title": "MigrationToKafka — RabbitMQ Decommission",
+      "description": "RabbitMQ Decommission for the MigrationToKafka project (migrating messaging from RabbitMQ to Kafka)."
+    },
+    {
+      "team": "MobileWolf",
+      "title": "DocuUp — Document Ingestion",
+      "description": "Document Ingestion for the DocuUp project (an app for working with scanned documents)."
+    },
+    {
+      "team": "MobileWolf",
+      "title": "DocuUp — OCR Pipeline",
+      "description": "OCR Pipeline for the DocuUp project (an app for working with scanned documents)."
+    },
+    {
+      "team": "MobileWolf",
+      "title": "DocuUp — Full-Text Search",
+      "description": "Full-Text Search for the DocuUp project (an app for working with scanned documents)."
+    },
+    {
+      "team": "MobileWolf",
+      "title": "DocuUp — Annotations & Markup",
+      "description": "Annotations & Markup for the DocuUp project (an app for working with scanned documents)."
+    },
+    {
+      "team": "MobileWolf",
+      "title": "DocuUp — Export & Sharing",
+      "description": "Export & Sharing for the DocuUp project (an app for working with scanned documents)."
+    },
+    {
+      "team": "Juniper",
+      "title": "MediaShop — Product Catalog",
+      "description": "Product Catalog for the MediaShop project (selling house equipment (TVs, fridges, vacuum cleaners, ...))."
+    },
+    {
+      "team": "Juniper",
+      "title": "MediaShop — Cart & Checkout",
+      "description": "Cart & Checkout for the MediaShop project (selling house equipment (TVs, fridges, vacuum cleaners, ...))."
+    },
+    {
+      "team": "Juniper",
+      "title": "MediaShop — Payment Integration",
+      "description": "Payment Integration for the MediaShop project (selling house equipment (TVs, fridges, vacuum cleaners, ...))."
+    },
+    {
+      "team": "Juniper",
+      "title": "MediaShop — Order Fulfillment",
+      "description": "Order Fulfillment for the MediaShop project (selling house equipment (TVs, fridges, vacuum cleaners, ...))."
+    },
+    {
+      "team": "Juniper",
+      "title": "MediaShop — Reviews & Ratings",
+      "description": "Reviews & Ratings for the MediaShop project (selling house equipment (TVs, fridges, vacuum cleaners, ...))."
+    },
+    {
+      "team": "Juniper",
+      "title": "ArtistsInWeb — Artist Profiles",
+      "description": "Artist Profiles for the ArtistsInWeb project (a website for artists)."
+    },
+    {
+      "team": "Juniper",
+      "title": "ArtistsInWeb — Portfolio Galleries",
+      "description": "Portfolio Galleries for the ArtistsInWeb project (a website for artists)."
+    },
+    {
+      "team": "Juniper",
+      "title": "ArtistsInWeb — Commission Requests",
+      "description": "Commission Requests for the ArtistsInWeb project (a website for artists)."
+    },
+    {
+      "team": "Juniper",
+      "title": "ArtistsInWeb — Blog & News",
+      "description": "Blog & News for the ArtistsInWeb project (a website for artists)."
+    },
+    {
+      "team": "Juniper",
+      "title": "ArtistsInWeb — Community Feed",
+      "description": "Community Feed for the ArtistsInWeb project (a website for artists)."
+    }
+  ],
+  "tickets": [
+    {
+      "team": "Orion",
+      "epic": "Banking App — Account Onboarding",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Account Onboarding requirements",
+      "body": "Clarify Account Onboarding scope and requirements",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Account Onboarding",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Account Onboarding solution",
+      "body": "Design Account Onboarding architecture and interfaces",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Account Onboarding",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Account Onboarding backend",
+      "body": "Implement Account Onboarding services and APIs",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Account Onboarding",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Account Onboarding frontend",
+      "body": "Build Account Onboarding screens and interactions",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Account Onboarding",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Account Onboarding",
+      "body": "Cover Account Onboarding with automated tests",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Payments & Transfers",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Payments & Transfers requirements",
+      "body": "Clarify Payments & Transfers scope and requirements",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Payments & Transfers",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Payments & Transfers solution",
+      "body": "Design Payments & Transfers architecture and interfaces",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Payments & Transfers",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Payments & Transfers backend",
+      "body": "Implement Payments & Transfers services and APIs",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Payments & Transfers",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Payments & Transfers frontend",
+      "body": "Build Payments & Transfers screens and interactions",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Payments & Transfers",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Payments & Transfers",
+      "body": "Cover Payments & Transfers with automated tests",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Payments & Transfers",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Payments & Transfers",
+      "body": "Resolve Payments & Transfers defects from QA",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Card Management",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Card Management requirements",
+      "body": "Clarify Card Management scope and requirements",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Card Management",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Card Management solution",
+      "body": "Design Card Management architecture and interfaces",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Card Management",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Card Management backend",
+      "body": "Implement Card Management services and APIs",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Card Management",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Card Management frontend",
+      "body": "Build Card Management screens and interactions",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Card Management",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Card Management",
+      "body": "Cover Card Management with automated tests",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Card Management",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Card Management",
+      "body": "Resolve Card Management defects from QA",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Card Management",
+      "type": "feature",
+      "state": "done",
+      "title": "Document Card Management",
+      "body": "Document Card Management for users and developers",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Security & Fraud Detection",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Security & Fraud Detection requirements",
+      "body": "Clarify Security & Fraud Detection scope and requirements",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Security & Fraud Detection",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Security & Fraud Detection solution",
+      "body": "Design Security & Fraud Detection architecture and interfaces",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Security & Fraud Detection",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Security & Fraud Detection backend",
+      "body": "Implement Security & Fraud Detection services and APIs",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Security & Fraud Detection",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Security & Fraud Detection frontend",
+      "body": "Build Security & Fraud Detection screens and interactions",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Security & Fraud Detection",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Security & Fraud Detection",
+      "body": "Cover Security & Fraud Detection with automated tests",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Security & Fraud Detection",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Security & Fraud Detection",
+      "body": "Resolve Security & Fraud Detection defects from QA",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Security & Fraud Detection",
+      "type": "feature",
+      "state": "done",
+      "title": "Document Security & Fraud Detection",
+      "body": "Document Security & Fraud Detection for users and developers",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Security & Fraud Detection",
+      "type": "fix",
+      "state": "ready_for_acceptance",
+      "title": "Refactor Security & Fraud Detection for performance",
+      "body": "Refactor Security & Fraud Detection for better performance",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Statements & Reporting",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Statements & Reporting requirements",
+      "body": "Clarify Statements & Reporting scope and requirements",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Statements & Reporting",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Statements & Reporting solution",
+      "body": "Design Statements & Reporting architecture and interfaces",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Statements & Reporting",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Statements & Reporting backend",
+      "body": "Implement Statements & Reporting services and APIs",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Statements & Reporting",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Statements & Reporting frontend",
+      "body": "Build Statements & Reporting screens and interactions",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "Banking App — Statements & Reporting",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Statements & Reporting",
+      "body": "Cover Statements & Reporting with automated tests",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Kafka Cluster Provisioning",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Kafka Cluster Provisioning requirements",
+      "body": "Clarify Kafka Cluster Provisioning scope and requirements",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Kafka Cluster Provisioning",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Kafka Cluster Provisioning solution",
+      "body": "Design Kafka Cluster Provisioning architecture and interfaces",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Kafka Cluster Provisioning",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Kafka Cluster Provisioning backend",
+      "body": "Implement Kafka Cluster Provisioning services and APIs",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Kafka Cluster Provisioning",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Kafka Cluster Provisioning frontend",
+      "body": "Build Kafka Cluster Provisioning screens and interactions",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Kafka Cluster Provisioning",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Kafka Cluster Provisioning",
+      "body": "Cover Kafka Cluster Provisioning with automated tests",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Kafka Cluster Provisioning",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Kafka Cluster Provisioning",
+      "body": "Resolve Kafka Cluster Provisioning defects from QA",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Producer Migration",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Producer Migration requirements",
+      "body": "Clarify Producer Migration scope and requirements",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Producer Migration",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Producer Migration solution",
+      "body": "Design Producer Migration architecture and interfaces",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Producer Migration",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Producer Migration backend",
+      "body": "Implement Producer Migration services and APIs",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Producer Migration",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Producer Migration frontend",
+      "body": "Build Producer Migration screens and interactions",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Producer Migration",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Producer Migration",
+      "body": "Cover Producer Migration with automated tests",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Producer Migration",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Producer Migration",
+      "body": "Resolve Producer Migration defects from QA",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Producer Migration",
+      "type": "feature",
+      "state": "done",
+      "title": "Document Producer Migration",
+      "body": "Document Producer Migration for users and developers",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Consumer Migration",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Consumer Migration requirements",
+      "body": "Clarify Consumer Migration scope and requirements",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Consumer Migration",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Consumer Migration solution",
+      "body": "Design Consumer Migration architecture and interfaces",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Consumer Migration",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Consumer Migration backend",
+      "body": "Implement Consumer Migration services and APIs",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Consumer Migration",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Consumer Migration frontend",
+      "body": "Build Consumer Migration screens and interactions",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Consumer Migration",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Consumer Migration",
+      "body": "Cover Consumer Migration with automated tests",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Consumer Migration",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Consumer Migration",
+      "body": "Resolve Consumer Migration defects from QA",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Consumer Migration",
+      "type": "feature",
+      "state": "done",
+      "title": "Document Consumer Migration",
+      "body": "Document Consumer Migration for users and developers",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Consumer Migration",
+      "type": "fix",
+      "state": "ready_for_acceptance",
+      "title": "Refactor Consumer Migration for performance",
+      "body": "Refactor Consumer Migration for better performance",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Schema Registry & Contracts",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Schema Registry & Contracts requirements",
+      "body": "Clarify Schema Registry & Contracts scope and requirements",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Schema Registry & Contracts",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Schema Registry & Contracts solution",
+      "body": "Design Schema Registry & Contracts architecture and interfaces",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Schema Registry & Contracts",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Schema Registry & Contracts backend",
+      "body": "Implement Schema Registry & Contracts services and APIs",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Schema Registry & Contracts",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Schema Registry & Contracts frontend",
+      "body": "Build Schema Registry & Contracts screens and interactions",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — Schema Registry & Contracts",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Schema Registry & Contracts",
+      "body": "Cover Schema Registry & Contracts with automated tests",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — RabbitMQ Decommission",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate RabbitMQ Decommission requirements",
+      "body": "Clarify RabbitMQ Decommission scope and requirements",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — RabbitMQ Decommission",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design RabbitMQ Decommission solution",
+      "body": "Design RabbitMQ Decommission architecture and interfaces",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — RabbitMQ Decommission",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop RabbitMQ Decommission backend",
+      "body": "Implement RabbitMQ Decommission services and APIs",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — RabbitMQ Decommission",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop RabbitMQ Decommission frontend",
+      "body": "Build RabbitMQ Decommission screens and interactions",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — RabbitMQ Decommission",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for RabbitMQ Decommission",
+      "body": "Cover RabbitMQ Decommission with automated tests",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Orion",
+      "epic": "MigrationToKafka — RabbitMQ Decommission",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in RabbitMQ Decommission",
+      "body": "Resolve RabbitMQ Decommission defects from QA",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Document Ingestion",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Document Ingestion requirements",
+      "body": "Clarify Document Ingestion scope and requirements",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Document Ingestion",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Document Ingestion solution",
+      "body": "Design Document Ingestion architecture and interfaces",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Document Ingestion",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Document Ingestion backend",
+      "body": "Implement Document Ingestion services and APIs",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Document Ingestion",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Document Ingestion frontend",
+      "body": "Build Document Ingestion screens and interactions",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Document Ingestion",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Document Ingestion",
+      "body": "Cover Document Ingestion with automated tests",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Document Ingestion",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Document Ingestion",
+      "body": "Resolve Document Ingestion defects from QA",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Document Ingestion",
+      "type": "feature",
+      "state": "done",
+      "title": "Document Document Ingestion",
+      "body": "Document Document Ingestion for users and developers",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — OCR Pipeline",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate OCR Pipeline requirements",
+      "body": "Clarify OCR Pipeline scope and requirements",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — OCR Pipeline",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design OCR Pipeline solution",
+      "body": "Design OCR Pipeline architecture and interfaces",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — OCR Pipeline",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop OCR Pipeline backend",
+      "body": "Implement OCR Pipeline services and APIs",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — OCR Pipeline",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop OCR Pipeline frontend",
+      "body": "Build OCR Pipeline screens and interactions",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — OCR Pipeline",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for OCR Pipeline",
+      "body": "Cover OCR Pipeline with automated tests",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — OCR Pipeline",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in OCR Pipeline",
+      "body": "Resolve OCR Pipeline defects from QA",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — OCR Pipeline",
+      "type": "feature",
+      "state": "done",
+      "title": "Document OCR Pipeline",
+      "body": "Document OCR Pipeline for users and developers",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — OCR Pipeline",
+      "type": "fix",
+      "state": "ready_for_acceptance",
+      "title": "Refactor OCR Pipeline for performance",
+      "body": "Refactor OCR Pipeline for better performance",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Full-Text Search",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Full-Text Search requirements",
+      "body": "Clarify Full-Text Search scope and requirements",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Full-Text Search",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Full-Text Search solution",
+      "body": "Design Full-Text Search architecture and interfaces",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Full-Text Search",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Full-Text Search backend",
+      "body": "Implement Full-Text Search services and APIs",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Full-Text Search",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Full-Text Search frontend",
+      "body": "Build Full-Text Search screens and interactions",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Full-Text Search",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Full-Text Search",
+      "body": "Cover Full-Text Search with automated tests",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Annotations & Markup",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Annotations & Markup requirements",
+      "body": "Clarify Annotations & Markup scope and requirements",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Annotations & Markup",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Annotations & Markup solution",
+      "body": "Design Annotations & Markup architecture and interfaces",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Annotations & Markup",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Annotations & Markup backend",
+      "body": "Implement Annotations & Markup services and APIs",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Annotations & Markup",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Annotations & Markup frontend",
+      "body": "Build Annotations & Markup screens and interactions",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Annotations & Markup",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Annotations & Markup",
+      "body": "Cover Annotations & Markup with automated tests",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Annotations & Markup",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Annotations & Markup",
+      "body": "Resolve Annotations & Markup defects from QA",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Export & Sharing",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Export & Sharing requirements",
+      "body": "Clarify Export & Sharing scope and requirements",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Export & Sharing",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Export & Sharing solution",
+      "body": "Design Export & Sharing architecture and interfaces",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Export & Sharing",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Export & Sharing backend",
+      "body": "Implement Export & Sharing services and APIs",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Export & Sharing",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Export & Sharing frontend",
+      "body": "Build Export & Sharing screens and interactions",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Export & Sharing",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Export & Sharing",
+      "body": "Cover Export & Sharing with automated tests",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Export & Sharing",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Export & Sharing",
+      "body": "Resolve Export & Sharing defects from QA",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "MobileWolf",
+      "epic": "DocuUp — Export & Sharing",
+      "type": "feature",
+      "state": "done",
+      "title": "Document Export & Sharing",
+      "body": "Document Export & Sharing for users and developers",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Product Catalog",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Product Catalog requirements",
+      "body": "Clarify Product Catalog scope and requirements",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Product Catalog",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Product Catalog solution",
+      "body": "Design Product Catalog architecture and interfaces",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Product Catalog",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Product Catalog backend",
+      "body": "Implement Product Catalog services and APIs",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Product Catalog",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Product Catalog frontend",
+      "body": "Build Product Catalog screens and interactions",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Product Catalog",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Product Catalog",
+      "body": "Cover Product Catalog with automated tests",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Product Catalog",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Product Catalog",
+      "body": "Resolve Product Catalog defects from QA",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Product Catalog",
+      "type": "feature",
+      "state": "done",
+      "title": "Document Product Catalog",
+      "body": "Document Product Catalog for users and developers",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Product Catalog",
+      "type": "fix",
+      "state": "ready_for_acceptance",
+      "title": "Refactor Product Catalog for performance",
+      "body": "Refactor Product Catalog for better performance",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Cart & Checkout",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Cart & Checkout requirements",
+      "body": "Clarify Cart & Checkout scope and requirements",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Cart & Checkout",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Cart & Checkout solution",
+      "body": "Design Cart & Checkout architecture and interfaces",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Cart & Checkout",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Cart & Checkout backend",
+      "body": "Implement Cart & Checkout services and APIs",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Cart & Checkout",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Cart & Checkout frontend",
+      "body": "Build Cart & Checkout screens and interactions",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Cart & Checkout",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Cart & Checkout",
+      "body": "Cover Cart & Checkout with automated tests",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Payment Integration",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Payment Integration requirements",
+      "body": "Clarify Payment Integration scope and requirements",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Payment Integration",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Payment Integration solution",
+      "body": "Design Payment Integration architecture and interfaces",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Payment Integration",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Payment Integration backend",
+      "body": "Implement Payment Integration services and APIs",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Payment Integration",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Payment Integration frontend",
+      "body": "Build Payment Integration screens and interactions",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Payment Integration",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Payment Integration",
+      "body": "Cover Payment Integration with automated tests",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Payment Integration",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Payment Integration",
+      "body": "Resolve Payment Integration defects from QA",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Order Fulfillment",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Order Fulfillment requirements",
+      "body": "Clarify Order Fulfillment scope and requirements",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Order Fulfillment",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Order Fulfillment solution",
+      "body": "Design Order Fulfillment architecture and interfaces",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Order Fulfillment",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Order Fulfillment backend",
+      "body": "Implement Order Fulfillment services and APIs",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Order Fulfillment",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Order Fulfillment frontend",
+      "body": "Build Order Fulfillment screens and interactions",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Order Fulfillment",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Order Fulfillment",
+      "body": "Cover Order Fulfillment with automated tests",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Order Fulfillment",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Order Fulfillment",
+      "body": "Resolve Order Fulfillment defects from QA",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Order Fulfillment",
+      "type": "feature",
+      "state": "done",
+      "title": "Document Order Fulfillment",
+      "body": "Document Order Fulfillment for users and developers",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Reviews & Ratings",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Reviews & Ratings requirements",
+      "body": "Clarify Reviews & Ratings scope and requirements",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Reviews & Ratings",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Reviews & Ratings solution",
+      "body": "Design Reviews & Ratings architecture and interfaces",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Reviews & Ratings",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Reviews & Ratings backend",
+      "body": "Implement Reviews & Ratings services and APIs",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Reviews & Ratings",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Reviews & Ratings frontend",
+      "body": "Build Reviews & Ratings screens and interactions",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Reviews & Ratings",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Reviews & Ratings",
+      "body": "Cover Reviews & Ratings with automated tests",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Reviews & Ratings",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Reviews & Ratings",
+      "body": "Resolve Reviews & Ratings defects from QA",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Reviews & Ratings",
+      "type": "feature",
+      "state": "done",
+      "title": "Document Reviews & Ratings",
+      "body": "Document Reviews & Ratings for users and developers",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "MediaShop — Reviews & Ratings",
+      "type": "fix",
+      "state": "ready_for_acceptance",
+      "title": "Refactor Reviews & Ratings for performance",
+      "body": "Refactor Reviews & Ratings for better performance",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Artist Profiles",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Artist Profiles requirements",
+      "body": "Clarify Artist Profiles scope and requirements",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Artist Profiles",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Artist Profiles solution",
+      "body": "Design Artist Profiles architecture and interfaces",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Artist Profiles",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Artist Profiles backend",
+      "body": "Implement Artist Profiles services and APIs",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Artist Profiles",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Artist Profiles frontend",
+      "body": "Build Artist Profiles screens and interactions",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Artist Profiles",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Artist Profiles",
+      "body": "Cover Artist Profiles with automated tests",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Portfolio Galleries",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Portfolio Galleries requirements",
+      "body": "Clarify Portfolio Galleries scope and requirements",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Portfolio Galleries",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Portfolio Galleries solution",
+      "body": "Design Portfolio Galleries architecture and interfaces",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Portfolio Galleries",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Portfolio Galleries backend",
+      "body": "Implement Portfolio Galleries services and APIs",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Portfolio Galleries",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Portfolio Galleries frontend",
+      "body": "Build Portfolio Galleries screens and interactions",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Portfolio Galleries",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Portfolio Galleries",
+      "body": "Cover Portfolio Galleries with automated tests",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Portfolio Galleries",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Portfolio Galleries",
+      "body": "Resolve Portfolio Galleries defects from QA",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Commission Requests",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Commission Requests requirements",
+      "body": "Clarify Commission Requests scope and requirements",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Commission Requests",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Commission Requests solution",
+      "body": "Design Commission Requests architecture and interfaces",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Commission Requests",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Commission Requests backend",
+      "body": "Implement Commission Requests services and APIs",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Commission Requests",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Commission Requests frontend",
+      "body": "Build Commission Requests screens and interactions",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Commission Requests",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Commission Requests",
+      "body": "Cover Commission Requests with automated tests",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Commission Requests",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Commission Requests",
+      "body": "Resolve Commission Requests defects from QA",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Commission Requests",
+      "type": "feature",
+      "state": "done",
+      "title": "Document Commission Requests",
+      "body": "Document Commission Requests for users and developers",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Blog & News",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Blog & News requirements",
+      "body": "Clarify Blog & News scope and requirements",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Blog & News",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Blog & News solution",
+      "body": "Design Blog & News architecture and interfaces",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Blog & News",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Blog & News backend",
+      "body": "Implement Blog & News services and APIs",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Blog & News",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Blog & News frontend",
+      "body": "Build Blog & News screens and interactions",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Blog & News",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Blog & News",
+      "body": "Cover Blog & News with automated tests",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Blog & News",
+      "type": "bug",
+      "state": "in_progress",
+      "title": "Fix defects in Blog & News",
+      "body": "Resolve Blog & News defects from QA",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Blog & News",
+      "type": "feature",
+      "state": "done",
+      "title": "Document Blog & News",
+      "body": "Document Blog & News for users and developers",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Blog & News",
+      "type": "fix",
+      "state": "ready_for_acceptance",
+      "title": "Refactor Blog & News for performance",
+      "body": "Refactor Blog & News for better performance",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Community Feed",
+      "type": "feature",
+      "state": "new",
+      "title": "Investigate Community Feed requirements",
+      "body": "Clarify Community Feed scope and requirements",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Community Feed",
+      "type": "feature",
+      "state": "ready_for_implementation",
+      "title": "Design Community Feed solution",
+      "body": "Design Community Feed architecture and interfaces",
+      "createdBy": "pm@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Community Feed",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Community Feed backend",
+      "body": "Implement Community Feed services and APIs",
+      "createdBy": "dev@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Community Feed",
+      "type": "feature",
+      "state": "in_progress",
+      "title": "Develop Community Feed frontend",
+      "body": "Build Community Feed screens and interactions",
+      "createdBy": "demo@mailpit.pit"
+    },
+    {
+      "team": "Juniper",
+      "epic": "ArtistsInWeb — Community Feed",
+      "type": "feature",
+      "state": "ready_for_acceptance",
+      "title": "Write automated tests for Community Feed",
+      "body": "Cover Community Feed with automated tests",
+      "createdBy": "pm@mailpit.pit"
+    }
+  ],
+  "comments": []
+}
