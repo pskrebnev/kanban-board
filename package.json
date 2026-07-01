@@ -1,0 +1,12 @@
+{
+  "name": "kanban-ticketing",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Root convenience scripts to run the stack from any shell (no make required).",
+  "scripts": {
+    "up": "node scripts/run.mjs up",
+    "seed": "node scripts/run.mjs seed",
+    "verify": "node scripts/run.mjs verify",
+    "down": "node scripts/run.mjs down"
+  }
+}

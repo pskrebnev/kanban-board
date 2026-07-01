@@ -214,17 +214,23 @@ Update `.env` for your local machine. Do not commit `.env`; it is ignored by Git
 
 ### Quick Commands
 
-Three short commands cover the common cases. They are thin wrappers around Compose, so no host
-runtime beyond a container engine is required. With **GNU Make** installed:
+Short commands cover the common cases. The simplest — runnable from any shell (PowerShell, cmd,
+bash) with just Node, **no `make` required** — are the root `npm` scripts:
 
 | Command | What it does |
 |---|---|
-| `make up` | Build and start the whole stack with **no** application data (clean, schema-only DB). |
-| `make seed` | Build and start the whole stack with the **generated** demo dataset (ephemeral, in-RAM DB — see [Generated dataset](#generated-dataset-orionmobilewolfjuniper)). |
-| `make verify` | Build and start with the **generated** dataset, run the **full end-to-end suite**, and exit with its pass/fail result. |
-| `make dev` | Start the **hot-reload development stack** — see [Development (hot reload)](#development-hot-reload). No image rebuilds for code changes. |
+| `npm run up` | Build and start the whole stack with **no** application data (clean, schema-only DB). |
+| `npm run seed` | Build and start with the **generated** demo dataset (ephemeral — see [Generated dataset](#generated-dataset-orionmobilewolfjuniper)). |
+| `npm run verify` | Build and start seeded, then run the **full end-to-end suite**. |
+| `npm run down` | Stop the stack and remove its volumes. |
 
-Add `COMPOSE="podman-compose"` to use Podman instead of Docker (e.g. `make up COMPOSE="podman-compose"`).
+They auto-detect the engine (Docker if present, else `podman-compose`) and run a fixed `kanban`
+compose project; override with `COMPOSE`, e.g. `COMPOSE="podman-compose" npm run up`. No `npm
+install` is needed — the launcher ([`scripts/run.mjs`](scripts/run.mjs)) has no dependencies.
+
+With **GNU Make** the equivalent `make up` / `make seed` / `make verify` / `make dev` targets also
+work (add `COMPOSE="podman-compose"` for Podman); `make dev` starts the
+[hot-reload dev stack](#development-hot-reload).
 
 Without Make, run the equivalent commands directly (Docker shown; for Podman replace
 `docker compose` with `podman-compose`):
@@ -605,5 +611,6 @@ compile automatically.
 - [Phase 8 plan](docs/phase-8.md) — quality gates, persistence hardening & Definition-of-Done plan with a JIRA-style backlog (complete).
 - [Phase 9 plan](docs/phase-9.md) — reference-wireframe fidelity & UX polish (type/state colour-coding + style) with a JIRA-style backlog (implemented; Tailwind migration deferred).
 - [Definition-of-Done checklist](docs/definition-of-done.md) — maps every spec §13 item to its automated test, CI job, or documented proof.
+- [Fixing UI & workflow issues](docs/fixing-ui-issues.md) — CLI `npm run` shortcuts, Cursor-contributor removal investigation, stronger type/state colours, the edit-form state-save fix, board filter labels, and the active nav link.
 - [Architecture](docs/architecture.md) — high-level architecture and delivery phases.
 - [Testing approach](docs/testing-approach.md) — grouped end-to-end scenario catalogue.

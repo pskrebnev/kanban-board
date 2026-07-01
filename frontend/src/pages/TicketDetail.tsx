@@ -37,7 +37,6 @@ export function TicketDetail(): ReactElement {
 
   const getTicket = useTicketsStore((state) => state.getTicket);
   const updateTicket = useTicketsStore((state) => state.updateTicket);
-  const changeState = useTicketsStore((state) => state.changeState);
   const deleteTicket = useTicketsStore((state) => state.deleteTicket);
 
   const comments = useCommentsStore((state) => state.comments);
@@ -56,6 +55,7 @@ export function TicketDetail(): ReactElement {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [type, setType] = useState<TicketType>("feature");
+  const [stateValue, setStateValue] = useState<TicketState>("new");
   const [teamId, setTeamId] = useState("");
   const [epicId, setEpicId] = useState("");
 
@@ -68,6 +68,7 @@ export function TicketDetail(): ReactElement {
     setTitle(loaded.title);
     setBody(loaded.body);
     setType(loaded.type);
+    setStateValue(loaded.state);
     setTeamId(loaded.teamId);
     setEpicId(loaded.epicId ?? "");
   }
@@ -131,6 +132,7 @@ export function TicketDetail(): ReactElement {
         title,
         body,
         type,
+        state: stateValue,
         teamId,
         epicId: epicId || null,
       });
@@ -139,16 +141,6 @@ export function TicketDetail(): ReactElement {
       setError(apiErrorMessage(err, "Could not save ticket."));
     } finally {
       setSaving(false);
-    }
-  }
-
-  async function handleStateChange(nextState: TicketState) {
-    setError("");
-    try {
-      const updated = await changeState(id, nextState);
-      syncForm(updated);
-    } catch (err) {
-      setError(apiErrorMessage(err, "Could not change state."));
     }
   }
 
@@ -213,30 +205,29 @@ export function TicketDetail(): ReactElement {
         </section>
 
         <div className="mx-auto max-w-[680px] space-y-6">
-          <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-line bg-white p-5 shadow-[0_16px_40px_rgb(23_32_51/6%)]">
-            <label htmlFor="ticket-state" className="text-[0.85rem] font-bold text-muted">
-              State
-            </label>
-            <select
-              id="ticket-state"
-              aria-label="State"
-              className="rounded-lg border border-field px-3 py-2 font-[inherit]"
-              value={ticket.state}
-              onChange={(event) => void handleStateChange(event.target.value as TicketState)}
-            >
-              {TICKET_STATES.map((state) => (
-                <option key={state} value={state}>
-                  {STATE_LABELS[state]}
-                </option>
-              ))}
-            </select>
-            <span className="text-xs text-muted">State changes save immediately.</span>
-          </div>
-
           <form
             className="grid gap-4 rounded-2xl border border-line bg-white p-6 shadow-[0_16px_40px_rgb(23_32_51/6%)]"
             onSubmit={handleSave}
           >
+            <div>
+              <label htmlFor="edit-state" className={labelClass}>
+                State
+              </label>
+              <select
+                id="edit-state"
+                aria-label="State"
+                className={fieldClass}
+                value={stateValue}
+                onChange={(event) => setStateValue(event.target.value as TicketState)}
+              >
+                {TICKET_STATES.map((state) => (
+                  <option key={state} value={state}>
+                    {STATE_LABELS[state]}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div>
               <label htmlFor="edit-team" className={labelClass}>
                 Team
