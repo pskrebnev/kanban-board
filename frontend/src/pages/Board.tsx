@@ -30,6 +30,7 @@ import {
 
 const fieldClass = "rounded-lg border border-field px-3 py-2 font-[inherit]";
 const primaryBtn = "rounded-full bg-brand px-4 py-2 font-bold text-white";
+const filterLabel = "text-[0.7rem] font-bold uppercase tracking-wide text-muted";
 
 // A small relative-time hint for cards (matches Wireframe 1's "2h ago" style).
 function relativeTime(iso: string): string {
@@ -256,56 +257,68 @@ export function Board(): ReactElement {
           </p>
         ) : (
           <>
-            <div className="mb-4 flex flex-wrap items-center gap-2">
-              <select
-                aria-label="Board team"
-                className={fieldClass}
-                value={selectedTeamId ?? ""}
-                onChange={(event) => void selectTeam(event.target.value || null)}
-              >
-                {teams.map((team) => (
-                  <option key={team.id} value={team.id}>
-                    {team.name}
-                  </option>
-                ))}
-              </select>
+            <div className="mb-4 flex flex-wrap items-end gap-3">
+              <label className="flex flex-col gap-1">
+                <span className={filterLabel}>Team</span>
+                <select
+                  aria-label="Board team"
+                  className={fieldClass}
+                  value={selectedTeamId ?? ""}
+                  onChange={(event) => void selectTeam(event.target.value || null)}
+                >
+                  {teams.map((team) => (
+                    <option key={team.id} value={team.id}>
+                      {team.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-              <input
-                type="search"
-                aria-label="Search by title"
-                placeholder="Search title…"
-                className={fieldClass}
-                value={filters.search}
-                onChange={(event) => setFilter({ search: event.target.value })}
-              />
+              <label className="flex flex-col gap-1">
+                <span className={filterLabel}>Title</span>
+                <input
+                  type="search"
+                  aria-label="Search by title"
+                  placeholder="Search title…"
+                  className={fieldClass}
+                  value={filters.search}
+                  onChange={(event) => setFilter({ search: event.target.value })}
+                />
+              </label>
 
-              <select
-                aria-label="Filter by type"
-                className={fieldClass}
-                value={filters.type}
-                onChange={(event) => setFilter({ type: event.target.value as TicketType | "" })}
-              >
-                <option value="">All types</option>
-                {TICKET_TYPES.map((type) => (
-                  <option key={type} value={type}>
-                    {TYPE_LABELS[type]}
-                  </option>
-                ))}
-              </select>
+              <label className="flex flex-col gap-1">
+                <span className={filterLabel}>Type</span>
+                <select
+                  aria-label="Filter by type"
+                  className={fieldClass}
+                  value={filters.type}
+                  onChange={(event) => setFilter({ type: event.target.value as TicketType | "" })}
+                >
+                  <option value="">All types</option>
+                  {TICKET_TYPES.map((type) => (
+                    <option key={type} value={type}>
+                      {TYPE_LABELS[type]}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-              <select
-                aria-label="Filter by epic"
-                className={fieldClass}
-                value={filters.epicId}
-                onChange={(event) => setFilter({ epicId: event.target.value })}
-              >
-                <option value="">All epics</option>
-                {teamEpics.map((epic) => (
-                  <option key={epic.id} value={epic.id}>
-                    {epic.title}
-                  </option>
-                ))}
-              </select>
+              <label className="flex flex-col gap-1">
+                <span className={filterLabel}>Epic</span>
+                <select
+                  aria-label="Filter by epic"
+                  className={fieldClass}
+                  value={filters.epicId}
+                  onChange={(event) => setFilter({ epicId: event.target.value })}
+                >
+                  <option value="">All epics</option>
+                  {teamEpics.map((epic) => (
+                    <option key={epic.id} value={epic.id}>
+                      {epic.title}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
               <button
                 type="button"
@@ -316,7 +329,7 @@ export function Board(): ReactElement {
                 Clear
               </button>
 
-              <span className="ml-auto text-[0.85rem] text-muted">
+              <span className="ml-auto pb-2 text-[0.85rem] text-muted">
                 {totalVisible} {totalVisible === 1 ? "ticket" : "tickets"}
               </span>
             </div>

@@ -131,20 +131,20 @@ try {
   // Lands on the details screen with the ticket title as the heading.
   await page.getByRole("heading", { name: ticketTitle, exact: true }).waitFor({ timeout: 20_000 });
 
-  // Change state immediately, then reload to confirm it persisted.
+  // Change the state via the edit form and save it together with a title edit,
+  // then reload to confirm the state persisted (regression test: editing state
+  // through the form must save, like drag-and-drop does).
   await page.getByLabel("State", { exact: true }).selectOption("in_progress");
-  await sleep(500);
-  await page.reload();
-  await page.getByRole("heading", { name: ticketTitle, exact: true }).waitFor({ timeout: 20_000 });
-  const persistedState = await page.getByLabel("State", { exact: true }).inputValue();
-  if (persistedState !== "in_progress") {
-    throw new Error(`State did not persist; expected in_progress, got ${persistedState}`);
-  }
-
-  // Edit the title and save.
   await page.getByLabel("Title", { exact: true }).fill(renamedTicket);
   await page.getByRole("button", { name: "Save changes" }).click();
   await page.getByRole("heading", { name: renamedTicket, exact: true }).waitFor({ timeout: 20_000 });
+
+  await page.reload();
+  await page.getByRole("heading", { name: renamedTicket, exact: true }).waitFor({ timeout: 20_000 });
+  const persistedState = await page.getByLabel("State", { exact: true }).inputValue();
+  if (persistedState !== "in_progress") {
+    throw new Error(`State did not persist after editing; expected in_progress, got ${persistedState}`);
+  }
 
   // Delete with confirmation; we should return to the list without this ticket.
   await page.getByRole("button", { name: "Delete" }).click();
