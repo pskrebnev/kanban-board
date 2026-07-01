@@ -282,4 +282,4 @@ are manual review items.
 - `ui-ux-states-consistent`: loading, empty, success, and error states are visually consistent across all screens (spec §11).
 - `ui-suite-still-green`: after the restyle, the full Playwright suite still passes — the visual changes preserve all test-facing hooks (aria-labels, `data-*`, placeholders, roles, headings, key text).
 - `ui-board-filter-labels`: the board's filter controls show visible captions — Team, Title, Type, Epic — above each control.
-- `ui-nav-active-link`: the top nav (Board/Teams/Epics/Tickets) is always visible; the link for the current screen is shown active (bold + underlined) and is non-clickable (`disabled`, `aria-current="page"`), including on sub-routes like `/tickets/:id`.
+- `ui-nav-active-link`: the top nav (Board/Teams/Epics/Tickets) is always visible; the current section's link is highlighted (bold + underlined, `aria-current="page"`) and is non-clickable (`disabled`) on its exact page, while sub-routes (e.g. `/tickets/:id`) keep it highlighted **but clickable** so you can return to the list.
