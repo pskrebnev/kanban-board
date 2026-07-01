@@ -8,9 +8,11 @@ import { useEpicsStore } from "../store/epics";
 import { useTeamsStore } from "../store/teams";
 import {
   STATE_LABELS,
+  STATE_STYLES,
   TICKET_STATES,
   TICKET_TYPES,
   TYPE_LABELS,
+  TYPE_STYLES,
   useTicketsStore,
   type Ticket,
   type TicketState,
@@ -200,6 +202,14 @@ export function TicketDetail(): ReactElement {
             Ticket details
           </p>
           <h1 className="mb-2 text-3xl font-bold">{ticket.title}</h1>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${TYPE_STYLES[ticket.type]}`}>
+              {TYPE_LABELS[ticket.type]}
+            </span>
+            <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${STATE_STYLES[ticket.state]}`}>
+              {STATE_LABELS[ticket.state]}
+            </span>
+          </div>
         </section>
 
         <div className="mx-auto max-w-[680px] space-y-6">

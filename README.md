@@ -78,14 +78,18 @@ The project is delivered in phases. The status below reflects what is actually b
   teams-flow, epics-flow, tickets-flow, comments-flow, board-flow, and dod-flow tests, plus a
   backend access-control matrix test.
 - **Tailwind CSS v4** is the frontend styling foundation (via `@tailwindcss/vite`, Preflight + a
-  brand `@theme`, existing classes layered so utilities win) — see
-  [Frontend Styling](#frontend-styling-tailwind-css).
+  brand `@theme` with type/state colour tokens) — see [Frontend Styling](#frontend-styling-tailwind-css).
+- **UI polish** ([Phase 9](docs/phase-9.md)): ticket types (Bug/Feature/Fix) and the five workflow
+  states are colour-coded from a single token source (with text labels always shown), and the app
+  has a smoother feel (hover-lift cards, coloured column accents, focus rings, a refined sticky
+  header/background, and reduced-motion support).
 
-### Not Yet Implemented
+### Status
 
-- **Reference-wireframe fidelity / UX polish** (planned: Phase 9). All mandatory functional scope
-  and the [Phase 8](docs/phase-8.md) quality gates / Definition-of-Done verification are implemented
-  — see the [Definition-of-Done checklist](docs/definition-of-done.md).
+All nine phases are implemented; the full mandatory scope and the [Phase 8](docs/phase-8.md)
+quality gates / [Definition-of-Done checklist](docs/definition-of-done.md) are complete. The one
+intentionally-deferred item is finishing the Tailwind migration of the remaining legacy CSS classes
+(a low-risk cleanup noted in [Phase 9](docs/phase-9.md)).
 
 See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap, the
 [Phase 1 plan](docs/phase-1.md) (persistence foundation, complete), the
@@ -94,8 +98,10 @@ See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap
 [Phase 4 plan](docs/phase-4.md) (epics, complete), the
 [Phase 5 plan](docs/phase-5.md) (tickets, complete), the
 [Phase 6 plan](docs/phase-6.md) (comments, complete), the
-[Phase 7 plan](docs/phase-7.md) (Kanban board, filtering & search, complete), and the
-[Phase 8 plan](docs/phase-8.md) (quality gates & Definition-of-Done hardening, complete).
+[Phase 7 plan](docs/phase-7.md) (Kanban board, filtering & search, complete), the
+[Phase 8 plan](docs/phase-8.md) (quality gates & Definition-of-Done hardening, complete), and the
+[Phase 9 plan](docs/phase-9.md) (reference-wireframe fidelity & UX polish, implemented — Tailwind
+migration deferred).
 
 ---
 
@@ -597,6 +603,7 @@ compile automatically.
 - [Phase 6 plan](docs/phase-6.md) — comments management plan with a JIRA-style backlog.
 - [Phase 7 plan](docs/phase-7.md) — Kanban board, filtering & search plan with a JIRA-style backlog (complete).
 - [Phase 8 plan](docs/phase-8.md) — quality gates, persistence hardening & Definition-of-Done plan with a JIRA-style backlog (complete).
+- [Phase 9 plan](docs/phase-9.md) — reference-wireframe fidelity & UX polish (type/state colour-coding + style) with a JIRA-style backlog (implemented; Tailwind migration deferred).
 - [Definition-of-Done checklist](docs/definition-of-done.md) — maps every spec §13 item to its automated test, CI job, or documented proof.
 - [Architecture](docs/architecture.md) — high-level architecture and delivery phases.
 - [Testing approach](docs/testing-approach.md) — grouped end-to-end scenario catalogue.

@@ -257,3 +257,26 @@ is the Playwright `dod-flow`.
 - `dod-min-screens-reachable`: every spec §10 screen (sign-up, verification result, resend, login, board + team selector, ticket create/edit/details, team management, epic management) exists and is reachable.
 - `dod-browser-compatibility`: the app is verified to work on current desktop Chrome, Edge, and Firefox.
 - `dod-automated-test-coverage`: the suite covers at least one backend business flow and one frontend/API flow (already exceeded — auth/teams/epics/tickets/comments backend tests and six Playwright flows).
+
+## Visual & UX Polish [implemented — colour-coding + polish; contrast/wireframe checks manual]
+
+See [phase-9.md](phase-9.md) for the detailed plan, JIRA-style backlog, and Definition of Done.
+The type/state colour-coding and the style polish are implemented and the full Playwright suite
+stays green (the restyle preserved all test-facing hooks); the contrast and per-wireframe checks
+are manual review items.
+
+- `ui-type-colors-distinct`: Bug, Feature, and Fix each render with a distinct colour on ticket badges.
+- `ui-type-colors-consistent`: a given type uses the same colour everywhere it appears (board cards, ticket list, ticket details, and the type selectors).
+- `ui-state-colors-distinct`: each of the five workflow states (New, Ready for implementation, In progress, Ready for acceptance, Done) has a distinct colour on the board columns.
+- `ui-state-colors-consistent`: a given state uses the same colour on the board, in the ticket list, and on the details screen.
+- `ui-color-not-sole-signal`: type and state are always accompanied by their text label — colour is reinforcement, not the only cue (accessibility).
+- `ui-contrast-and-focus`: text on coloured chips meets WCAG AA contrast, and interactive elements show a visible focus ring on keyboard focus.
+- `ui-reduced-motion`: with `prefers-reduced-motion: reduce`, hover/drag/transition animations are suppressed.
+- `ui-smoothness-pass`: cards/panels share consistent radii, shadows, and spacing; hover and drag interactions feel smooth.
+- `ui-wireframe-board`: the board matches Wireframe 1's hierarchy (team selector, filters bar, five columns, card content).
+- `ui-wireframe-auth`: login / sign-up / verification match Wireframe 2, including the header user menu with Log out.
+- `ui-wireframe-ticket`: ticket details/editing/comments match Wireframe 3 (fields, metadata, actions, comments).
+- `ui-wireframe-teams`: team management matches Wireframe 4, including the disabled delete control for referenced teams.
+- `ui-wireframe-epics`: epic management matches Wireframe 5 (list + create/edit with team selector).
+- `ui-ux-states-consistent`: loading, empty, success, and error states are visually consistent across all screens (spec §11).
+- `ui-suite-still-green`: after the restyle, the full Playwright suite still passes — the visual changes preserve all test-facing hooks (aria-labels, `data-*`, placeholders, roles, headings, key text).
