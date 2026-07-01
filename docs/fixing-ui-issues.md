@@ -111,10 +111,13 @@ Each control now has a visible label — **Team**, **Title**, **Type**, **Epic**
 
 ## 7. Active state for the top navigation
 
-The header links (**Board**, **Teams**, **Epics**, **Tickets**) are always visible, but the link for
-the current screen is now shown as the active page: **bold + underlined and non-clickable**
-(`disabled`, `aria-current="page"`). `AppHeader` derives this from the current route (`useLocation`),
-matching sub-routes too (e.g. `/tickets/:id` keeps **Tickets** active).
+The header links (**Board**, **Teams**, **Epics**, **Tickets**) are always visible, and the link for
+the current **section** is highlighted (**bold + underlined**, `aria-current="page"`). On the
+section's exact page (e.g. the `/tickets` list) the link is also **non-clickable** (`disabled`) —
+you're already there. On a sub-route (e.g. a ticket detail `/tickets/:id`) the link stays
+highlighted but **remains clickable**, so you can jump back to the list. `AppHeader` derives this
+from the current route (`useLocation`), and Teams/Epics now render the same shared `<AppHeader />`
+so the behaviour is consistent across every screen.
 
 ## 8. Documentation
 

@@ -10,10 +10,9 @@ const NAV_ITEMS: Array<{ label: string; path: string }> = [
   { label: "Tickets", path: "/tickets" },
 ];
 
-// The nav item for the current screen is shown as the active page: still visible,
-// but dimmed and non-clickable. "/" matches only the board; the others also match
-// their sub-routes (e.g. /tickets/:id keeps "Tickets" active).
-function isActivePath(pathname: string, path: string): boolean {
+// A nav item is "in section" for its own page and sub-routes (e.g. /tickets/:id
+// keeps "Tickets" highlighted). "/" only matches the board exactly.
+function isInSection(pathname: string, path: string): boolean {
   return path === "/" ? pathname === "/" : pathname === path || pathname.startsWith(`${path}/`);
 }
 
@@ -38,14 +37,17 @@ export function AppHeader(): ReactElement {
       <span className="brand">Kanban Ticketing</span>
       <nav className="topbar-nav">
         {NAV_ITEMS.map((item) => {
-          const active = isActivePath(pathname, item.path);
+          const inSection = isInSection(pathname, item.path);
+          // Highlight the current section; disable the link only on its exact
+          // page, so sub-routes (e.g. /tickets/:id) can still navigate to the list.
+          const isExactPage = pathname === item.path;
           return (
             <button
               key={item.path}
               type="button"
-              className={`link-button ${active ? "font-extrabold underline underline-offset-4" : ""}`}
-              aria-current={active ? "page" : undefined}
-              disabled={active}
+              className={`link-button ${inSection ? "font-extrabold underline underline-offset-4" : ""}`}
+              aria-current={inSection ? "page" : undefined}
+              disabled={isExactPage}
               onClick={() => navigate(item.path)}
             >
               {item.label}
