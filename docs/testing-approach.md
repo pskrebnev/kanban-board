@@ -4,11 +4,12 @@ This document groups end-to-end scenario candidates from `docs/KanbanBoard.pdf`.
 
 ## Current Phase
 
-Phases 0–7 are complete (foundation, persistence/migrations, authentication with password
-recovery, team management, epic management, ticket management, comments, and the Kanban board with
-filtering & search). Phase 8 (quality gates & Definition-of-Done hardening) is the next phase.
-Scenario sections below are marked **[implemented]** when covered by automated tests today, or
-**[planned]** when they document the target behavior for an upcoming phase.
+Phases 0–8 are complete (foundation, persistence/migrations, authentication with password
+recovery, team management, epic management, ticket management, comments, the Kanban board with
+filtering & search, and the quality-gate / Definition-of-Done hardening). Phase 9 (reference-wireframe
+fidelity & UX polish) is the next and final phase. Scenario sections below are marked
+**[implemented]** when covered by automated tests today, or **[planned]** when they document the
+target behavior for an upcoming phase.
 
 Current automated coverage:
 
@@ -23,8 +24,9 @@ Current automated coverage:
   consistency, comment cascade on delete, filters, 404/401), comments integration tests (add with
   author/timestamp from the server, body trim/empty/oversize validation, oldest-first order, the
   ticket-`modified_at` invariant, `author_id` provenance, unknown-ticket 404 / non-UUID 400,
-  cascade delete, 401), and a migration smoke test asserting a fresh database has schema + metadata
-  only.
+  cascade delete, 401), an access-control matrix test (every protected route → 401 anon / 403
+  unverified, public allow-list reachable, and the 400/404/409 status-code contract), and a
+  migration smoke test asserting a fresh database has schema + metadata only.
 - Playwright containers under `tests/e2e/`: a smoke test (frontend shell loads), an auth-flow
   test (sign up, read the verification email from Mailpit, verify, log in, reach the board), a
   teams-flow test (create, rename, and delete a team through the UI), an epics-flow test
@@ -32,9 +34,11 @@ Current automated coverage:
   test (create a team + epic, then create a ticket, change its state, edit it, and delete it
   through the UI), a comments-flow test (create a team + ticket, add two comments, confirm
   oldest-first order with author + timestamp, that the ticket's modified time is unchanged, and
-  that they survive a refresh), and a board-flow test (create a team + tickets, drag a card to a
+  that they survive a refresh), a board-flow test (create a team + tickets, drag a card to a
   new column and confirm it persists across a refresh, force a state-change failure and confirm
-  the card rolls back with an error, and exercise the type/search filters and Clear).
+  the card rolls back with an error, and exercise the type/search filters and Clear), and a
+  dod-flow test (the full Definition-of-Done journey: sign up → verify → log in → team → epic →
+  ticket → comment → drag to Done → refresh).
 
 Target coverage:
 
@@ -215,20 +219,41 @@ See [phase-7.md](phase-7.md) for the detailed plan, JIRA-style backlog, and Defi
 - `seed-references-by-key`: the dataset resolves natural-key references (user email, team name, epic/ticket title); a ticket referencing an unknown epic/team or a comment referencing an unknown ticket fails with a clear "unknown <kind>" error.
 - `seed-invalid-file-rejected`: a malformed dataset (bad JSON, invalid email, ticket `type`/`state` outside the allowed sets) is rejected with a validation error and the backend exits non-zero rather than partially importing.
 
-## Persistence And Refresh [partly implemented — fresh-db smoke test; rest Phase 8]
+## Persistence And Refresh [implemented — refresh & fresh-db automated; restart documented]
 
-- `persistence-after-refresh`: teams, epics, tickets, comments, and board state survive browser refresh.
-- `persistence-after-restart`: created data survives application container restart.
-- `fresh-db-no-seed-data`: fresh database starts empty except migration metadata.
+See [phase-8.md](phase-8.md) and the [Definition-of-Done checklist](definition-of-done.md).
+Refresh persistence is covered by `board-flow`/`dod-flow`; the fresh-DB guarantee by
+`migrations.smoke`; the container-restart procedure is documented in the checklist.
 
-## Access Control [partly implemented — auth guard; full matrix Phase 8]
+- `persistence-after-refresh`: teams, epics, tickets, comments, and dragged board state survive a browser refresh.
+- `persistence-after-restart`: data created via the UI/API survives a full `backend`+`db` container restart in the default named-volume mode (`down` without `-v`, then `up`).
+- `fresh-db-no-seed-data`: a freshly-migrated database contains only migration metadata — every application table (`users`, `teams`, `epics`, `tickets`, `comments`, token tables) has zero rows.
+- `default-start-does-not-seed`: the default `up` (without the seed compose file) loads no sample data; the startup log shows no seed import.
+- `volume-wipe-resets-db`: `down -v` removes the named volume so the next start re-runs migrations from scratch into an empty database.
 
-- `protected-screens-require-auth`: board, teams, epics, tickets, and comments require login.
-- `protected-api-requires-auth`: protected API endpoints reject anonymous requests.
-- `public-auth-pages-accessible`: sign-up, login, verification, resend, health, and readiness stay public.
+## Access Control [implemented]
 
-## Smoke And Definition Of Done [planned — Phase 8]
+See [phase-8.md](phase-8.md) and the [Definition-of-Done checklist](definition-of-done.md).
+Covered by the backend `access-control-integration` suite (401/403 matrix + 400/404/409 contract).
 
-- `dod-full-happy-path`: sign up, verify, log in, create team, create epic, create ticket, comment, drag ticket to done, refresh.
-- `dod-clean-checkout-start`: application starts from a clean checkout through Podman compose.
-- `dod-no-sample-data`: QA can create all data through UI/API without manual database edits.
+- `protected-screens-require-auth`: board, teams, epics, tickets, and comments screens redirect anonymous users to login.
+- `protected-api-requires-auth`: every protected API route/method (`/api/teams`, `/api/epics`, `/api/tickets`, `/api/tickets/:id/comments`) rejects anonymous requests with `401`.
+- `unverified-user-forbidden`: a signed-up but unverified user presenting a valid session is rejected from protected endpoints with `403`.
+- `public-endpoints-accessible`: sign-up, login, verify, resend, forgot-password, reset-password, `/api/health`, and `/api/ready` stay reachable without authentication.
+- `status-code-contract`: validation/enum/bad-UUID → `400`; unauthenticated → `401`; unverified → `403`; missing record → `404`; referenced team/epic delete → `409`; verified consistently across resources.
+- `no-token-in-url`: session/bearer tokens are never placed in URLs; only the single-use email-verification token appears in the verification link (spec §9).
+
+## Smoke And Definition Of Done [implemented]
+
+See [phase-8.md](phase-8.md) and the [Definition-of-Done checklist](definition-of-done.md), which
+maps every item below to its automated test, CI job, or documented procedure. `dod-full-happy-path`
+is the Playwright `dod-flow`.
+
+- `dod-full-happy-path`: sign up → verify (Mailpit) → log in → create team → create epic → create ticket → add comment → drag ticket to Done → refresh; all data and the dragged state persist.
+- `dod-clean-checkout-start`: from a clean checkout with only Docker/Podman installed and a `.env` copied from `.env.example`, the single compose command from the repo root brings the stack up, migrations auto-apply, `/api/health` + `/api/ready` pass, and the SPA loads.
+- `dod-no-sample-data`: QA can create all required test/demo data through the UI or API without manually editing database records.
+- `dod-no-committed-secrets`: `.env`/`.env.*` are git-ignored (keeping `.env.example`), no `.env` is tracked, and `.env.example` holds placeholders only.
+- `dod-passwords-hashed`: passwords are stored only as Argon2id hashes; no plaintext password is persisted or logged.
+- `dod-min-screens-reachable`: every spec §10 screen (sign-up, verification result, resend, login, board + team selector, ticket create/edit/details, team management, epic management) exists and is reachable.
+- `dod-browser-compatibility`: the app is verified to work on current desktop Chrome, Edge, and Firefox.
+- `dod-automated-test-coverage`: the suite covers at least one backend business flow and one frontend/API flow (already exceeded — auth/teams/epics/tickets/comments backend tests and six Playwright flows).

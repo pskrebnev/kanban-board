@@ -14,10 +14,8 @@ COPY teams-flow.ts ./
 COPY epics-flow.ts ./
 COPY tickets-flow.ts ./
 COPY comments-flow.ts ./
-<<<<<<< HEAD
 COPY board-flow.ts ./
-=======
->>>>>>> 38c086d85be695e4709f7537890cbca79299944a
+COPY dod-flow.ts ./
 COPY tsconfig.json ./
 
 CMD ["npm", "test"]

@@ -282,7 +282,10 @@ See [phase-7.md](phase-7.md) for the detailed plan, JIRA-style backlog, and Defi
   the Phase 5 ticket endpoints with no backend changes. Covered by a Playwright `board-flow`
   (columns, drag persistence across refresh, drag-failure rollback, filtering/search).
 
-## Phase 8 — Quality Gates, Persistence Hardening & Definition of Done (next phase)
+## Phase 8 — Quality Gates, Persistence Hardening & Definition of Done (complete)
+
+See [phase-8.md](phase-8.md) for the detailed plan and backlog, and the
+[Definition-of-Done checklist](definition-of-done.md) mapping each spec §13 item to its proof.
 
 - **Goal:** Lock in cross-cutting expectations and prove the Definition of Done.
 - **Spec coverage:** §9 (API/persistence), §11 (non-functional), §13 (DoD).
@@ -297,8 +300,13 @@ See [phase-7.md](phase-7.md) for the detailed plan, JIRA-style backlog, and Defi
 - **Wireframe considerations:** confirm all minimum screens (spec §10) exist and are
   reachable.
 - **Exit criteria:** every Definition of Done checkbox (spec §13) passes.
+- **Status:** complete — a backend `access-control-integration` suite (the `401`/`403` matrix and
+  the `400/404/409` contract), the `migrations.smoke` fresh-DB assertion, a Playwright `dod-flow`
+  for the full §13 journey, a GitHub Actions CI pipeline, repository-root `make up/seed/verify`
+  commands, a generated demo dataset, and a [Definition-of-Done checklist](definition-of-done.md)
+  mapping every DoD item to its proof.
 
-## Phase 9 — Reference Wireframe Fidelity & UX Polish (final)
+## Phase 9 — Reference Wireframe Fidelity & UX Polish (next phase, final)
 
 - **Goal:** Bring the UI to the information hierarchy and flows shown in the reference
   wireframes (spec §15), and polish UX states.
