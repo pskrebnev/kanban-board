@@ -20,8 +20,9 @@ The local runtime uses Podman and `podman-compose` for the application services,
 Phase numbering follows the [High Level Solution](kanban-ticketing-hls.md). Phase 0
 (foundation scaffold), Phase 1 (persistence foundation & migrations), Phase 2
 (authentication), Phase 3 (teams), Phase 4 (epics), Phase 5 (tickets), Phase 6 (comments),
-Phase 7 (Kanban board, filtering & search), and Phase 8 (quality gates & Definition-of-Done
-hardening) are complete; the next phase is Phase 9 (reference-wireframe fidelity & UX polish).
+Phase 7 (Kanban board, filtering & search), Phase 8 (quality gates & Definition-of-Done
+hardening), and Phase 9 (UX polish — type/state colour-coding + smoother styling) are complete.
+The only deferred item is finishing the Tailwind migration of the remaining legacy CSS classes.
 
 Completed:
 
