@@ -216,6 +216,7 @@ runtime beyond a container engine is required. With **GNU Make** installed:
 | `make up` | Build and start the whole stack with **no** application data (clean, schema-only DB). |
 | `make seed` | Build and start the whole stack with the **generated** demo dataset (ephemeral, in-RAM DB — see [Generated dataset](#generated-dataset-orionmobilewolfjuniper)). |
 | `make verify` | Build and start with the **generated** dataset, run the **full end-to-end suite**, and exit with its pass/fail result. |
+| `make dev` | Start the **hot-reload development stack** — see [Development (hot reload)](#development-hot-reload). No image rebuilds for code changes. |
 
 Add `COMPOSE="podman-compose"` to use Podman instead of Docker (e.g. `make up COMPOSE="podman-compose"`).
 
@@ -238,6 +239,27 @@ SEED_FILE_HOST=./backend/seed/generated-data.json \
 
 On Windows PowerShell, set the variable first (`$env:SEED_FILE_HOST = "./backend/seed/generated-data.json"`)
 and then run the compose command.
+
+### Development (hot reload)
+
+For iterative work, use the development stack instead of rebuilding images on every change:
+
+```shell
+make dev
+# or, without Make:
+docker compose -f compose.dev.yaml up      # podman-compose -f compose.dev.yaml up
+```
+
+It runs the **Vite dev server** (frontend) and **`tsx watch`** (backend) with the source
+bind-mounted, so edits under `frontend/src` or `backend/src` are picked up in ~1s with **no image
+rebuild**. `node_modules` live in named volumes (installed inside the container, so they are fast on
+WSL2 and not shadowed by the host). The app is served on the same `FRONTEND_HOST_PORT` and proxies
+`/api` to the backend, just like production. This is a standalone stack — use it *instead of* the
+production stack (`make up`), not alongside it (same host ports).
+
+> The production images (`make up` / `docker compose up --build`) are unaffected — they still build
+> the optimized Vite bundle served by Nginx. Use the dev stack for coding, the production stack for
+> a true-to-prod run.
 
 ### Start The Application
 

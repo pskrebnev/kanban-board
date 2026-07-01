@@ -1,0 +1,13 @@
+# Keep the build context small and cache-stable: the Vite build only needs
+# source + config, never these.
+node_modules
+dist
+.git
+.gitignore
+*.md
+coverage
+.env
+.env.*
+npm-debug.log*
+Containerfile
+.dockerignore
