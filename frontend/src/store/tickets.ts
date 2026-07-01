@@ -28,6 +28,36 @@ export const STATE_LABELS: Record<TicketState, string> = {
   done: "Done",
 };
 
+// Colour-coding (Phase 9). These are the single source of truth for how a
+// ticket's type and workflow state are coloured; the class strings are literal
+// so Tailwind detects and generates the utilities. Colour always accompanies the
+// text label (STATE_LABELS/TYPE_LABELS) — it is a reinforcement, not the sole cue.
+
+// Soft pill for a ticket type (background + text), used on cards and lists.
+export const TYPE_STYLES: Record<TicketType, string> = {
+  bug: "bg-type-bug-soft text-type-bug",
+  feature: "bg-type-feature-soft text-type-feature",
+  fix: "bg-type-fix-soft text-type-fix",
+};
+
+// Soft pill for a workflow state (background + text).
+export const STATE_STYLES: Record<TicketState, string> = {
+  new: "bg-state-new-soft text-state-new",
+  ready_for_implementation: "bg-state-ready-soft text-state-ready",
+  in_progress: "bg-state-progress-soft text-state-progress",
+  ready_for_acceptance: "bg-state-acceptance-soft text-state-acceptance",
+  done: "bg-state-done-soft text-state-done",
+};
+
+// Top-border accent for a board column, in the state's strong colour.
+export const STATE_COLUMN_ACCENT: Record<TicketState, string> = {
+  new: "border-t-state-new",
+  ready_for_implementation: "border-t-state-ready",
+  in_progress: "border-t-state-progress",
+  ready_for_acceptance: "border-t-state-acceptance",
+  done: "border-t-state-done",
+};
+
 export type Ticket = {
   id: string;
   teamId: string;
