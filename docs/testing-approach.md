@@ -4,11 +4,19 @@ This document groups end-to-end scenario candidates from `docs/KanbanBoard.pdf`.
 
 ## Current Phase
 
+<<<<<<< HEAD
+Phases 0–7 are complete (foundation, persistence/migrations, authentication with password
+recovery, team management, epic management, ticket management, comments, and the Kanban board with
+filtering & search). Phase 8 (quality gates & Definition-of-Done hardening) is the next phase.
+Scenario sections below are marked **[implemented]** when covered by automated tests today, or
+**[planned]** when they document the target behavior for an upcoming phase.
+=======
 Phases 0–6 are complete (foundation, persistence/migrations, authentication with password
 recovery, team management, epic management, ticket management, and comments). Phase 7 (the Kanban
 board, filtering & search) is the next phase. Scenario sections below are marked **[implemented]**
 when covered by automated tests today, or **[planned]** when they document the target behavior for
 an upcoming phase.
+>>>>>>> 38c086d85be695e4709f7537890cbca79299944a
 
 Current automated coverage:
 
@@ -30,9 +38,17 @@ Current automated coverage:
   teams-flow test (create, rename, and delete a team through the UI), an epics-flow test
   (create a team, then create, edit, and delete an epic for it through the UI), a tickets-flow
   test (create a team + epic, then create a ticket, change its state, edit it, and delete it
+<<<<<<< HEAD
+  through the UI), a comments-flow test (create a team + ticket, add two comments, confirm
+  oldest-first order with author + timestamp, that the ticket's modified time is unchanged, and
+  that they survive a refresh), and a board-flow test (create a team + tickets, drag a card to a
+  new column and confirm it persists across a refresh, force a state-change failure and confirm
+  the card rolls back with an error, and exercise the type/search filters and Clear).
+=======
   through the UI), and a comments-flow test (create a team + ticket, add two comments, confirm
   oldest-first order with author + timestamp, that the ticket's modified time is unchanged, and
   that they survive a refresh).
+>>>>>>> 38c086d85be695e4709f7537890cbca79299944a
 
 Target coverage:
 
@@ -169,7 +185,11 @@ podman-compose -f infra/podman/podman-compose.yml --profile test down
 - `comments-require-auth`: all comment endpoints reject anonymous requests with `401`.
 - `comments-empty-state`: a ticket with no comments shows an explicit "No comments yet" empty state.
 
+<<<<<<< HEAD
+## Kanban Board [implemented]
+=======
 ## Kanban Board [planned — Phase 7]
+>>>>>>> 38c086d85be695e4709f7537890cbca79299944a
 
 See [phase-7.md](phase-7.md) for the detailed plan, JIRA-style backlog, and Definition of Done.
 
@@ -189,7 +209,11 @@ See [phase-7.md](phase-7.md) for the detailed plan, JIRA-style backlog, and Defi
 - `board-click-vs-drag`: clicking a card without dragging it opens ticket details rather than starting/ending a drag.
 - `board-usable-at-100-tickets`: with at least 100 tickets on one team, the board remains responsive for scrolling, filtering, and dragging.
 
+<<<<<<< HEAD
+## Filtering And Search [implemented]
+=======
 ## Filtering And Search [planned — Phase 7]
+>>>>>>> 38c086d85be695e4709f7537890cbca79299944a
 
 See [phase-7.md](phase-7.md) for the detailed plan, JIRA-style backlog, and Definition of Done.
 
