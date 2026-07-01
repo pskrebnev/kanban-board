@@ -2,7 +2,7 @@ import { useEffect, useState, type SyntheticEvent, type ReactElement } from "rea
 import { useNavigate } from "react-router-dom";
 
 import { apiErrorMessage } from "../api";
-import { useAuthStore } from "../store/auth";
+import { AppHeader } from "../components/AppHeader";
 import { useEpicsStore, type Epic } from "../store/epics";
 import { useTeamsStore } from "../store/teams";
 
@@ -14,8 +14,6 @@ const fieldClass = "rounded-lg border border-field px-3 py-2 font-[inherit]";
 
 export function Epics(): ReactElement {
   const navigate = useNavigate();
-  const user = useAuthStore((state) => state.user);
-  const logout = useAuthStore((state) => state.logout);
 
   const teams = useTeamsStore((state) => state.teams);
   const fetchTeams = useTeamsStore((state) => state.fetchTeams);
@@ -38,11 +36,6 @@ export function Epics(): ReactElement {
     void fetchEpics();
   }, [fetchTeams, fetchEpics]);
 
-  async function handleLogout() {
-    await logout();
-    navigate("/login", { replace: true });
-  }
-
   async function handleCreate(event: SyntheticEvent) {
     event.preventDefault();
     setCreateError("");
@@ -64,28 +57,7 @@ export function Epics(): ReactElement {
 
   return (
     <div className="app">
-      <header className="topbar">
-        <span className="brand">Kanban Ticketing</span>
-        <nav className="topbar-nav">
-          <button type="button" className="link-button" onClick={() => navigate("/")}>
-            Board
-          </button>
-          <button type="button" className="link-button" onClick={() => navigate("/teams")}>
-            Teams
-          </button>
-          <button type="button" className="link-button" onClick={() => navigate("/tickets")}>
-            Tickets
-          </button>
-        </nav>
-        <div className="user-menu">
-          <span className="user-button" aria-hidden="true">
-            {user?.email ?? "Account"}
-          </span>
-          <button type="button" className="link-button" onClick={handleLogout}>
-            Log out
-          </button>
-        </div>
-      </header>
+      <AppHeader />
 
       <main className="min-h-screen p-12">
         <section className="mx-auto mb-8 max-w-[980px]">

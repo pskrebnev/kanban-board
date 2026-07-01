@@ -111,15 +111,18 @@ try {
   await page.getByText(teamName, { exact: true }).waitFor({ timeout: 20_000 });
 
   // Rename it inline. Click Rename on this team's row (while its name is still
-  // shown), then use the single open edit form. Only one row edits at a time,
-  // so `.team-edit input` and the Save button are unambiguous even if other
-  // teams already exist.
+  // shown), then use the single open edit form. Only one row edits at a time, so
+  // the "Team name" input and the Save button are unambiguous even if other teams
+  // exist. Wait for the edit input to appear before filling (robust against
+  // slower CI render timing).
   await page
     .getByText(teamName, { exact: true })
     .locator("xpath=ancestor::li")
     .getByRole("button", { name: "Rename" })
     .click();
-  await page.locator(".team-edit input").fill(renamedTeam);
+  const renameInput = page.getByLabel("Team name", { exact: true });
+  await renameInput.waitFor({ timeout: 20_000 });
+  await renameInput.fill(renamedTeam);
   await page.getByRole("button", { name: "Save" }).click();
   await page.getByText(renamedTeam, { exact: true }).waitFor({ timeout: 20_000 });
 
