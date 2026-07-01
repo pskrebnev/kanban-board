@@ -86,10 +86,10 @@ The project is delivered in phases. The status below reflects what is actually b
 
 ### Status
 
-All nine phases are implemented; the full mandatory scope and the [Phase 8](docs/phase-8.md)
-quality gates / [Definition-of-Done checklist](docs/definition-of-done.md) are complete. The one
-intentionally-deferred item is finishing the Tailwind migration of the remaining legacy CSS classes
-(a low-risk cleanup noted in [Phase 9](docs/phase-9.md)).
+All nine phases are implemented and complete — the full mandatory scope, the
+[Phase 8](docs/phase-8.md) quality gates / [Definition-of-Done checklist](docs/definition-of-done.md),
+and the [Phase 9](docs/phase-9.md) UX polish (type/state colour-coding, smoother styling, and the
+finished Tailwind migration).
 
 See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap, the
 [Phase 1 plan](docs/phase-1.md) (persistence foundation, complete), the
@@ -100,8 +100,7 @@ See the [phase-by-phase plan](docs/kanban-ticketing-hls.md) for the full roadmap
 [Phase 6 plan](docs/phase-6.md) (comments, complete), the
 [Phase 7 plan](docs/phase-7.md) (Kanban board, filtering & search, complete), the
 [Phase 8 plan](docs/phase-8.md) (quality gates & Definition-of-Done hardening, complete), and the
-[Phase 9 plan](docs/phase-9.md) (reference-wireframe fidelity & UX polish, implemented — Tailwind
-migration deferred).
+[Phase 9 plan](docs/phase-9.md) (reference-wireframe fidelity & UX polish, complete).
 
 ---
 
@@ -603,7 +602,7 @@ compile automatically.
 - [Phase 6 plan](docs/phase-6.md) — comments management plan with a JIRA-style backlog.
 - [Phase 7 plan](docs/phase-7.md) — Kanban board, filtering & search plan with a JIRA-style backlog (complete).
 - [Phase 8 plan](docs/phase-8.md) — quality gates, persistence hardening & Definition-of-Done plan with a JIRA-style backlog (complete).
-- [Phase 9 plan](docs/phase-9.md) — reference-wireframe fidelity & UX polish (type/state colour-coding + style) with a JIRA-style backlog (implemented; Tailwind migration deferred).
+- [Phase 9 plan](docs/phase-9.md) — reference-wireframe fidelity & UX polish (type/state colour-coding + style + finished Tailwind migration) with a JIRA-style backlog (complete).
 - [Definition-of-Done checklist](docs/definition-of-done.md) — maps every spec §13 item to its automated test, CI job, or documented proof.
 - [Architecture](docs/architecture.md) — high-level architecture and delivery phases.
 - [Testing approach](docs/testing-approach.md) — grouped end-to-end scenario catalogue.

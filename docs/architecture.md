@@ -21,8 +21,8 @@ Phase numbering follows the [High Level Solution](kanban-ticketing-hls.md). Phas
 (foundation scaffold), Phase 1 (persistence foundation & migrations), Phase 2
 (authentication), Phase 3 (teams), Phase 4 (epics), Phase 5 (tickets), Phase 6 (comments),
 Phase 7 (Kanban board, filtering & search), Phase 8 (quality gates & Definition-of-Done
-hardening), and Phase 9 (UX polish — type/state colour-coding + smoother styling) are complete.
-The only deferred item is finishing the Tailwind migration of the remaining legacy CSS classes.
+hardening), and Phase 9 (UX polish — type/state colour-coding, smoother styling, and the finished
+Tailwind migration) are complete. All nine phases are done.
 
 Completed:
 

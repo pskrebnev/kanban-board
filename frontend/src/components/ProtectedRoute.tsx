@@ -8,7 +8,7 @@ export function ProtectedRoute({ children }: { children: ReactElement }): ReactE
 
   if (status === "idle" || status === "loading") {
     return (
-      <main className="centered">
+      <main className="flex min-h-screen items-center justify-center">
         <p>Loading…</p>
       </main>
     );

@@ -2,6 +2,7 @@ import { useState, type SyntheticEvent, type ReactElement } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
 import { api, apiErrorMessage } from "../api";
+import { authAlt, authCard, authForm, authInput, authLabel, authShell, authTitle } from "../authUi";
 
 export function ResetPassword(): ReactElement {
   const [searchParams] = useSearchParams();
@@ -36,10 +37,10 @@ export function ResetPassword(): ReactElement {
   }
 
   return (
-    <main className="auth-shell">
-      <section className="auth-card">
+    <main className={authShell}>
+      <section className={authCard}>
         <p className="eyebrow">Kanban Ticketing</p>
-        <h1>Choose a new password</h1>
+        <h1 className={authTitle}>Choose a new password</h1>
 
         {status === "success" ? (
           <div>
@@ -51,16 +52,17 @@ export function ResetPassword(): ReactElement {
         ) : !token ? (
           <div>
             <p className="error">This reset link is missing its token.</p>
-            <p className="auth-alt">
+            <p className={authAlt}>
               Request a new one on the <Link to="/forgot-password">password reset</Link> page.
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit}>
-            <label>
+          <form className={authForm} onSubmit={handleSubmit}>
+            <label className={authLabel}>
               New password
               <input
                 type="password"
+                className={authInput}
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 minLength={8}

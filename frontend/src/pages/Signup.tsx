@@ -2,6 +2,7 @@ import { useState, type SyntheticEvent, type ReactElement } from "react";
 import { Link } from "react-router-dom";
 
 import { api, apiErrorMessage } from "../api";
+import { authAlt, authCard, authForm, authInput, authLabel, authShell, authTitle } from "../authUi";
 
 export function Signup(): ReactElement {
   const [email, setEmail] = useState("");
@@ -24,10 +25,10 @@ export function Signup(): ReactElement {
   }
 
   return (
-    <main className="auth-shell">
-      <section className="auth-card">
+    <main className={authShell}>
+      <section className={authCard}>
         <p className="eyebrow">Kanban Ticketing</p>
-        <h1>Create your account</h1>
+        <h1 className={authTitle}>Create your account</h1>
 
         {status === "success" ? (
           <div>
@@ -37,20 +38,22 @@ export function Signup(): ReactElement {
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit}>
-            <label>
+          <form className={authForm} onSubmit={handleSubmit}>
+            <label className={authLabel}>
               Email
               <input
                 type="email"
+                className={authInput}
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 required
               />
             </label>
-            <label>
+            <label className={authLabel}>
               Password
               <input
                 type="password"
+                className={authInput}
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 minLength={8}
@@ -67,7 +70,7 @@ export function Signup(): ReactElement {
           </form>
         )}
 
-        <p className="auth-alt">
+        <p className={authAlt}>
           Already have an account? <Link to="/login">Log in</Link>
         </p>
       </section>

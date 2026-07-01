@@ -26,27 +26,35 @@ export function AppHeader(): ReactElement {
   }
 
   return (
-    <header className="topbar">
-      <span className="brand">Kanban Ticketing</span>
-      <nav className="topbar-nav">
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-line bg-white/80 px-8 py-4 backdrop-blur-md">
+      <span className="font-extrabold tracking-tight">Kanban Ticketing</span>
+      <nav className="ml-8 flex flex-1 gap-2">
         {NAV_ITEMS.map((item) => (
           <button
             key={item.path}
             type="button"
-            className="link-button"
+            className="rounded-full bg-transparent px-3 py-2 font-bold text-brand hover:bg-brand-soft"
             onClick={() => navigate(item.path)}
           >
             {item.label}
           </button>
         ))}
       </nav>
-      <div className="user-menu">
-        <button type="button" className="user-button" onClick={() => setMenuOpen((open) => !open)}>
+      <div className="relative flex items-center gap-2">
+        <button
+          type="button"
+          className="rounded-full bg-brand-soft px-4 py-2 font-bold text-brand"
+          onClick={() => setMenuOpen((open) => !open)}
+        >
           {user?.email ?? "Account"}
         </button>
         {menuOpen && (
-          <div className="user-dropdown">
-            <button type="button" onClick={handleLogout}>
+          <div className="absolute right-0 top-12 rounded-xl border border-line bg-white p-2 shadow-[0_16px_40px_rgb(23_32_51/12%)]">
+            <button
+              type="button"
+              className="w-full rounded-full bg-transparent px-4 py-2 text-left font-bold text-ink"
+              onClick={handleLogout}
+            >
               Log out
             </button>
           </div>

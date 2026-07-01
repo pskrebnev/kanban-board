@@ -14,14 +14,15 @@ feel smoother and more coherent. It also folds in three specific product request
    acceptance, and Done are each visually distinct.
 3. **A smoother, more polished general style** across the app.
 
-> **Status: largely implemented.** The three requested UI improvements and the overall polish are
-> built and verified: ticket types (Bug/Feature/Fix) and the five workflow states are each
-> colour-coded from a single token source, with the text label always shown; the app has a smoother
-> feel (shared transitions, hover-lift cards, coloured column accents, `focus-visible` rings, a
-> refined sticky header and background, and `prefers-reduced-motion` support). The full Playwright
-> suite still passes (all test-facing hooks preserved). **Deferred (optional cleanup):** finishing
-> the Tailwind migration of the remaining legacy `@layer components` classes (P9-E6) — they were
-> polished in place rather than converted to utilities, to keep the change low-risk.
+> **Status: implemented.** The three requested UI improvements and the overall polish are built and
+> verified: ticket types (Bug/Feature/Fix) and the five workflow states are each colour-coded from a
+> single token source, with the text label always shown; the app has a smoother feel (shared
+> transitions, hover-lift cards, coloured column accents, `focus-visible` rings, a refined sticky
+> header and background, and `prefers-reduced-motion` support). The **Tailwind migration is now
+> finished** too: the legacy `@layer components` layout classes were converted to utilities (auth
+> screens use a shared `authUi` module; Teams/Epics reuse `<AppHeader />`), leaving `styles.css` as
+> the framework import, the `@theme` tokens, a small base layer, and four tiny semantic text/button
+> helpers. The full Playwright suite still passes (all test-facing hooks preserved).
 
 ## Goal
 
@@ -239,8 +240,9 @@ Story points are rough relative estimates. IDs are local references (e.g. `P9-1`
 - [x] Colour is never the only signal (types/states always carry their text label); interactive
       elements show a visible focus ring. (Contrast uses conventional strong/soft pairs; a formal
       WCAG audit is a follow-up.)
-- [ ] The remaining legacy component classes are migrated to Tailwind utilities — **deferred**
-      (P9-E6); they were polished in place to keep the change low-risk.
+- [x] The remaining legacy component classes are migrated to Tailwind utilities; `styles.css` is
+      essentially the framework import + `@theme` + a small base layer and a few tiny text/button
+      helpers.
 - [x] The full Playwright suite still passes (all test-facing hooks preserved) — 8/8 flows green.
 - [x] README, architecture, and HLS docs reflect the styling.
 
