@@ -1,0 +1,9 @@
+# The e2e image installs its own deps and browsers; never ship these.
+node_modules
+.git
+*.md
+.env
+.env.*
+npm-debug.log*
+Containerfile
+.dockerignore
