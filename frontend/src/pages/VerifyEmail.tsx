@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactElement } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
 import { api, apiErrorMessage } from "../api";
+import { authAlt, authCard, authShell, authTitle } from "../authUi";
 import { ResendVerification } from "../components/ResendVerification";
 
 export function VerifyEmail(): ReactElement {
@@ -45,10 +46,10 @@ export function VerifyEmail(): ReactElement {
   }, [token]);
 
   return (
-    <main className="auth-shell">
-      <section className="auth-card">
+    <main className={authShell}>
+      <section className={authCard}>
         <p className="eyebrow">Kanban Ticketing</p>
-        <h1>Email verification</h1>
+        <h1 className={authTitle}>Email verification</h1>
 
         {status === "loading" && <p>Verifying your email…</p>}
 
@@ -65,7 +66,7 @@ export function VerifyEmail(): ReactElement {
           <div>
             <p className="error">{message}</p>
             <ResendVerification />
-            <p className="auth-alt">
+            <p className={authAlt}>
               Back to <Link to="/login">log in</Link>
             </p>
           </div>

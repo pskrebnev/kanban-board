@@ -37,19 +37,20 @@ export function Teams(): ReactElement {
     <div className="app">
       <AppHeader />
 
-      <main className="shell">
-        <section className="hero">
+      <main className="min-h-screen p-8">
+        <section className="mx-auto mb-8 max-w-[980px]">
           <p className="eyebrow">Team management</p>
-          <h1>Teams</h1>
+          <h1 className="mb-6 text-[clamp(2rem,5vw,4rem)] leading-none">Teams</h1>
           <p className="text-[0.85rem] text-muted">
             Teams group the epics and tickets created in later phases.
           </p>
         </section>
 
-        <form className="team-create" onSubmit={handleCreate}>
+        <form className="mx-auto mb-6 flex max-w-[980px] gap-2" onSubmit={handleCreate}>
           <input
             type="text"
             placeholder="New team name"
+            className="flex-1 rounded-lg border border-field px-3.5 py-2.5 font-[inherit]"
             value={newName}
             onChange={(event) => setNewName(event.target.value)}
             maxLength={100}
@@ -70,7 +71,7 @@ export function Teams(): ReactElement {
         )}
 
         {teams.length > 0 && (
-          <ul className="team-list">
+          <ul className="mx-auto mt-4 max-w-[980px] list-none p-0">
             {teams.map((team) => (
               <TeamRow key={team.id} team={team} />
             ))}
@@ -127,19 +128,20 @@ function TeamRow({ team }: { team: Team }): ReactElement {
   }
 
   return (
-    <li className="team-row">
+    <li className="mb-3 flex flex-wrap items-center justify-between gap-x-4 rounded-[0.85rem] border border-line bg-white px-5 py-4 shadow-[0_16px_40px_rgb(23_32_51/6%)] hover:border-field hover:shadow-[0_18px_44px_rgb(23_32_51/10%)]">
       {editing ? (
-        <form className="team-edit" onSubmit={handleRename}>
+        <form className="flex flex-1 items-center gap-2" onSubmit={handleRename}>
           <input
             type="text"
             aria-label="Team name"
+            className="flex-1 rounded-lg border border-field px-3 py-2.5 font-[inherit]"
             value={draftName}
             onChange={(event) => setDraftName(event.target.value)}
             maxLength={100}
             autoFocus
             required
           />
-          <div className="team-actions">
+          <div className="flex items-center gap-2">
             <button type="submit" disabled={busy || draftName.trim().length === 0}>
               Save
             </button>
@@ -155,8 +157,8 @@ function TeamRow({ team }: { team: Team }): ReactElement {
         </form>
       ) : (
         <>
-          <span className="team-name">{team.name}</span>
-          <div className="team-actions">
+          <span className="font-bold">{team.name}</span>
+          <div className="flex items-center gap-2">
             <button type="button" className="secondary" onClick={startEditing} disabled={busy}>
               Rename
             </button>
@@ -195,7 +197,7 @@ function TeamRow({ team }: { team: Team }): ReactElement {
       )}
 
       {team.referenced && !editing && (
-        <span className="team-hint muted">Has epics or tickets — cannot be deleted</span>
+        <span className="muted basis-full">Has epics or tickets — cannot be deleted</span>
       )}
       {error && <span className="error">{error}</span>}
     </li>
