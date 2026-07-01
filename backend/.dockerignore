@@ -1,0 +1,14 @@
+# Keep the build context small and cache-stable. The image build copies only
+# src, tsconfig, migrations, seed, and the entrypoint.
+node_modules
+dist
+coverage
+test
+.git
+.gitignore
+*.md
+.env
+.env.*
+npm-debug.log*
+Containerfile
+.dockerignore
